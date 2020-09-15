@@ -1,0 +1,24 @@
+# IDEA
+# ----
+.idea
+.shelf
+**/*.iml
+/*.ipr
+/*.iws
+*/*.iml
+
+# Eclipse
+# -------
+*.classpath
+*.project
+*.settings
+
+# OS X
+# ----
+.DS_Store
+
+#target
+**/target/
+
+*.pid
+pom.xml.versionsBackup
