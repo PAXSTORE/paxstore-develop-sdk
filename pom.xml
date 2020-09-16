@@ -16,7 +16,7 @@
     <modelVersion>4.0.0</modelVersion>
 	<groupId>com.pax.market</groupId>
     <artifactId>paxstore-developerapi-java-sdk</artifactId>
-	<version>1.0</version>
+	<version>1.1-SNAPSHOT</version>
     <name>PAX Market :: Developer API Java SDK</name>
 
     <properties>
@@ -126,7 +126,7 @@
         <connection>scm:git:https://gitlab.paxszapp.com/tanjie/paxstore-develop-sdk.git</connection>
         <developerConnection>scm:git:https://gitlab.paxszapp.com/tanjie/paxstore-develop-sdk.git</developerConnection>
         <url>scm:git:https://gitlab.paxszapp.com/tanjie/paxstore-develop-sdk.git</url>
-        <tag>paxstore-developerapi-java-sdk-1.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
 
