@@ -17,7 +17,7 @@
 	<groupId>com.pax.market</groupId>
     <artifactId>paxstore-developerapi-java-sdk</artifactId>
 	<version>1.0-SNAPSHOT</version>
-    <name>PAX Market :: Developerapi Java SDK</name>
+    <name>PAX Market :: Developer API Java SDK</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,8 +26,6 @@
     </properties>
 
     <dependencies>
-
-    
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
@@ -78,7 +76,6 @@
 
     <build>
         <plugins>
-            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -124,20 +121,20 @@
             </plugin>
         </plugins>
     </build>
-	
-	<!--<scm>
-        <developerConnection>scm:git:git@github.com:PAXSTORE/paxstore-openapi-java-sdk.git</developerConnection>
-      <tag>paxstore-openapi-java-sdk-7.2.0</tag>
-  </scm>-->
+
+    <scm>
+        <connection>scm:git:https://gitlab.paxszapp.com/tanjie/paxstore-develop-sdk.git</connection>
+        <developerConnection>scm:git:https://gitlab.paxszapp.com/tanjie/paxstore-develop-sdk.git</developerConnection>
+        <url>scm:git:https://gitlab.paxszapp.com/tanjie/paxstore-develop-sdk.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
 
     <distributionManagement>
         <repository>
-            <id>pax.nexus.internal</id>
-            <url>http://nexus.paxszapp.com/nexus/repository/maven-releases/</url>
+            <id>bintray</id>
+            <url>https://api.bintray.com/maven/paxstore-support/paxstore/paxstore-developer-api-java-sdk/;publish=1</url>
         </repository>
-        <snapshotRepository>
-            <id>pax.nexus.snapshots</id>
-            <url>http://nexus.paxszapp.com/nexus/repository/maven-snapshots/</url>
-        </snapshotRepository>
     </distributionManagement>
+
 </project>
