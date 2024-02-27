@@ -14,16 +14,39 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-	<groupId>com.pax.market</groupId>
-    <artifactId>paxstore-developerapi-java-sdk</artifactId>
-	<version>1.1-SNAPSHOT</version>
-    <name>PAX Market :: Developer API Java SDK</name>
+	<groupId>com.whatspos.sdk</groupId>
+    <artifactId>paxstore-developerapi</artifactId>
+	<version>1.1.0</version>
+
+    <name>DeveloperAPI Java SDK</name>
+    <description>DeveloperAPI Java SDK</description>
+    <url>https://github.com/PAXSTORE/paxstore-develop-sdk</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
 		<javadoc.opts>-Xdoclint:none</javadoc.opts>
     </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Jay</name>
+            <email>tanjie@szzolon.com</email>
+            <organization>pax</organization>
+        </developer>
+        <developer>
+            <name>Allen</name>
+            <email>zhoudong@szzolon.com</email>
+            <organization>pax</organization>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
@@ -123,17 +146,20 @@
     </build>
 
     <scm>
-        <connection>scm:git:https://gitlab.paxszapp.com/tanjie/paxstore-develop-sdk.git</connection>
-        <developerConnection>scm:git:https://gitlab.paxszapp.com/tanjie/paxstore-develop-sdk.git</developerConnection>
-        <url>scm:git:https://gitlab.paxszapp.com/tanjie/paxstore-develop-sdk.git</url>
-        <tag>HEAD</tag>
+        <connection>scm:git:https://github.com/PAXSTORE/paxstore-develop-sdk.git</connection>
+        <developerConnection>scm:git:https://github.com/PAXSTORE/paxstore-develop-sdk.git</developerConnection>
+        <url>scm:git:https://github.com/PAXSTORE/paxstore-develop-sdk.git</url>
     </scm>
 
 
     <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
         <repository>
-            <id>bintray</id>
-            <url>https://api.bintray.com/maven/paxstore-support/paxstore/paxstore-developer-api-java-sdk/;publish=1</url>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
