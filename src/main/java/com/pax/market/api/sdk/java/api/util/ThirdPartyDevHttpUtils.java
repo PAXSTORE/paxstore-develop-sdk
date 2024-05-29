@@ -84,65 +84,16 @@ public abstract class ThirdPartyDevHttpUtils {
      * @param requestMethod  the request method
      * @param connectTimeout the connect timeout
      * @param readTimeout    the read timeout
-     * @param userData       the user data
+     * @param userData       the user data, will be ignored when is multipart-form
      * @param headerMap      the header map
+     * @param filePathMap      the header map, only support for multipart-form
+     * @param formValueMap      the header map, only support for multipart-form
      * @return the string
      */
-    public static String request(String requestUrl, String requestMethod, int connectTimeout, int readTimeout, String userData, Map<String, String> headerMap, int retryTimes){
-//		return request(requestUrl, requestMethod, connectTimeout, readTimeout, userData, false, headerMap, null);
-		return request(requestUrl, requestMethod, connectTimeout, readTimeout, userData, headerMap, null, retryTimes);
-	}
-
-    /**
-     * Compress request string.
-     *
-     * @param requestUrl     the request url
-     * @param requestMethod  the request method
-     * @param connectTimeout the connect timeout
-     * @param readTimeout    the read timeout
-     * @param userData       the user data
-     * @param headerMap      the header map
-     * @return the string
-     */
-    public static String compressRequest(String requestUrl, String requestMethod, int connectTimeout, int readTimeout, String userData, Map<String, String> headerMap, int retryTimes){
-		return compressRequest(requestUrl, requestMethod, connectTimeout, readTimeout, userData, headerMap, null, retryTimes);
-	}
-
-    /**
-     * Request string.
-     *
-     * @param requestUrl     the request url
-     * @param requestMethod  the request method
-     * @param connectTimeout the connect timeout
-     * @param readTimeout    the read timeout
-     * @param userData       the user data
-     * @param headerMap      the header map
-     * @param saveFilePath   the save file path
-     * @return the string
-     */
-    public static String request(String requestUrl, String requestMethod, int connectTimeout, int readTimeout, String userData, Map<String, String> headerMap, String saveFilePath, int retryTimes){
-//		return request(requestUrl, requestMethod, connectTimeout, readTimeout, userData, false, headerMap, saveFilePath);
+    public static String request(String requestUrl, String requestMethod, int connectTimeout, int readTimeout, String userData, Map<String, String> headerMap, Map<String, String> filePathMap, Map<String, String> formValueMap, int retryTimes){
 		try {
 			return RetryUtils.retry(() -> {
-				return request(requestUrl, requestMethod, connectTimeout, readTimeout, userData, false, headerMap, saveFilePath);
-			}, e -> isExceptionShouldRetry(e), retryTimes);
-		} catch (Exception e) {
-			FileUtils.deleteFile(saveFilePath);
-			logger.error("Exception Occurred. Details: {}", e.toString());
-			if(e instanceof IOException) {
-				return EnhancedJsonUtils.getSdkJson(ResultCode.SDK_UN_CONNECT);
-			}else{
-				return EnhancedJsonUtils.getSdkJson(ResultCode.SDK_RQUEST_EXCEPTION);
-			}
-
-		}
-	}
-
-
-	public static String formRequest(String requestUrl, int connectTimeout, int readTimeout,Map<String, String> headerMap,Map<String, String> filePathMap,Map<String, String> formValueMap, int retryTimes) {
-		try {
-			return RetryUtils.retry(() -> {
-				return formRequest(requestUrl,connectTimeout, readTimeout, headerMap, filePathMap, formValueMap);
+				return request(requestUrl, requestMethod, connectTimeout, readTimeout, userData, false, headerMap, filePathMap, formValueMap);
 			}, e -> isExceptionShouldRetry(e), retryTimes);
 		} catch (Exception e) {
 			logger.error("Exception Occurred. Details: {}", e.toString());
@@ -151,52 +102,6 @@ public abstract class ThirdPartyDevHttpUtils {
 			}else{
 				return EnhancedJsonUtils.getSdkJson(ResultCode.SDK_RQUEST_EXCEPTION);
 			}
-
-		}
-	}
-
-	private static String formRequest(String requestUrl, int connectTimeout, int readTimeout, Map<String, String> headerMap,Map<String, String> filePathMap,Map<String, String> formValueMap) throws ConnectException, SocketTimeoutException{
-		HttpURLConnection urlConnection = null;
-		try {
-			urlConnection = getConnection(requestUrl, connectTimeout, readTimeout);
-			return finalRequest(urlConnection, headerMap, filePathMap, formValueMap);
-		} catch (IOException e) {
-			if(e instanceof ConnectException){
-				throw (ConnectException)e;
-			}else if(e instanceof SocketTimeoutException){
-				throw (SocketTimeoutException)e;
-			}
-			logger.error("IOException Occurred. Details: {}", e.toString());
-		} finally {
-			if(urlConnection != null) {
-				urlConnection.disconnect();
-			}
-		}
-		return EnhancedJsonUtils.getSdkJson(ResultCode.SDK_RQUEST_EXCEPTION);
-	}
-    /**
-     * Compress request string.
-     *
-     * @param requestUrl     the request url
-     * @param requestMethod  the request method
-     * @param connectTimeout the connect timeout
-     * @param readTimeout    the read timeout
-     * @param userData       the user data
-     * @param headerMap      the header map
-     * @param saveFilePath   the save file path
-     * @return the string
-     */
-    public static String compressRequest(String requestUrl, String requestMethod, int connectTimeout, int readTimeout, String userData, Map<String, String> headerMap, String saveFilePath, int retryTimes){
-		try {
-			return RetryUtils.retry(() -> {
-				return request(requestUrl, requestMethod, connectTimeout, readTimeout, userData, true, headerMap, saveFilePath);
-			}, e -> isExceptionShouldRetry(e), retryTimes);
-		} catch (Exception e) {
-			if(StringUtils.isNotBlank(saveFilePath)) {
-				FileUtils.deleteFile(saveFilePath);
-			}
-			logger.error("Occurred. Details: {}", e.toString());
-			return EnhancedJsonUtils.getSdkJson(ResultCode.SDK_UN_CONNECT);
 		}
 	}
 
@@ -211,11 +116,18 @@ public abstract class ThirdPartyDevHttpUtils {
 	}
 
 	private static String request(String requestUrl, String requestMethod, int connectTimeout, int readTimeout, String userData, boolean compressData,
-								  Map<String, String> headerMap, String saveFilePath) throws ConnectException, SocketTimeoutException{
+								  Map<String, String> headerMap, Map<String, String> filePathMap, Map<String, String> formValueMap) throws ConnectException, SocketTimeoutException{
 		HttpURLConnection urlConnection = null;
 		try {
 			urlConnection = getConnection(requestUrl, connectTimeout, readTimeout);
-			return finalRequest(urlConnection, requestMethod, userData, compressData, headerMap, saveFilePath);
+			if (filePathMap!=null && !filePathMap.isEmpty()) {
+				//走multipart-form形式
+				return finalMultipartFormRequest(urlConnection,  headerMap, filePathMap, formValueMap);
+			} else {
+				//走restful形式
+				return finalRestfulRequest(urlConnection, requestMethod, userData, compressData, headerMap);
+			}
+
 		} catch (IOException e) {
 			if(e instanceof ConnectException){
 				throw (ConnectException)e;
@@ -231,8 +143,8 @@ public abstract class ThirdPartyDevHttpUtils {
 		return EnhancedJsonUtils.getSdkJson(ResultCode.SDK_RQUEST_EXCEPTION);
 	}
 
-	private static String finalRequest(HttpURLConnection urlConnection, String requestMethod, String userData, boolean compressData,
-									   Map<String, String> headerMap, String saveFilePath) throws ConnectException,SocketTimeoutException{
+	private static String finalRestfulRequest(HttpURLConnection urlConnection, String requestMethod, String userData, boolean compressData,
+													Map<String, String> headerMap) throws ConnectException,SocketTimeoutException{
 		StringBuilder stringBuilder = new StringBuilder();
 		BufferedReader bufferedReader = null;
 		FileOutputStream fileOutputStream = null;
@@ -241,6 +153,7 @@ public abstract class ThirdPartyDevHttpUtils {
 			urlConnection.setDoInput(true);
 			urlConnection.setUseCaches(false);
 			urlConnection.setRequestMethod(requestMethod);
+			urlConnection.setRequestProperty(Constants.CONTENT_TYPE, Constants.CONTENT_TYPE_JSON);
 			if(locale != null) {
 				urlConnection.setRequestProperty(Constants.ACCESS_LANGUAGE, getLanguageTag(locale));
 			}
@@ -276,25 +189,6 @@ public abstract class ThirdPartyDevHttpUtils {
 				}
 			}
 
-			if(saveFilePath != null) {
-				filePath = saveFilePath + File.separator + FileUtils.generateMixString(16) ;
-
-				File fileDir = new File(saveFilePath);
-				if(!fileDir.exists()) {
-					fileDir.mkdirs();
-				}
-				fileOutputStream = new FileOutputStream(filePath);
-
-				int bytesRead;
-				byte[] buffer = new byte[BUFFER_SIZE];
-				while ((bytesRead = urlConnection.getInputStream().read(buffer)) != -1) {
-					fileOutputStream.write(buffer, 0, bytesRead);
-				}
-
-
-
-				return EnhancedJsonUtils.getSdkJson(ResultCode.SUCCESS, filePath);
-			}
 			Map<String, List<String>> map = urlConnection.getHeaderFields();
 			rateLimit = map.get("X-RateLimit-Limit")==null?"":map.get("X-RateLimit-Limit").get(0);
 			rateLimitRemain = map.get("X-RateLimit-Remaining")==null?"":map.get("X-RateLimit-Remaining").get(0);
@@ -368,7 +262,7 @@ public abstract class ThirdPartyDevHttpUtils {
 		return EnhancedJsonUtils.getSdkJson(ResultCode.SDK_RQUEST_EXCEPTION);
 	}
 
-	private static String finalRequest(HttpURLConnection urlConnection, Map<String, String> headerMap,  Map<String, String> filePathMap, Map<String, String> keyValues) {
+	private static String finalMultipartFormRequest(HttpURLConnection urlConnection, Map<String, String> headerMap, Map<String, String> filePathMap, Map<String, String> formValueMap) throws ConnectException,SocketTimeoutException{
 		String boundary = "PAXBoundary" + System.currentTimeMillis();
 		BufferedReader bufferedReader = null;
 
@@ -395,8 +289,8 @@ public abstract class ThirdPartyDevHttpUtils {
 					}
 				}
 
-				if (keyValues != null && !keyValues.isEmpty()) {
-					for (Entry<String, String> entry : keyValues.entrySet()) {
+				if (formValueMap != null && !formValueMap.isEmpty()) {
+					for (Entry<String, String> entry : formValueMap.entrySet()) {
 						writeSimpleFormField(boundary, outputStream, entry);
 					}
 				}
@@ -441,8 +335,21 @@ public abstract class ThirdPartyDevHttpUtils {
 			json.addProperty("rateLimitReset", rateLimitReset);
 			return json.toString();
 
-		} catch (Exception e) {
+		} catch (SocketTimeoutException localSocketTimeoutException) {
+			if(StringUtils.containsIgnoreCase(localSocketTimeoutException.toString(),"Read timed out")){
+				logger.error("SocketTimeoutException Occurred. Details: {}", localSocketTimeoutException.toString());
+				return EnhancedJsonUtils.getSdkJson(ResultCode.SDK_CONNECT_TIMEOUT);
+			}else{
+				throw localSocketTimeoutException;
+			}
+		} catch (ConnectException localConnectException) {
+			throw localConnectException;
 
+		} catch (FileNotFoundException fileNotFoundException) {
+			logger.error("FileNotFoundException Occurred. Details: {}", fileNotFoundException.toString());
+			return EnhancedJsonUtils.getSdkJson(ResultCode.SDK_FILE_NOT_FOUND);
+		} catch (Exception ignored) {
+			logger.error("Exception Occurred. Details: {}", ignored.toString());
 		} finally {
 			if(bufferedReader != null) {
 				try {
