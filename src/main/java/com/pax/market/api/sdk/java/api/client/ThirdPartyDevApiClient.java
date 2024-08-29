@@ -51,11 +51,11 @@ public class ThirdPartyDevApiClient {
     /**
      * The Connect timeout.
      */
-    protected int connectTimeout = 30000; 			// 默认连接超时时间为30秒
+    protected int connectTimeout = 60000; 			// 默认连接超时时间为30秒
     /**
      * The Read timeout.
      */
-    protected int readTimeout = 30000; 				// 默认响应超时时间为30秒
+    protected int readTimeout = 60000; 				// 默认响应超时时间为30秒
 
     protected int retryTimes = 5;
 
@@ -147,7 +147,7 @@ public class ThirdPartyDevApiClient {
 		String requestUrl = ThirdPartyDevHttpUtils.buildRequestUrl(baseUrl + request.getRequestMappingUrl(), query);
 		logger.info(" --> {} {}", request.getRequestMethod().getValue(), requestUrl);
 
-		response = ThirdPartyDevHttpUtils.formRequest(requestUrl, connectTimeout, readTimeout, request.getHeaderMap(), request.getFilePathMap(), request.getFormValueMap(), retryTimes);
+		response = ThirdPartyDevHttpUtils.request(requestUrl, request.getRequestMethod().getValue(),connectTimeout, readTimeout, request.getRequestBody(), request.getHeaderMap(), request.getFilePathMap(), request.getFormValueMap(), retryTimes);
 
 		return response;
 	}
