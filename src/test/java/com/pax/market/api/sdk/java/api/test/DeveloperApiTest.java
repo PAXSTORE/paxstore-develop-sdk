@@ -1,5 +1,6 @@
 package com.pax.market.api.sdk.java.api.test;
 
+import com.pax.market.api.sdk.java.api.base.dto.AppDetailDTO;
 import com.pax.market.api.sdk.java.api.base.dto.Result;
 import com.pax.market.api.sdk.java.api.developer.DeveloperApi;
 import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleAppRequest;
@@ -76,7 +77,7 @@ public class DeveloperApiTest {
         CreateSingleAppRequest createAppRequest = new CreateSingleAppRequest();
         createAppRequest.setAppName("TestApp");
 
-        Result<String>  result = developerApi.createApp(createAppRequest);
+        Result<Long>  result = developerApi.createApp(createAppRequest);
         Assert.assertTrue(result.getBusinessCode() == 0);
     }
 
@@ -115,7 +116,7 @@ public class DeveloperApiTest {
         createApkRequest.setFeaturedImgPath("C:\\TestApp3.png");
         createApkRequest.setIconFilePath("C:\\TestApp3.png");
 
-        Result<String>  result = developerApi.createApk(createApkRequest);
+        Result<Long>  result = developerApi.createApk(createApkRequest);
         Assert.assertTrue(result.getBusinessCode() == 0);
     }
 
@@ -175,7 +176,7 @@ public class DeveloperApiTest {
 
     @Test
     public void testGetAppByPackageOrName() {
-        Result<String> testApp = developerApi.getAppByPackageOrName(null, "testApp");
+        Result<AppDetailDTO> testApp = developerApi.getAppByPackageOrName(null, "testApp");
         System.out.println(testApp.toString());
     }
 }

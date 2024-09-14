@@ -250,10 +250,17 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 
 ```
 {
-	"businessCode": 0
+	"businessCode": 0,
+	"data": 1634922089414693
 }
 ```
+<br>
 
+The Json structure shows like below.
+
+| Property Name |Type| Description                                                                       |
+|:--------------|:---|:----------------------------------------------------------------------------------|
+| data          |Long| the id of app                                                                     |
 
 **Possible client validation errors**
 
@@ -307,9 +314,28 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 
 ```
 {
-	"businessCode": 0
+	"businessCode": 0,
+	"data": {
+		"id": 1634804562919462,
+		"name": "TestApp0920",
+		"type": "G",
+		"status": "A"
+	}
 }
 ```
+
+<br>
+
+The type in dataSet of is AppDetailDTO. And the structure shows like below.
+
+| Property Name |Type| Description                                                                       |
+|:--------------|:---|:----------------------------------------------------------------------------------|
+| id            |Long| the id of app                                                                     |
+| name          |String| the name of app                                                                   |
+| type          |String| the type of app                                                                   |
+| status        |String| the status of reseller, value can be one of A(Active), I(INACTIVE) and S(Suspend) |
+
+<br>
 
 **Possible business codes**
 
@@ -416,9 +442,14 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 ```
 {
 	"businessCode": 0,
-	"data":1598563819716651
+	"data": 1634925723779110
 }
 ```
+The JSON structure shows like below.
+<br>
+| Parameter Name | Type | Nullable | Description |
+|:---------------|:-----| :------- |:------------|
+| data           | Long | false    | id of APK   |
 
 
 **Possible client validation errors**
