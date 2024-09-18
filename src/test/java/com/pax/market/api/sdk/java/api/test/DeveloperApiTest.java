@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.pax.market.api.sdk.java.api.constant.Constants.APP_TYPE_NORMAL;
+
 /**
  * 2 * @Author: Zhou Dong
  * 3 * @Date: 2020/7/29 16:49
@@ -39,7 +41,7 @@ public class DeveloperApiTest {
         createApkRequest.setAppFilePath("C:\\TestApp.apk");
         createApkRequest.setAppName("Test App Name");
         createApkRequest.setAppNameByVersion("App Name By Version");
-        createApkRequest.setBaseType("N");
+        createApkRequest.setBaseType(APP_TYPE_NORMAL);
         createApkRequest.setShortDesc("test short desc");
         createApkRequest.setDescription("test description");
         createApkRequest.setReleaseNotes("This is release note");
@@ -47,10 +49,13 @@ public class DeveloperApiTest {
         createApkRequest.setPrice(BigDecimal.ONE);
 
         List<String> categoryList = new ArrayList<>();
+        // business category dictionary
+        // You can get it from app edit page in develop center or admin platform
         categoryList.add("WL_PS");
         categoryList.add("WL_SK");
         createApkRequest.setCategoryList(categoryList);
         List<String> modelNameList = new ArrayList<>();
+        //
         modelNameList.add("A920");
         //modelNameList.add("Prolin");
         createApkRequest.setModelNameList(modelNameList);

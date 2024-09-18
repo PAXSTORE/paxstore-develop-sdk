@@ -112,4 +112,13 @@ public class Constants {
     public static final String REQ_HEADER_SDK_LANG = "SDK-Language";
     public static final String REQ_HEADER_SDK_VERSION = "SDK-Version";
 
+    /**
+     * normal app
+     * */
+    public static final String APP_TYPE_NORMAL="N";
+    /**
+     * parameter app
+     * */
+    public static final String APP_TYPE_PARAMETER="P";
+
 }
