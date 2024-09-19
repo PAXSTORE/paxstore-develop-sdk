@@ -106,7 +106,7 @@ public class EnhancedJsonUtils {
                 break;
 
         }
-        message = MessageBoudleUtil.getMessage(message, Locale.getDefault());
+        message = MessageBundleUtils.getMessage(message, Locale.getDefault());
         return getSdkJson(resultCode, message);
     }
 

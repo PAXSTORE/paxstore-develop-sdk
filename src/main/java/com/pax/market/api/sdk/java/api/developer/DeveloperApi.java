@@ -11,6 +11,7 @@ import com.pax.market.api.sdk.java.api.developer.dto.CreateApkRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.step.EditSingleApkRequest;
 import com.pax.market.api.sdk.java.api.util.EnhancedJsonUtils;
 import com.pax.market.api.sdk.java.api.util.StringUtils;
+import com.pax.market.api.sdk.java.api.validate.Validators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +43,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
     }
 
     public Result<String> uploadApk(CreateApkRequest createApkRequest) {
-        List<String> validationErrs = validateCreate(createApkRequest, "parameter.terminalCreateRequest.null");
+        List<String> validationErrs = Validators.validateCreate(createApkRequest, "parameter.terminalCreateRequest.null");
         if (validationErrs.size() > 0) {
             return new Result<String>(validationErrs);
         }
@@ -53,7 +54,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
     }
 
     public Result<Long> createApp(CreateSingleAppRequest createAppRequest) {
-        List<String> validationErrs = validateCreate(createAppRequest, "parameter.appCreateRequest.null");
+        List<String> validationErrs = Validators.validateCreate(createAppRequest, "parameter.appCreateRequest.null");
         if (validationErrs.size() > 0) {
             return new Result<Long>(validationErrs);
         }
@@ -65,7 +66,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
     }
 
     public Result<Long> createApk(CreateSingleApkRequest createApkRequest) {
-        List<String> validationErrs = validateCreate(createApkRequest, "parameter.apkCreateRequest.null");
+        List<String> validationErrs = Validators.validateCreate(createApkRequest, "parameter.apkCreateRequest.null");
         if (validationErrs.size() > 0) {
             return new Result<Long>(validationErrs);
         }
@@ -78,7 +79,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
     }
 
     public Result<String> editApk(EditSingleApkRequest editApkRequest) {
-        List<String> validationErrs = validateCreate(editApkRequest, "parameter.apkEditRequest.null");
+        List<String> validationErrs = Validators.validateCreate(editApkRequest, "parameter.apkEditRequest.null");
         if (validationErrs.size() > 0) {
             return new Result<String>(validationErrs);
         }

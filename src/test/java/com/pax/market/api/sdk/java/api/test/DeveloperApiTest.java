@@ -82,8 +82,9 @@ public class DeveloperApiTest {
         CreateSingleAppRequest createAppRequest = new CreateSingleAppRequest();
         createAppRequest.setAppName("TestApp");
 
-        Result<Long>  result = developerApi.createApp(createAppRequest);
+        Result<Long>  result = developerApi.createApp(null);
         Assert.assertTrue(result.getBusinessCode() == 0);
+        Assert.assertNotNull("create App failed", result.getData());
     }
 
     @Test
@@ -123,6 +124,7 @@ public class DeveloperApiTest {
 
         Result<Long>  result = developerApi.createApk(createApkRequest);
         Assert.assertTrue(result.getBusinessCode() == 0);
+        Assert.assertNotNull("create Apk failed", result.getData());
     }
 
     @Test
@@ -182,6 +184,7 @@ public class DeveloperApiTest {
     @Test
     public void testGetAppByPackageOrName() {
         Result<AppDetailDTO> testApp = developerApi.getAppByPackageOrName(null, "testApp");
-        System.out.println(testApp.toString());
+        Assert.assertTrue(testApp.getBusinessCode() == 0);
+        Assert.assertNotNull("get App failed", testApp.getData());
     }
 }

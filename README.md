@@ -57,8 +57,8 @@ public DeveloperApi(String baseUrl, String apiKey, String apiSecret);
 
 
 
-### Upload an apk
-Create APK one step, it needs fully information of App and APK.
+### Upload an Apk
+Create Apk by one step, it needs fully information of App and Apk.
 
 **API**
 
@@ -200,8 +200,8 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 | 10102         | Do not upload signed file                                    |             |
 | 29102         | Set up your Stripe account first                             |             |
 
-### Create APP 
-Create app with specific name simply, will get appId when success.
+### Create App 
+Create App project with specific name simply, will get appId when success.
 
 **API**
 
@@ -282,7 +282,7 @@ The Json structure shows like below.
 | 1248          | App base type is invalid                                     |             |
 
 ### getAppByPackageOrName
-Get app by packageName or appName.
+Get App information by packageName or appName.
 
 Note: packageName and appName should not be null at same time
 
@@ -352,7 +352,8 @@ The type in dataSet of is AppDetailDTO. And the structure shows like below.
 | 1012          | Please sign your app with a self-signed certificate                     |             |
 | 1013          | The App signature certificate  is invalid                               |             |
 
-### Create an apk
+### Create an Apk
+Create an Apk with related information
 
 **API**
 
@@ -512,7 +513,8 @@ The JSON structure shows like below.
 | 10102         | Do not upload signed file                                               |             |
 | 29102         | Set up your Stripe account first                                        |             |
 
-### Edit an apk
+### Edit an Apk
+Edit the information of an Apk
 
 **API**
 
@@ -575,20 +577,16 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
         screenshotList.add("C:\\Tiktok33.png");
         editApkRequest.setScreenshotFiles(screenshotList);
 
-Click the eye icon in developer SDK integration configuration page to get the access secret. It will show a dialog .
         List<String> paramList = new ArrayList<>();
         paramList.add("C:\\Tiktok_paramTemplate.xml");
         editApkRequest.setParamTemplateFiles(paramList);
 
-Please click OK button. And it will show the access secret instead of asterisks.
         editApkRequest.setFeaturedImgPath("C:\\Tiktok33.png");
         editApkRequest.setIconFilePath("C:\\Tiktok33.png");
 
-Please keep the access key and access secret safely. Once the access key or access secret leaks please goto developer SDK integration configuration page to disable developer SDK access or reset the access key and access secret.
         developerApi.editApk(editApkRequest);
 ```
 
-## Intergrate with SDK
 **Client side validation failed sample result(JSON formatted)**
 
 ```
@@ -669,6 +667,7 @@ Please keep the access key and access secret safely. Once the access key or acce
 | 29102         | Set up your Stripe account first                                        |             |
 
 ### Submit Apk
+Submit Apk for administrator approval
 
 **API**
 
@@ -719,6 +718,7 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 
 
 ### Delete Apk
+Delete Apk by apkId
 
 **API**
 
@@ -769,6 +769,7 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 | 1013          | The App signature certificate  is invalid                        |             |
 
 ### Delete App
+Delete App project by appId
 
 **API**
 
@@ -839,6 +840,8 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 | A920    | A920                                                                                       |
 | A920MAX | A920MAX                                                                                    |
 | ...     | About others models, You can get it from app edit page in develop center or admin platform |
+
+## Intergrate with SDK
 
 The minimal JDK version is 1.8.
 To integrate with this SDK please add below dependency by updating the pom.xml file in your maven project.

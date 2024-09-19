@@ -121,4 +121,7 @@ public class Constants {
      * */
     public static final String APP_TYPE_PARAMETER="P";
 
+    public static final int MIN_PAGE_NO = 1;
+    public static final int MIN_PAGE_SIZE = 1;
+    public static final int MAX_PAGE_SIZE = 100;
 }

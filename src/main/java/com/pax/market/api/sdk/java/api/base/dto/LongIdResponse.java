@@ -11,40 +11,11 @@
  */
 package com.pax.market.api.sdk.java.api.base.dto;
 
-
-import com.pax.market.api.sdk.java.api.constant.Constants;
-
 /**
  *
  * @author tanjie
  * @date 2018-07-02
  */
-public class PageRequestDTO{
+public class LongIdResponse extends Response<Long>{
 
-
-    private int pageNo = 1;
-	
-    private int pageSize = Constants.DEFAULT_PAGE_SIZE;
-    private String orderBy;
-
-	public int getPageNo() {
-		return pageNo;
-	}
-	public void setPageNo(int pageNo) {
-		this.pageNo = pageNo;
-	}
-	public String getOrderBy() {
-		return orderBy;
-	}
-	public void setOrderBy(String orderBy) {
-		this.orderBy = orderBy;
-	}
-	public int getPageSize() {
-		return pageSize;
-	}
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
-	
-	
 }
