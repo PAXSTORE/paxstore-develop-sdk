@@ -2,8 +2,7 @@ package com.pax.market.api.sdk.java.api.developer;
 
 import com.google.gson.Gson;
 import com.pax.market.api.sdk.java.api.BaseThirdPartyDevApi;
-import com.pax.market.api.sdk.java.api.base.dto.EmptyResponse;
-import com.pax.market.api.sdk.java.api.base.dto.Result;
+import com.pax.market.api.sdk.java.api.base.dto.*;
 import com.pax.market.api.sdk.java.api.base.request.SdkRequest;
 import com.pax.market.api.sdk.java.api.client.ThirdPartyDevApiClient;
 import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleAppRequest;
@@ -12,6 +11,7 @@ import com.pax.market.api.sdk.java.api.developer.dto.CreateApkRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.step.EditSingleApkRequest;
 import com.pax.market.api.sdk.java.api.util.EnhancedJsonUtils;
 import com.pax.market.api.sdk.java.api.util.StringUtils;
+import com.pax.market.api.sdk.java.api.validate.Validators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
     }
 
     public Result<String> uploadApk(CreateApkRequest createApkRequest) {
-        List<String> validationErrs = validateCreate(createApkRequest, "parameter.terminalCreateRequest.null");
+        List<String> validationErrs = Validators.validateCreate(createApkRequest, "parameter.terminalCreateRequest.null");
         if (validationErrs.size() > 0) {
             return new Result<String>(validationErrs);
         }
@@ -53,33 +53,33 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         return emptyResult(client,request);
     }
 
-    public Result<String> createApp(CreateSingleAppRequest createAppRequest) {
-        List<String> validationErrs = validateCreate(createAppRequest, "parameter.appCreateRequest.null");
+    public Result<Long> createApp(CreateSingleAppRequest createAppRequest) {
+        List<String> validationErrs = Validators.validateCreate(createAppRequest, "parameter.appCreateRequest.null");
         if (validationErrs.size() > 0) {
-            return new Result<String>(validationErrs);
+            return new Result<Long>(validationErrs);
         }
         ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
         SdkRequest request = createSdkRequest(CREATE_APP_URL);
         request.setRequestMethod(SdkRequest.RequestMethod.POST);
         request.setRequestBody(new Gson().toJson(createAppRequest, CreateSingleAppRequest.class));
-        return emptyResult(client,request);
+        return idResult(client,request);
     }
 
-    public Result<String> createApk(CreateSingleApkRequest createApkRequest) {
-        List<String> validationErrs = validateCreate(createApkRequest, "parameter.apkCreateRequest.null");
+    public Result<Long> createApk(CreateSingleApkRequest createApkRequest) {
+        List<String> validationErrs = Validators.validateCreate(createApkRequest, "parameter.apkCreateRequest.null");
         if (validationErrs.size() > 0) {
-            return new Result<String>(validationErrs);
+            return new Result<Long>(validationErrs);
         }
         ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
         SdkRequest request = createSdkRequest(CREATE_APK_URL.replace("{appId}", String.valueOf(createApkRequest.getAppId())));
         request.setRequestMethod(SdkRequest.RequestMethod.POST);
         handleCreateApkFormData(createApkRequest, request);
 
-        return emptyResult(client,request);
+        return idResult(client,request);
     }
 
     public Result<String> editApk(EditSingleApkRequest editApkRequest) {
-        List<String> validationErrs = validateCreate(editApkRequest, "parameter.apkEditRequest.null");
+        List<String> validationErrs = Validators.validateCreate(editApkRequest, "parameter.apkEditRequest.null");
         if (validationErrs.size() > 0) {
             return new Result<String>(validationErrs);
         }
@@ -111,7 +111,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         return emptyResult(client,request);
     }
 
-    public Result<String> getAppByPackageOrName(String packageName, String appName) {
+    public Result<AppDetailDTO> getAppByPackageOrName(String packageName, String appName) {
         ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
         SdkRequest request = createSdkRequest(GET_APP_BY_PACKAGE_URL);
         request.setRequestMethod(SdkRequest.RequestMethod.GET);
@@ -121,7 +121,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         if(StringUtils.isNotBlank(appName)){
             request.getRequestParams().put("appName", appName);
         }
-        return emptyResult(client,request);
+        return dataResult(client,request);
     }
 
     public Result<String> submitApk(Long apkId) {
@@ -235,6 +235,17 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
 
     private Result<String>  emptyResult(ThirdPartyDevApiClient client, SdkRequest request) {
         EmptyResponse emptyResponse =  EnhancedJsonUtils.fromJson(client.execute(request), EmptyResponse.class);
-        return  new Result<String>(emptyResponse);
+        return  new Result<>(emptyResponse);
     }
+
+    private Result<AppDetailDTO>  dataResult(ThirdPartyDevApiClient client, SdkRequest request ) {
+        AppDetailResponse dataResponse =  EnhancedJsonUtils.fromJson(client.execute(request), AppDetailResponse.class);
+        return  new Result<>(dataResponse);
+    }
+
+    private Result<Long>  idResult(ThirdPartyDevApiClient client, SdkRequest request ) {
+        LongIdResponse idResponse =  EnhancedJsonUtils.fromJson(client.execute(request), LongIdResponse.class);
+        return  new Result<>(idResponse);
+    }
+
 }

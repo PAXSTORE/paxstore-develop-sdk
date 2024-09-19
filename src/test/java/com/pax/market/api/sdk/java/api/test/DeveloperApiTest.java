@@ -1,5 +1,6 @@
 package com.pax.market.api.sdk.java.api.test;
 
+import com.pax.market.api.sdk.java.api.base.dto.AppDetailDTO;
 import com.pax.market.api.sdk.java.api.base.dto.Result;
 import com.pax.market.api.sdk.java.api.developer.DeveloperApi;
 import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleAppRequest;
@@ -15,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.pax.market.api.sdk.java.api.constant.Constants.APP_TYPE_NORMAL;
 
 /**
  * 2 * @Author: Zhou Dong
@@ -38,7 +41,7 @@ public class DeveloperApiTest {
         createApkRequest.setAppFilePath("C:\\TestApp.apk");
         createApkRequest.setAppName("Test App Name");
         createApkRequest.setAppNameByVersion("App Name By Version");
-        createApkRequest.setBaseType("N");
+        createApkRequest.setBaseType(APP_TYPE_NORMAL);
         createApkRequest.setShortDesc("test short desc");
         createApkRequest.setDescription("test description");
         createApkRequest.setReleaseNotes("This is release note");
@@ -46,10 +49,13 @@ public class DeveloperApiTest {
         createApkRequest.setPrice(BigDecimal.ONE);
 
         List<String> categoryList = new ArrayList<>();
+        // business category dictionary
+        // You can get it from app edit page in develop center or admin platform
         categoryList.add("WL_PS");
         categoryList.add("WL_SK");
         createApkRequest.setCategoryList(categoryList);
         List<String> modelNameList = new ArrayList<>();
+        //
         modelNameList.add("A920");
         //modelNameList.add("Prolin");
         createApkRequest.setModelNameList(modelNameList);
@@ -76,8 +82,9 @@ public class DeveloperApiTest {
         CreateSingleAppRequest createAppRequest = new CreateSingleAppRequest();
         createAppRequest.setAppName("TestApp");
 
-        Result<String>  result = developerApi.createApp(createAppRequest);
+        Result<Long>  result = developerApi.createApp(null);
         Assert.assertTrue(result.getBusinessCode() == 0);
+        Assert.assertNotNull("create App failed", result.getData());
     }
 
     @Test
@@ -115,8 +122,9 @@ public class DeveloperApiTest {
         createApkRequest.setFeaturedImgPath("C:\\TestApp3.png");
         createApkRequest.setIconFilePath("C:\\TestApp3.png");
 
-        Result<String>  result = developerApi.createApk(createApkRequest);
+        Result<Long>  result = developerApi.createApk(createApkRequest);
         Assert.assertTrue(result.getBusinessCode() == 0);
+        Assert.assertNotNull("create Apk failed", result.getData());
     }
 
     @Test
@@ -175,7 +183,8 @@ public class DeveloperApiTest {
 
     @Test
     public void testGetAppByPackageOrName() {
-        Result<String> testApp = developerApi.getAppByPackageOrName(null, "testApp");
-        System.out.println(testApp.toString());
+        Result<AppDetailDTO> testApp = developerApi.getAppByPackageOrName(null, "testApp");
+        Assert.assertTrue(testApp.getBusinessCode() == 0);
+        Assert.assertNotNull("get App failed", testApp.getData());
     }
 }

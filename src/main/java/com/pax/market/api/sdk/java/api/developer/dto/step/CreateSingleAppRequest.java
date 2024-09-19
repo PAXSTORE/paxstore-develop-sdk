@@ -24,8 +24,6 @@ public class CreateSingleAppRequest implements Serializable {
 
     private static final long serialVersionUID = 3038268183852188565L;
     private String appName;
-    //The APP type, value can be G, and S (G is general app, S is solution app)
-    private String baseType;
 
     public String getAppName() {
         return appName;
@@ -33,14 +31,6 @@ public class CreateSingleAppRequest implements Serializable {
 
     public void setAppName(String appName) {
         this.appName = appName;
-    }
-
-    public String getBaseType() {
-        return baseType;
-    }
-
-    public void setBaseType(String baseType) {
-        this.baseType = baseType;
     }
 
 }

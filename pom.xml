@@ -16,7 +16,7 @@
     <modelVersion>4.0.0</modelVersion>
 	<groupId>com.whatspos.sdk</groupId>
     <artifactId>3rdsys-developerapi</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1</version>
 
     <name>DeveloperAPI Java SDK</name>
     <description>DeveloperAPI Java SDK</description>
@@ -55,16 +55,6 @@
     </developers>
 
     <dependencies>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-			<version>5.3.5.Final</version>
-        </dependency>
-	    <dependency>
-		    <groupId>org.glassfish.web</groupId>
-		    <artifactId>el-impl</artifactId>
-		    <version>2.2</version>
-		</dependency>
 		<dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
