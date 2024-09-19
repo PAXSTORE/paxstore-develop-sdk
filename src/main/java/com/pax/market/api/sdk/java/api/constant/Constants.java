@@ -16,20 +16,11 @@ package com.pax.market.api.sdk.java.api.constant;
  */
 public class Constants {
 
-    /**
-     * 协议入参共享参数
-     */
-    public static final String APP_KEY = "appKey";
-
     public static final String DEVELOPER_KEY = "devKey";
     /**
      * The constant TIMESTAMP.
      */
     public static final String TIMESTAMP = "timestamp";
-    /**
-     * The constant SIGN_METHOD.
-     */
-    public static final String SIGN_METHOD = "signMethod";
     /**
      * The constant SIGNATURE.
      */
@@ -41,43 +32,20 @@ public class Constants {
      */
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    public static final String TIMEZONE_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss Z";
-
     /**
      * UTF-8字符集
      */
     public static final String CHARSET_UTF8 = "UTF-8";
-
-    /**
-     * 响应编码
-     */
-    public static final String ACCEPT_ENCODING = "Accept-Encoding";
-    /**
-     * The constant CONTENT_ENCODING.
-     */
-    public static final String CONTENT_ENCODING = "Content-Encoding";
     /**
      * The constant CONTENT_ENCODING_GZIP.
      */
     public static final String CONTENT_ENCODING_GZIP = "gzip";
-    /**
-     * The constant PARAM_DATA.
-     */
-    public static final String PARAM_DATA = "data";
 
-    /**
-     * 默认媒体类型
-     */
-    public static final String MIME_TYPE_DEFAULT = "application/octet-stream";
     /**
      * The constant ACCESS_LANGUAGE.
      */
     public static final String ACCESS_LANGUAGE = "Accept-Language";
 
-    /**
-     * MD5签名方式
-     */
-    public static final String SIGN_METHOD_MD5 = "md5";
     /**
      * HMAC签名方式
      */
@@ -91,24 +59,11 @@ public class Constants {
      * The constant CONTENT_TYPE_JSON.
      */
     public static final String CONTENT_TYPE_JSON = "application/json;charset=utf-8";
-
-    /**
-     * The constant REQ_HEADER_DOMAIN.
-     */
-    public static final String REQ_HEADER_DOMAIN = "X-Market-Domain";
-    /**
-     * The constant REQ_HEADER_SN.
-     */
-    public static final String REQ_HEADER_SN = "X-Terminal-SN";
-    /**
-     * The constant XML_FILE_PREFIX.
-     */
-    public static final String XML_FILE_PREFIX = "<?xml";
     
     public static final int DEFAULT_PAGE_SIZE = 10;
     
     public static final String THIRD_PARTY_API_SDK_LANGUAGE = "Java";
-    public static final String THIRD_PARTY_API_SDK_VERSION = "1.2.0";
+    public static final String THIRD_PARTY_API_SDK_VERSION = "1.2.1";
     public static final String REQ_HEADER_SDK_LANG = "SDK-Language";
     public static final String REQ_HEADER_SDK_VERSION = "SDK-Version";
 
@@ -116,10 +71,6 @@ public class Constants {
      * normal app
      * */
     public static final String APP_TYPE_NORMAL="N";
-    /**
-     * parameter app
-     * */
-    public static final String APP_TYPE_PARAMETER="P";
 
     public static final int MIN_PAGE_NO = 1;
     public static final int MIN_PAGE_SIZE = 1;
