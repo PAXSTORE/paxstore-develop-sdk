@@ -220,6 +220,7 @@ Structure of class CreateSingleAppRequest
 | Property Name      | Type          | Nullable | Description                                                                         |
 | :----------------- |:--------------| :------- |:------------------------------------------------------------------------------------|
 | appName            | String        | false    | the name of app, max lenth is 64                                                    |
+
 **Sample codes**
 
 ```
@@ -375,7 +376,7 @@ Structure of class CreateSingleApkRequest
 | apkName            | String | false    | the name of apk                                                                      |
 | apkType            | String        | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App) |
 | modelNameList      | List\<String> | false    | model names, the apk supported models                                                |
-| categoryList       | List\<String> | false    | business category                                                                    |
+| categoryList       | List\<String> | false    | business category,please reference appendix part                                                                   |
 | shortDesc          | String        | false    | short description                                                                    |
 | description        | String        | false    |                                                                                      |
 | releaseNotes       | String        | true     | release note                                                                         |
@@ -384,7 +385,7 @@ Structure of class CreateSingleApkRequest
 | featuredImgPath    | String        | true     | the featured image file path                                                         |
 | accessUrl          | String        | true     | url of access                                                                        |
 | screenshotFiles    | List\<String> | false    | the screenshots file path                                                            |
-| paramTemplateFiles | List\<String> | true     | the parameter templates file path , template file is mandantory when ApkType is 'P'   |
+| paramTemplateFiles | List\<String> | true     | the parameter templates file path , template file is mandantory when ApkType is 'P'  |
 
 **Sample codes**
 

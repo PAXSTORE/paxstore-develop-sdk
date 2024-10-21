@@ -111,7 +111,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         return emptyResult(client,request);
     }
 
-    public Result<AppDetailDTO> getAppByPackageOrName(String packageName, String appName) {
+    public Result<AppDetailDTO> getAppInfoByName(String packageName, String appName) {
         ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
         SdkRequest request = createSdkRequest(GET_APP_BY_PACKAGE_URL);
         request.setRequestMethod(SdkRequest.RequestMethod.GET);

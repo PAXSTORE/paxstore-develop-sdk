@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.pax.market.api.sdk.java.api.constant.Constants.APP_TYPE_NORMAL;
+import static com.pax.market.api.sdk.java.api.constant.Constants.APP_TYPE_PARAMETER;
 
 /**
  * 2 * @Author: Zhou Dong
@@ -42,6 +43,8 @@ public class DeveloperApiTest {
         createApkRequest.setAppName("Test App Name");
         createApkRequest.setAppNameByVersion("App Name By Version");
         createApkRequest.setBaseType(APP_TYPE_NORMAL);
+        //parameter should use APP_TYPE_PARAMETER
+        //createApkRequest.setBaseType(APP_TYPE_PARAMETER);
         createApkRequest.setShortDesc("test short desc");
         createApkRequest.setDescription("test description");
         createApkRequest.setReleaseNotes("This is release note");
@@ -182,8 +185,8 @@ public class DeveloperApiTest {
     }
 
     @Test
-    public void testGetAppByPackageOrName() {
-        Result<AppDetailDTO> testApp = developerApi.getAppByPackageOrName(null, "testApp");
+    public void testGetAppInfoByName() {
+        Result<AppDetailDTO> testApp = developerApi.getAppInfoByName(null, "testApp");
         Assert.assertTrue(testApp.getBusinessCode() == 0);
         Assert.assertNotNull("get App failed", testApp.getData());
     }
