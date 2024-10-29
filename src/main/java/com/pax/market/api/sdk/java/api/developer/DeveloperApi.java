@@ -9,7 +9,9 @@ import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleAppRequest
 import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleApkRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.CreateApkRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.step.EditSingleApkRequest;
+import com.pax.market.api.sdk.java.api.io.UploadedFileContent;
 import com.pax.market.api.sdk.java.api.util.EnhancedJsonUtils;
+import com.pax.market.api.sdk.java.api.util.GsonUtils;
 import com.pax.market.api.sdk.java.api.util.StringUtils;
 import com.pax.market.api.sdk.java.api.validate.Validators;
 import org.slf4j.Logger;
@@ -135,64 +137,60 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
     }
 
     private void handleCreateApkFormData(CreateSingleApkRequest createApkRequest, SdkRequest request) {
-        if (StringUtils.isNotBlank(createApkRequest.getIconFilePath())) {
-            request.addFilePath("iconFile", createApkRequest.getIconFilePath());
+        if (createApkRequest.getIconFile()!=null) {
+            request.addUploadFile("iconFile", createApkRequest.getIconFile());
         }
 
-        if (StringUtils.isNotBlank(createApkRequest.getFeaturedImgPath())) {
-            request.addFilePath("featuredImg", createApkRequest.getFeaturedImgPath());
+        if (createApkRequest.getFeaturedImgFile()!=null) {
+            request.addUploadFile("featuredImg", createApkRequest.getFeaturedImgFile());
         }
 
-        if (StringUtils.isNotBlank(createApkRequest.getAppFilePath())) {
-            request.addFilePath("apkFile", createApkRequest.getAppFilePath());
+        if (createApkRequest.getAppFile()!=null) {
+            request.addUploadFile("apkFile", createApkRequest.getAppFile());
         }
 
-        if (createApkRequest.getScreenshotFiles() != null && !createApkRequest.getScreenshotFiles().isEmpty()) {
-            for (int i = 0; i < createApkRequest.getScreenshotFiles().size(); i++) {
-                request.addFilePath("screenshot#" + i, createApkRequest.getScreenshotFiles().get(i));
+        if (createApkRequest.getScreenshotFileList() != null && !createApkRequest.getScreenshotFileList().isEmpty()) {
+            for (int i = 0; i < createApkRequest.getScreenshotFileList().size(); i++) {
+                request.addUploadFile("screenshot#" + i, createApkRequest.getScreenshotFileList().get(i));
             }
         }
 
-        if (createApkRequest.getParamTemplateFiles() != null && !createApkRequest.getParamTemplateFiles().isEmpty()) {
+        if (createApkRequest.getParamTemplateFileList() != null && !createApkRequest.getParamTemplateFileList().isEmpty()) {
             List<String> paramTemplateNameList = new ArrayList<>();
-            for (int i = 0; i < createApkRequest.getParamTemplateFiles().size(); i++) {
-                String filePath = createApkRequest.getParamTemplateFiles().get(i);
-                String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
-                request.addFilePath("paramTemplate#" + fileName, filePath);
-                paramTemplateNameList.add(fileName);
+            for(UploadedFileContent fileContent : createApkRequest.getParamTemplateFileList()){
+                request.addUploadFile("paramTemplate#" + fileContent.getName(), fileContent);
+                paramTemplateNameList.add(fileContent.getName());
             }
             createApkRequest.setParamTemplateList(paramTemplateNameList);
         }
-
-        request.addFormValue("apkDetail", new Gson().toJson(createApkRequest, CreateSingleApkRequest.class));
+        Gson gson = GsonUtils.getGsonBuilder();
+        request.addFormValue("apkDetail", gson.toJson(createApkRequest, CreateSingleApkRequest.class));
     }
 
     private void handleEditApkFormData(EditSingleApkRequest editApkRequest, SdkRequest request) {
-        if (StringUtils.isNotBlank(editApkRequest.getIconFilePath())) {
-            request.addFilePath("iconFile", editApkRequest.getIconFilePath());
+        if (editApkRequest.getIconFile()!=null) {
+            request.addUploadFile("iconFile", editApkRequest.getIconFile());
         }
 
-        if (StringUtils.isNotBlank(editApkRequest.getFeaturedImgPath())) {
-            request.addFilePath("featuredImg", editApkRequest.getFeaturedImgPath());
+        if (editApkRequest.getFeaturedImgFile()!=null) {
+            request.addUploadFile("featuredImg", editApkRequest.getFeaturedImgFile());
         }
 
-        if (StringUtils.isNotBlank(editApkRequest.getAppFilePath())) {
-            request.addFilePath("apkFile", editApkRequest.getAppFilePath());
+        if (editApkRequest.getAppFile()!=null) {
+            request.addUploadFile("apkFile", editApkRequest.getAppFile());
         }
 
-        if (editApkRequest.getScreenshotFiles() != null && !editApkRequest.getScreenshotFiles().isEmpty()) {
-            for (int i = 0; i < editApkRequest.getScreenshotFiles().size(); i++) {
-                request.addFilePath("screenshot#" + i, editApkRequest.getScreenshotFiles().get(i));
+        if (editApkRequest.getScreenshotFileList() != null && !editApkRequest.getScreenshotFileList().isEmpty()) {
+            for (int i = 0; i < editApkRequest.getScreenshotFileList().size(); i++) {
+                request.addUploadFile("screenshot#" + i, editApkRequest.getScreenshotFileList().get(i));
             }
         }
 
-        if (editApkRequest.getParamTemplateFiles() != null && !editApkRequest.getParamTemplateFiles().isEmpty()) {
+        if (editApkRequest.getParamTemplateFileList() != null && !editApkRequest.getParamTemplateFileList().isEmpty()) {
             List<String> paramTemplateNameList = new ArrayList<>();
-            for (int i = 0; i < editApkRequest.getParamTemplateFiles().size(); i++) {
-                String filePath = editApkRequest.getParamTemplateFiles().get(i);
-                String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
-                request.addFilePath("paramTemplate#" + fileName, filePath);
-                paramTemplateNameList.add(fileName);
+            for(UploadedFileContent fileContent: editApkRequest.getParamTemplateFileList()){
+                request.addUploadFile("paramTemplate#" + fileContent.getName(), fileContent);
+                paramTemplateNameList.add(fileContent.getName());
             }
             editApkRequest.setParamTemplateList(paramTemplateNameList);
         }
@@ -201,31 +199,29 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
     }
 
     private void handleFormData(CreateApkRequest createApkRequest, SdkRequest request) {
-        if (StringUtils.isNotBlank(createApkRequest.getIconFilePath())) {
-            request.addFilePath("iconFile", createApkRequest.getIconFilePath());
+        if (createApkRequest.getIconFile()!=null) {
+            request.addUploadFile("iconFile", createApkRequest.getIconFile());
         }
 
-        if (StringUtils.isNotBlank(createApkRequest.getFeaturedImgPath())) {
-            request.addFilePath("featuredImg", createApkRequest.getFeaturedImgPath());
+        if (createApkRequest.getFeaturedImgFile()!=null) {
+            request.addUploadFile("featuredImg", createApkRequest.getFeaturedImgFile());
         }
 
-        if (StringUtils.isNotBlank(createApkRequest.getAppFilePath())) {
-            request.addFilePath("apkFile", createApkRequest.getAppFilePath());
+        if (createApkRequest.getAppFile()!=null) {
+            request.addUploadFile("apkFile", createApkRequest.getAppFile());
         }
 
-        if (createApkRequest.getScreenshotFiles() != null && !createApkRequest.getScreenshotFiles().isEmpty()) {
-            for (int i = 0; i < createApkRequest.getScreenshotFiles().size(); i++) {
-                request.addFilePath("screenshot#" + i, createApkRequest.getScreenshotFiles().get(i));
+        if (createApkRequest.getScreenshotFileList() != null && !createApkRequest.getScreenshotFileList().isEmpty()) {
+            for (int i = 0; i < createApkRequest.getScreenshotFileList().size(); i++) {
+                request.addUploadFile("screenshot#" + i, createApkRequest.getScreenshotFileList().get(i));
             }
         }
 
-        if (createApkRequest.getParamTemplateFiles() != null && !createApkRequest.getParamTemplateFiles().isEmpty()) {
+        if (createApkRequest.getParamTemplateFileList() != null && !createApkRequest.getParamTemplateFileList().isEmpty()) {
             List<String> paramTemplateNameList = new ArrayList<>();
-            for (int i = 0; i < createApkRequest.getParamTemplateFiles().size(); i++) {
-                String filePath = createApkRequest.getParamTemplateFiles().get(i);
-                String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
-                request.addFilePath("paramTemplate#" + fileName, filePath);
-                paramTemplateNameList.add(fileName);
+            for(UploadedFileContent fileContent : createApkRequest.getParamTemplateFileList()){
+                request.addUploadFile("paramTemplate#" + fileContent.getName(), fileContent);
+                paramTemplateNameList.add(fileContent.getName());
             }
             createApkRequest.setParamTemplateList(paramTemplateNameList);
         }

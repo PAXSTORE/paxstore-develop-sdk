@@ -1,5 +1,7 @@
 package com.pax.market.api.sdk.java.api.developer.dto.step;
 
+import com.pax.market.api.sdk.java.api.io.UploadedFileContent;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,11 +28,13 @@ public class CreateSingleApkRequest implements Serializable {
     private String releaseNotes;
     private String accessUrl;
     private List<String> paramTemplateList;
-    private String appFilePath;
-    private String iconFilePath;
-    private String featuredImgPath;
-    private List<String> screenshotFiles;
-    private List<String> paramTemplateFiles;
+
+    private UploadedFileContent appFile;
+    private UploadedFileContent iconFile;
+    private UploadedFileContent featuredImgFile;
+    private List<UploadedFileContent> screenshotFileList;
+    private List<UploadedFileContent> paramTemplateFileList;
+
     private Integer chargeType;
     private BigDecimal price;
 
@@ -90,46 +94,6 @@ public class CreateSingleApkRequest implements Serializable {
         this.paramTemplateList = paramTemplateList;
     }
 
-    public String getAppFilePath() {
-        return appFilePath;
-    }
-
-    public void setAppFilePath(String appFilePath) {
-        this.appFilePath = appFilePath;
-    }
-
-    public String getIconFilePath() {
-        return iconFilePath;
-    }
-
-    public void setIconFilePath(String iconFilePath) {
-        this.iconFilePath = iconFilePath;
-    }
-
-    public String getFeaturedImgPath() {
-        return featuredImgPath;
-    }
-
-    public void setFeaturedImgPath(String featuredImgPath) {
-        this.featuredImgPath = featuredImgPath;
-    }
-
-    public List<String> getScreenshotFiles() {
-        return screenshotFiles;
-    }
-
-    public void setScreenshotFiles(List<String> screenshotFiles) {
-        this.screenshotFiles = screenshotFiles;
-    }
-
-    public List<String> getParamTemplateFiles() {
-        return paramTemplateFiles;
-    }
-
-    public void setParamTemplateFiles(List<String> paramTemplateFiles) {
-        this.paramTemplateFiles = paramTemplateFiles;
-    }
-
     public Long getAppId() {
         return appId;
     }
@@ -168,5 +132,45 @@ public class CreateSingleApkRequest implements Serializable {
 
     public void setApkName(String apkName) {
         this.apkName = apkName;
+    }
+
+    public UploadedFileContent getAppFile() {
+        return appFile;
+    }
+
+    public void setAppFile(UploadedFileContent appFile) {
+        this.appFile = appFile;
+    }
+
+    public UploadedFileContent getIconFile() {
+        return iconFile;
+    }
+
+    public void setIconFile(UploadedFileContent iconFile) {
+        this.iconFile = iconFile;
+    }
+
+    public UploadedFileContent getFeaturedImgFile() {
+        return featuredImgFile;
+    }
+
+    public void setFeaturedImgFile(UploadedFileContent featuredImgFile) {
+        this.featuredImgFile = featuredImgFile;
+    }
+
+    public List<UploadedFileContent> getScreenshotFileList() {
+        return screenshotFileList;
+    }
+
+    public void setScreenshotFileList(List<UploadedFileContent> screenshotFileList) {
+        this.screenshotFileList = screenshotFileList;
+    }
+
+    public List<UploadedFileContent> getParamTemplateFileList() {
+        return paramTemplateFileList;
+    }
+
+    public void setParamTemplateFileList(List<UploadedFileContent> paramTemplateFileList) {
+        this.paramTemplateFileList = paramTemplateFileList;
     }
 }

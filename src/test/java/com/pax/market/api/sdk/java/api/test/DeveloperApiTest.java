@@ -2,11 +2,14 @@ package com.pax.market.api.sdk.java.api.test;
 
 import com.pax.market.api.sdk.java.api.base.dto.AppDetailDTO;
 import com.pax.market.api.sdk.java.api.base.dto.Result;
+import com.pax.market.api.sdk.java.api.constant.Constants;
 import com.pax.market.api.sdk.java.api.developer.DeveloperApi;
 import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleAppRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleApkRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.CreateApkRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.step.EditSingleApkRequest;
+import com.pax.market.api.sdk.java.api.io.UploadedFileContent;
+import com.pax.market.api.sdk.java.api.util.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +42,7 @@ public class DeveloperApiTest {
     @Test
     public void testUploadApk() {
         CreateApkRequest createApkRequest = new CreateApkRequest();
-        createApkRequest.setAppFilePath("C:\\TestApp.apk");
+        createApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp.apk", "TestApp"));
         createApkRequest.setAppName("Test App Name");
         createApkRequest.setAppNameByVersion("App Name By Version");
         createApkRequest.setBaseType(APP_TYPE_NORMAL);
@@ -63,19 +66,19 @@ public class DeveloperApiTest {
         //modelNameList.add("Prolin");
         createApkRequest.setModelNameList(modelNameList);
 
-        List<String> screenshotList = new ArrayList<>();
-        screenshotList.add("D:\\image\\1.jpg");
-        screenshotList.add("D:\\image\\2.jpg");
-        screenshotList.add("D:\\image\\3.jpg");
-        createApkRequest.setScreenshotFiles(screenshotList);
+        List<UploadedFileContent> screenshotList = new ArrayList<>();
+        screenshotList.add(FileUtils.createUploadFile("D:\\image\\1.jpg"));
+        screenshotList.add(FileUtils.createUploadFile("D:\\image\\2.jpg"));
+        screenshotList.add(FileUtils.createUploadFile("D:\\image\\3.jpg"));
+        createApkRequest.setScreenshotFileList(screenshotList);
 
-       /* List<String> paramList = new ArrayList<>();
-        paramList.add("C:\\Users\\zhoudong\\Desktop\\template01.xml");
-        paramList.add("C:\\Users\\zhoudong\\Desktop\\template02.xml");
-        createApkRequest.setParamTemplateFiles(paramList);*/
+        List<UploadedFileContent> paramList = new ArrayList<>();
+        paramList.add(FileUtils.createUploadFile("C:\\Users\\zhoudong\\Desktop\\template01.xml"));
+        paramList.add(FileUtils.createUploadFile("C:\\Users\\zhoudong\\Desktop\\template02.xml"));
+        createApkRequest.setParamTemplateFileList(paramList);
 
-        createApkRequest.setFeaturedImgPath("D:\\image\\3.jpg");
-        createApkRequest.setIconFilePath("D:\\image.jpg");
+        createApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("D:\\image\\3.jpg"));
+        createApkRequest.setIconFile(FileUtils.createUploadFile("D:\\image.jpg"));
         Result<String>  result = developerApi.uploadApk(createApkRequest);
         Assert.assertTrue(result.getBusinessCode() == 0);
     }
@@ -85,7 +88,7 @@ public class DeveloperApiTest {
         CreateSingleAppRequest createAppRequest = new CreateSingleAppRequest();
         createAppRequest.setAppName("TestApp");
 
-        Result<Long>  result = developerApi.createApp(null);
+        Result<Long>  result = developerApi.createApp(createAppRequest);
         Assert.assertTrue(result.getBusinessCode() == 0);
         Assert.assertNotNull("create App failed", result.getData());
     }
@@ -93,10 +96,10 @@ public class DeveloperApiTest {
     @Test
     public void testCreateApk() {
         CreateSingleApkRequest createApkRequest = new CreateSingleApkRequest();
-        createApkRequest.setAppId(1605025453309994L);
-        createApkRequest.setAppFilePath("C:\\TestApp.apk");
+        createApkRequest.setAppId(1643135327273002L);
+        createApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp.apk"));
         createApkRequest.setApkName("TestAppV1.0");
-        createApkRequest.setApkType("P");
+        createApkRequest.setApkType(APP_TYPE_PARAMETER);
         createApkRequest.setShortDesc("test short desc");
         createApkRequest.setDescription("test description");
         createApkRequest.setReleaseNotes("This is release note");
@@ -105,25 +108,25 @@ public class DeveloperApiTest {
         createApkRequest.setPrice(BigDecimal.ONE);
 
         List<String> categoryList = new ArrayList<>();
-        categoryList.add("JD");
+        categoryList.add("CY");
         createApkRequest.setCategoryList(categoryList);
         List<String> modelNameList = new ArrayList<>();
         modelNameList.add("A920");
         //modelNameList.add("Prolin");
         createApkRequest.setModelNameList(modelNameList);
 
-        List<String> screenshotList = new ArrayList<>();
-        screenshotList.add("C:\\TestApp1.png");
-        screenshotList.add("C:\\TestApp2.png");
-        screenshotList.add("C:\\TestApp3.png");
-        createApkRequest.setScreenshotFiles(screenshotList);
+        List<UploadedFileContent> screenshotList = new ArrayList<>();
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp1.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp2.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp3.png"));
+        createApkRequest.setScreenshotFileList(screenshotList);
 
-        List<String> paramList = new ArrayList<>();
-        paramList.add("C:\\TestApp_paramTemplate.xml");
-        createApkRequest.setParamTemplateFiles(paramList);
+        List<UploadedFileContent> paramList = new ArrayList<>();
+        paramList.add(FileUtils.createUploadFile("C:\\TestApp_paramTemplate.xml"));
+        createApkRequest.setParamTemplateFileList(paramList);
 
-        createApkRequest.setFeaturedImgPath("C:\\TestApp3.png");
-        createApkRequest.setIconFilePath("C:\\TestApp3.png");
+        createApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("C:\\TestApp3.png"));
+        createApkRequest.setIconFile(FileUtils.createUploadFile("C:\\TestApp3.png"));
 
         Result<Long>  result = developerApi.createApk(createApkRequest);
         Assert.assertTrue(result.getBusinessCode() == 0);
@@ -133,37 +136,37 @@ public class DeveloperApiTest {
     @Test
     public void testEditApk() {
         EditSingleApkRequest editApkRequest = new EditSingleApkRequest();
-        editApkRequest.setApkId(1604907870191657L);
+        editApkRequest.setApkId(1642230508945446L);
         editApkRequest.setApkName("TestAppV1.1");
-        editApkRequest.setAppFilePath("C:\\TestApp_1.apk");
-        editApkRequest.setApkType("P");
+        editApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp_1.apk", "TestApp"));
+        editApkRequest.setApkType(APP_TYPE_PARAMETER);
         editApkRequest.setShortDesc("test short descV3");
         editApkRequest.setDescription("test descriptionV3");
         editApkRequest.setReleaseNotes("This is release noteV3");
         editApkRequest.setAccessUrl("www.baidu-v3.com");
 
         List<String> categoryList = new ArrayList<>();
-        categoryList.add("JD");
+        categoryList.add("GYL");
 //        categoryList.add("WL_SK");
         editApkRequest.setCategoryList(categoryList);
         List<String> modelNameList = new ArrayList<>();
         modelNameList.add("A920");
-        modelNameList.add("A920Pro");
+//        modelNameList.add("E500");
         //modelNameList.add("Prolin");
         editApkRequest.setModelNameList(modelNameList);
 
-        List<String> screenshotList = new ArrayList<>();
-        screenshotList.add("C:\\TestApp111.png");
-//        screenshotList.add("C:\\PAX_WORK\\测试安装包\\222.png");
-        screenshotList.add("C:\\TestApp333.png");
-        editApkRequest.setScreenshotFiles(screenshotList);
+        List<UploadedFileContent> screenshotList = new ArrayList<>();
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp111.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp222.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp333.png"));
+        editApkRequest.setScreenshotFileList(screenshotList);
 
-        List<String> paramList = new ArrayList<>();
-        paramList.add("C:\\TestApp_paramTemplate2.xml");
-        editApkRequest.setParamTemplateFiles(paramList);
+        List<UploadedFileContent> paramList = new ArrayList<>();
+        paramList.add(FileUtils.createUploadFile("C:\\TestApp_paramTemplate2.xml"));
+        editApkRequest.setParamTemplateFileList(paramList);
 
-        editApkRequest.setFeaturedImgPath("C:\\TestApp333.png");
-        editApkRequest.setIconFilePath("C:\\TestApp33.png");
+        editApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("C:\\TestApp333.png"));
+        editApkRequest.setIconFile(FileUtils.createUploadFile("C:\\TestApp333.png"));
 
         Result<String>  result = developerApi.editApk(editApkRequest);
         Assert.assertTrue(result.getBusinessCode() == 0);

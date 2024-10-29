@@ -74,31 +74,44 @@ public Result<String> uploadApk(CreateApkRequest createApkRequest)
 
 Structure of class CreateApkRequest
 
-| Property Name      | Type          | Nullable | Description                                                                          |
-| :----------------- | :------------ | :------- |:-------------------------------------------------------------------------------------|
-| appName            | String        | false    | the name of app                                                                      |
-| baseType           | String        | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App) |
-| chargeType         | Integer       | false    | the charge type of app,  the values can be 0 and 1. (0 : Free, 1: Paid App)          |
-| price              | BigDecimal    | true     | the price of app                                                                     |
-| modelNameList      | List\<String> | false    | model names, the apk supported models                                                |
-| categoryList       | List\<String> | false    | business category, please reference appendix part.                                   |
-| appNameByVersion   | String        | true     | the name of app version                                                              |
-| shortDesc          | String        | false    | short description                                                                    |
-| description        | String        | false    |                                                                                      |
-| releaseNotes       | String        | true     | release note                                                                         |
-| appFilePath        | String        | false    | the appfile path                                                                     |
-| iconFilePath       | String        | true     | the icon file path                                                                   |
-| screenshotFiles    | List\<String> | false    | the screenshots file path                                                            |
-| paramTemplateFiles | List\<String> | true     | the parameter templates file path                                                    |
+| Property Name         | Type          | Nullable | Description                                                                          |
+|:----------------------| :------------ |:---------|:-------------------------------------------------------------------------------------|
+| appName               | String        | false    | the name of app                                                                      |
+| baseType              | String        | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App) |
+| chargeType            | Integer       | false    | the charge type of app,  the values can be 0 and 1. (0 : Free, 1: Paid App)          |
+| price                 | BigDecimal    | true     | the price of app                                                                     |
+| modelNameList         | List\<String> | false    | model names, the apk supported models                                                |
+| categoryList          | List\<String> | false    | business category, please reference appendix part.                                   |
+| appNameByVersion      | String        | true     | the name of app version                                                              |
+| shortDesc             | String        | false    | short description                                                                    |
+| description           | String        | false    |                                                                                      |
+| releaseNotes          | String        | true     | release note                                                                         |
+| appFile               | UploadedFileContent        | false    | the app file                                                                         |
+| iconFile              | UploadedFileContent        | true     | the icon file                                                                        |
+| featuredImgFile       | UploadedFileContent        | false    | the icon file                                                                        |
+| screenshotFileList    | List\<UploadedFileContent> | true     | the screenshots file, at least three pictures                                        |
+| paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file path, mandatory when baseType is 'P'                    |
+
+
+Structure of class UploadedFileContent
+
+|Property Name| Type   | Description              |
+|:---|:-------|:-------------------------|
+|bytesContent| byte[] | bytes of file content    |
+|name| String | name of file             |
+|originalFilename| String | originalFilename of file |
+|contentType| String | conent of file           |
 
 **Sample codes**
 
 ```
 DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
   CreateApkRequest createApkRequest = new CreateApkRequest();
-        createApkRequest.setAppFilePath("D:\\test.apk");
+        createApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp.apk"));
         createApkRequest.setAppName("test");
-        createApkRequest.setBaseType("N");
+        createApkRequest.setBaseType(APP_TYPE_NORMAL);
+        //parameter should use APP_TYPE_PARAMETER
+        //createApkRequest.setBaseType(APP_TYPE_PARAMETER);
         createApkRequest.setShortDesc("test short desc");
         createApkRequest.setDescription("test description");
         createApkRequest.setReleaseNotes("This is release note");
@@ -112,11 +125,18 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
         modelNameList.add("A920");
         createApkRequest.setModelNameList(modelNameList);
 
-        List<String> screenshotList = new ArrayList<>();
-        screenshotList.add("D:\\1.jpg");
-        screenshotList.add("D:\\2.jpg");
-        screenshotList.add("D:\\3.jpg");
-        createApkRequest.setScreenshotFiles(screenshotList);
+        List<UploadedFileContent> screenshotList = new ArrayList<>();
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp1.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp2.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp3.png"));
+        createApkRequest.setScreenshotFileList(screenshotList);
+        
+        /**List<UploadedFileContent> paramList = new ArrayList<>();
+        paramList.add(FileUtils.createUploadFile("C:\\TestApp_paramTemplate.xml"));
+        createApkRequest.setParamTemplateFileList(paramList);**/
+        
+        createApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("C:\\TestApp3.png"));
+        createApkRequest.setIconFile(FileUtils.createUploadFile("C:\\TestApp3.png"));
 
         developerApi.uploadApk(createApkRequest);
 ```
@@ -282,7 +302,7 @@ The Json structure shows like below.
 | 1248          | App base type is invalid                                     |             |
 | 1248          | App base type is invalid                                     |             |
 
-### getAppByPackageOrName
+### getAppInfoByName
 Get App information by packageName or appName.
 
 Note: packageName and appName should not be null at same time
@@ -290,7 +310,7 @@ Note: packageName and appName should not be null at same time
 **API**
 
 ```
-public Result<AppDetailDTO> getAppByPackageOrName(String packageName, String appName)
+public Result<AppDetailDTO> getAppInfoByName(String packageName, String appName)
 ```
 
 **Input parameter(s) description**
@@ -304,7 +324,7 @@ public Result<AppDetailDTO> getAppByPackageOrName(String packageName, String app
 
 ```
 DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
-  developerApi.getAppByPackageOrName("com.kibo.xunlian", "TestApp1");
+  developerApi.getAppInfoByName("com.kibo.xunlian", "TestApp1");
 ```
 
 **Server side validation failed sample result(JSON formatted)**
@@ -376,16 +396,16 @@ Structure of class CreateSingleApkRequest
 | apkName            | String | false    | the name of apk                                                                      |
 | apkType            | String        | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App) |
 | modelNameList      | List\<String> | false    | model names, the apk supported models                                                |
-| categoryList       | List\<String> | false    | business category,please reference appendix part                                                                   |
+| categoryList       | List\<String> | false    | business category,please reference appendix part                                     |
 | shortDesc          | String        | false    | short description                                                                    |
 | description        | String        | false    |                                                                                      |
 | releaseNotes       | String        | true     | release note                                                                         |
-| appFilePath        | String        | false    | the appfile path                                                                     |
-| iconFilePath       | String        | true     | the icon file path                                                                   |
-| featuredImgPath    | String        | true     | the featured image file path                                                         |
+| appFile            | UploadedFileContent        | true     | the app file                                                                         |
+| iconFile           | UploadedFileContent        | true     | the icon file                                                                        |
+| featuredImgFile    | UploadedFileContent        | false    | the featured image file                                                              |
 | accessUrl          | String        | true     | url of access                                                                        |
-| screenshotFiles    | List\<String> | false    | the screenshots file path                                                            |
-| paramTemplateFiles | List\<String> | true     | the parameter templates file path , template file is mandantory when ApkType is 'P'  |
+| screenshotFileList    | List\<UploadedFileContent> | true     | the screenshots files, at least three pictures                                       |
+| paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file , template file is mandantory when ApkType is 'P'       |
 
 **Sample codes**
 
@@ -394,8 +414,9 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
   CreateSingleApkRequest createApkRequest = new CreateSingleApkRequest();
         createApkRequest.setAppId(1598740513161250L);
         createApkRequest.setApkName("Tiktok-V1.0");
-        createApkRequest.setAppFilePath("C:\\Tiktok.apk");
-        createApkRequest.setApkType("N");
+        createApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp.apk"));
+        //createApkRequest.setApkType(APP_TYPE_NORMAL);
+        createApkRequest.setApkType(APP_TYPE_PARAMETER);
         createApkRequest.setShortDesc("test short desc");
         createApkRequest.setDescription("test description");
         createApkRequest.setReleaseNotes("This is release note");
@@ -413,18 +434,18 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
         //modelNameList.add("Prolin");
         createApkRequest.setModelNameList(modelNameList);
 
-        List<String> screenshotList = new ArrayList<>();
-        screenshotList.add("C:\\Tiktok1.png");
-        screenshotList.add("C:\\Tiktok2.png");
-        screenshotList.add("C:\\Tiktok3.png");
-        createApkRequest.setScreenshotFiles(screenshotList);
+        List<UploadedFileContent> screenshotList = new ArrayList<>();
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp1.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp2.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp3.png"));
+        createApkRequest.setScreenshotFileList(screenshotList);
 
-        List<String> paramList = new ArrayList<>();
-        paramList.add("C:\\Tiktok_paramTemplate.xml");
-        createApkRequest.setParamTemplateFiles(paramList);
+        List<UploadedFileContent> paramList = new ArrayList<>();
+        paramList.add(FileUtils.createUploadFile("C:\\TestApp_paramTemplate.xml"));
+        createApkRequest.setParamTemplateFileList(paramList);
 
-        createApkRequest.setFeaturedImgPath("C:\\Tiktok3.png");
-        createApkRequest.setIconFilePath("C:\\Tiktok3.png");
+        createApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("C:\\TestApp3.png"));
+        createApkRequest.setIconFile(FileUtils.createUploadFile("C:\\TestApp3.png"));
 
         developerApi.createApk(createApkRequest);
 ```
@@ -541,12 +562,12 @@ Structure of class CreateSingleApkRequest
 | shortDesc          | String        | false    | short description                                                                    |
 | description        | String        | false    |                                                                                      |
 | releaseNotes       | String        | true     | release note                                                                         |
-| appFilePath        | String        | true     | the appfile path                                                                     |
-| iconFilePath       | String        | true     | the icon file path                                                                   |
-| featuredImgPath    | String        | true     | the featured image file path                                                         |
+| appFile            | UploadedFileContent        | true     | the appfile                                                                          |
+| iconFile           | UploadedFileContent        | true     | the icon file                                                                        |
+| featuredImg        | UploadedFileContent        | true     | the featured image file                                                              |
 | accessUrl          | String        | true     | url of access                                                                        |
-| screenshotFiles    | List\<String> | false    | the screenshots file path                                                            |
-| paramTemplateFiles | List\<String> | false    | the parameter templates file path, mandantory when ApkType is 'P'                     |
+| screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots files                                                                |
+| paramTemplateFileList | List\<UploadedFileContent> | false    | the parameter templates file, mandantory when ApkType is 'P'                         |
 
 
 **Sample codes**
@@ -556,8 +577,8 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
   EditSingleApkRequest editApkRequest = new EditSingleApkRequest();
         editApkRequest.setApkId(1598744592121890L);
         editApkRequest.setApkName("Tiktok");
-        editApkRequest.setAppFilePath("C:\\Tiktok1.apk");
-        editApkRequest.setApkType("N");
+        editApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp_1.apk", "TestApp"));
+        editApkRequest.setApkType(APP_TYPE_PARAMETER);
         editApkRequest.setShortDesc("test short descV2");
         editApkRequest.setDescription("test descriptionV2");
         editApkRequest.setReleaseNotes("This is release noteV2");
@@ -572,18 +593,18 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
         modelNameList.add("A920Pro");
         editApkRequest.setModelNameList(modelNameList);
 
-        List<String> screenshotList = new ArrayList<>();
-        screenshotList.add("C:\\Tiktok11.png");
-        screenshotList.add("C:\\Tiktok22.png");
-        screenshotList.add("C:\\Tiktok33.png");
-        editApkRequest.setScreenshotFiles(screenshotList);
+        List<UploadedFileContent> screenshotList = new ArrayList<>();
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp111.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp222.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp333.png"));
+        editApkRequest.setScreenshotFileList(screenshotList);
 
-        List<String> paramList = new ArrayList<>();
-        paramList.add("C:\\Tiktok_paramTemplate.xml");
-        editApkRequest.setParamTemplateFiles(paramList);
+        List<UploadedFileContent> paramList = new ArrayList<>();
+        paramList.add(FileUtils.createUploadFile("C:\\TestApp_paramTemplate2.xml"));
+        editApkRequest.setParamTemplateFileList(paramList);
 
-        editApkRequest.setFeaturedImgPath("C:\\Tiktok33.png");
-        editApkRequest.setIconFilePath("C:\\Tiktok33.png");
+        editApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("C:\\TestApp333.png"));
+        editApkRequest.setIconFile(FileUtils.createUploadFile("C:\\TestApp333.png"));
 
         developerApi.editApk(editApkRequest);
 ```
@@ -819,7 +840,6 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 | 1011          | The app's developer signature is different from previous version |             |
 | 1012          | Please sign your app with a self-signed certificate              |             |
 | 1013          | The App signature certificate  is invalid                        |             |
-
 
 ### Appendix
 

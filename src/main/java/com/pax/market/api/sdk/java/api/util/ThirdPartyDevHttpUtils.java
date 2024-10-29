@@ -17,6 +17,7 @@ import com.google.gson.JsonParser;
 import com.pax.market.api.sdk.java.api.base.request.SdkRequest;
 import com.pax.market.api.sdk.java.api.constant.Constants;
 import com.pax.market.api.sdk.java.api.constant.ResultCode;
+import com.pax.market.api.sdk.java.api.io.UploadedFileContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,14 +87,14 @@ public abstract class ThirdPartyDevHttpUtils {
      * @param readTimeout    the read timeout
      * @param userData       the user data, will be ignored when is multipart-form
      * @param headerMap      the header map
-     * @param filePathMap      the header map, only support for multipart-form
+     * @param fileContentMap      the header map, only support for multipart-form
      * @param formValueMap      the header map, only support for multipart-form
      * @return the string
      */
-    public static String request(String requestUrl, String requestMethod, int connectTimeout, int readTimeout, String userData, Map<String, String> headerMap, Map<String, String> filePathMap, Map<String, String> formValueMap, int retryTimes){
+    public static String request(String requestUrl, String requestMethod, int connectTimeout, int readTimeout, String userData, Map<String, String> headerMap, Map<String, UploadedFileContent> fileContentMap, Map<String, String> formValueMap, int retryTimes){
 		try {
 			return RetryUtils.retry(() -> {
-				return request(requestUrl, requestMethod, connectTimeout, readTimeout, userData, false, headerMap, filePathMap, formValueMap);
+				return request(requestUrl, requestMethod, connectTimeout, readTimeout, userData, false, headerMap, fileContentMap, formValueMap);
 			}, e -> isExceptionShouldRetry(e), retryTimes);
 		} catch (Exception e) {
 			logger.error("Exception Occurred. Details: {}", e.toString());
@@ -116,13 +117,13 @@ public abstract class ThirdPartyDevHttpUtils {
 	}
 
 	private static String request(String requestUrl, String requestMethod, int connectTimeout, int readTimeout, String userData, boolean compressData,
-								  Map<String, String> headerMap, Map<String, String> filePathMap, Map<String, String> formValueMap) throws ConnectException, SocketTimeoutException{
+								  Map<String, String> headerMap, Map<String, UploadedFileContent> fileContentMap, Map<String, String> formValueMap) throws ConnectException, SocketTimeoutException{
 		HttpURLConnection urlConnection = null;
 		try {
 			urlConnection = getConnection(requestUrl, connectTimeout, readTimeout);
-			if (filePathMap!=null && !filePathMap.isEmpty()) {
+			if (fileContentMap!=null && !fileContentMap.isEmpty()) {
 				//走multipart-form形式
-				return finalMultipartFormRequest(urlConnection,  headerMap, filePathMap, formValueMap);
+				return finalMultipartFormRequest(urlConnection,  headerMap, fileContentMap, formValueMap);
 			} else {
 				//走restful形式
 				return finalRestfulRequest(urlConnection, requestMethod, userData, compressData, headerMap);
@@ -262,7 +263,7 @@ public abstract class ThirdPartyDevHttpUtils {
 		return EnhancedJsonUtils.getSdkJson(ResultCode.SDK_RQUEST_EXCEPTION);
 	}
 
-	private static String finalMultipartFormRequest(HttpURLConnection urlConnection, Map<String, String> headerMap, Map<String, String> filePathMap, Map<String, String> formValueMap) throws ConnectException,SocketTimeoutException{
+	private static String finalMultipartFormRequest(HttpURLConnection urlConnection, Map<String, String> headerMap, Map<String, UploadedFileContent> fileContentMap, Map<String, String> formValueMap) throws ConnectException,SocketTimeoutException{
 		String boundary = "PAXBoundary" + System.currentTimeMillis();
 		BufferedReader bufferedReader = null;
 
@@ -283,9 +284,9 @@ public abstract class ThirdPartyDevHttpUtils {
 			OutputStream outputStream = null;
 			try {
 				outputStream = new DataOutputStream(urlConnection.getOutputStream());
-				if (filePathMap != null && !filePathMap.isEmpty()) {
-					for (Entry<String, String> filePath : filePathMap.entrySet()) {
-						writeFile(filePath.getKey(), filePath.getValue(), boundary, outputStream);
+				if (fileContentMap != null && !fileContentMap.isEmpty()) {
+					for (Entry<String, UploadedFileContent> uploadFile : fileContentMap.entrySet()) {
+						writeFile(uploadFile.getKey(), uploadFile.getValue(), boundary, outputStream);
 					}
 				}
 
@@ -376,13 +377,13 @@ public abstract class ThirdPartyDevHttpUtils {
 	}
 
 
-	private static void writeFile(String paramName, String filePath, String boundary,
+	private static void writeFile(String paramName, UploadedFileContent fileContent, String boundary,
 								  OutputStream out) {
 
-		try (DataInputStream  in = new DataInputStream(new FileInputStream(filePath))) {
+		try (DataInputStream  in = new DataInputStream(new ByteArrayInputStream(fileContent.getBytesContent()))) {
 			String boundaryStr = BOUNDARY_PREFIX + boundary + LINE_END;
 			out.write(boundaryStr.getBytes());
-			String fileName = new File(filePath).getName();
+			String fileName = fileContent.getName();
 			String contentDispositionStr = String.format("Content-Disposition: form-data; name=\"%s\"; filename=\"%s\"", paramName, fileName) + LINE_END;
 			out.write(contentDispositionStr.getBytes());
 			String contentType = "Content-Type: application/octet-stream" + LINE_END + LINE_END;

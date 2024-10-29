@@ -1,5 +1,7 @@
 package com.pax.market.api.sdk.java.api.developer.dto;
 
+import com.pax.market.api.sdk.java.api.io.UploadedFileContent;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,11 +15,11 @@ import java.util.Map;
 public class CreateApkRequest implements Serializable {
     private static final long serialVersionUID = -1828764677771826323L;
 
-    private String appFilePath;
-    private String iconFilePath;
-    private String featuredImgPath;
-    private List<String> screenshotFiles;
-    private List<String> paramTemplateFiles;
+    private UploadedFileContent appFile;
+    private UploadedFileContent iconFile;
+    private UploadedFileContent featuredImgFile;
+    private List<UploadedFileContent> screenshotFileList;
+    private List<UploadedFileContent> paramTemplateFileList;
 
     private String appName;
     private String appNameByVersion;
@@ -30,38 +32,6 @@ public class CreateApkRequest implements Serializable {
     private List<String> paramTemplateList;
     private Integer chargeType;
     private BigDecimal price;
-
-    public String getAppFilePath() {
-        return appFilePath;
-    }
-
-    public void setAppFilePath(String appFilePath) {
-        this.appFilePath = appFilePath;
-    }
-
-    public String getIconFilePath() {
-        return iconFilePath;
-    }
-
-    public void setIconFilePath(String iconFilePath) {
-        this.iconFilePath = iconFilePath;
-    }
-
-    public List<String> getScreenshotFiles() {
-        return screenshotFiles;
-    }
-
-    public void setScreenshotFiles(List<String> screenshotFiles) {
-        this.screenshotFiles = screenshotFiles;
-    }
-
-    public List<String> getParamTemplateFiles() {
-        return paramTemplateFiles;
-    }
-
-    public void setParamTemplateFiles(List<String> paramTemplateFiles) {
-        this.paramTemplateFiles = paramTemplateFiles;
-    }
 
     public String getAppName() {
         return appName;
@@ -143,19 +113,51 @@ public class CreateApkRequest implements Serializable {
         this.price = price;
     }
 
-    public String getFeaturedImgPath() {
-        return featuredImgPath;
-    }
-
-    public void setFeaturedImgPath(String featuredImgPath) {
-        this.featuredImgPath = featuredImgPath;
-    }
-
     public String getAppNameByVersion() {
         return appNameByVersion;
     }
 
     public void setAppNameByVersion(String appNameByVersion) {
         this.appNameByVersion = appNameByVersion;
+    }
+
+    public UploadedFileContent getAppFile() {
+        return appFile;
+    }
+
+    public void setAppFile(UploadedFileContent appFile) {
+        this.appFile = appFile;
+    }
+
+    public UploadedFileContent getIconFile() {
+        return iconFile;
+    }
+
+    public void setIconFile(UploadedFileContent iconFile) {
+        this.iconFile = iconFile;
+    }
+
+    public UploadedFileContent getFeaturedImgFile() {
+        return featuredImgFile;
+    }
+
+    public void setFeaturedImgFile(UploadedFileContent featuredImgFile) {
+        this.featuredImgFile = featuredImgFile;
+    }
+
+    public List<UploadedFileContent> getScreenshotFileList() {
+        return screenshotFileList;
+    }
+
+    public void setScreenshotFileList(List<UploadedFileContent> screenshotFileList) {
+        this.screenshotFileList = screenshotFileList;
+    }
+
+    public List<UploadedFileContent> getParamTemplateFileList() {
+        return paramTemplateFileList;
+    }
+
+    public void setParamTemplateFileList(List<UploadedFileContent> paramTemplateFileList) {
+        this.paramTemplateFileList = paramTemplateFileList;
     }
 }

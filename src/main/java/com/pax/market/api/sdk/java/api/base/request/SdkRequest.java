@@ -15,6 +15,7 @@ package com.pax.market.api.sdk.java.api.base.request;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pax.market.api.sdk.java.api.io.UploadedFileContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,14 +60,14 @@ public class SdkRequest {
     protected boolean compressData = false;                         // 是否压缩数据
 
     /**
-     * The file path map
-     */
-    protected Map<String, String> filePathMap;                      // form文件路径
-
-    /**
      * The form params
      */
     protected Map<String, String> formValueMap;                     // form普通参数
+
+    /**
+     * The upload file map
+     */
+    protected Map<String, UploadedFileContent> uploadFileMap;                      // form文件
 
     /**
      * Instantiates a new Sdk request.
@@ -298,19 +299,19 @@ public class SdkRequest {
         this.compressData = compressData;
     }
 
-    public Map<String, String> getFilePathMap() {
-        if (this.filePathMap == null) {
-            this.filePathMap = new HashMap<>();
+    public Map<String, UploadedFileContent> getUploadFileMap() {
+        if (this.uploadFileMap == null) {
+            this.uploadFileMap = new HashMap<>();
         }
-        return filePathMap;
+        return uploadFileMap;
     }
 
-    public void setFilePathMap(Map<String, String> filePathMap) {
-        this.filePathMap = filePathMap;
+    public void setUploadFileMap(Map<String, UploadedFileContent> uploadFileMap) {
+        this.uploadFileMap = uploadFileMap;
     }
 
-    public void addFilePath(String key, String value) {
-        getFilePathMap().put(key, value);
+    public void addUploadFile(String key, UploadedFileContent value) {
+        getUploadFileMap().put(key, value);
     }
 
     public Map<String, String> getFormValueMap() {
