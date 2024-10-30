@@ -89,7 +89,7 @@ Structure of class CreateApkRequest
 | appFile               | UploadedFileContent        | false    | the app file                                                                         |
 | iconFile              | UploadedFileContent        | true     | the icon file                                                                        |
 | featuredImgFile       | UploadedFileContent        | false    | the icon file                                                                        |
-| screenshotFileList    | List\<UploadedFileContent> | true     | the screenshots file, at least three pictures                                        |
+| screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots file, at least three pictures                                        |
 | paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file path, mandatory when baseType is 'P'                    |
 
 
@@ -400,11 +400,11 @@ Structure of class CreateSingleApkRequest
 | shortDesc          | String        | false    | short description                                                                    |
 | description        | String        | false    |                                                                                      |
 | releaseNotes       | String        | true     | release note                                                                         |
-| appFile            | UploadedFileContent        | true     | the app file                                                                         |
+| appFile            | UploadedFileContent        | false    | the app file                                                                         |
 | iconFile           | UploadedFileContent        | true     | the icon file                                                                        |
-| featuredImgFile    | UploadedFileContent        | false    | the featured image file                                                              |
+| featuredImgFile    | UploadedFileContent        | true     | the featured image file                                                              |
 | accessUrl          | String        | true     | url of access                                                                        |
-| screenshotFileList    | List\<UploadedFileContent> | true     | the screenshots files, at least three pictures                                       |
+| screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots files, at least three pictures                                       |
 | paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file , template file is mandantory when ApkType is 'P'       |
 
 **Sample codes**
@@ -563,11 +563,11 @@ Structure of class CreateSingleApkRequest
 | description        | String        | false    |                                                                                      |
 | releaseNotes       | String        | true     | release note                                                                         |
 | appFile            | UploadedFileContent        | true     | the appfile                                                                          |
-| iconFile           | UploadedFileContent        | true     | the icon file                                                                        |
+| iconFile           | UploadedFileContent        | false    | the icon file                                                                        |
 | featuredImg        | UploadedFileContent        | true     | the featured image file                                                              |
 | accessUrl          | String        | true     | url of access                                                                        |
 | screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots files                                                                |
-| paramTemplateFileList | List\<UploadedFileContent> | false    | the parameter templates file, mandantory when ApkType is 'P'                         |
+| paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file, mandantory when ApkType is 'P'                         |
 
 
 **Sample codes**
