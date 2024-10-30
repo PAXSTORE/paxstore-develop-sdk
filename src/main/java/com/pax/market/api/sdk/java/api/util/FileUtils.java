@@ -12,7 +12,11 @@
 
 package com.pax.market.api.sdk.java.api.util;
 
+import com.pax.market.api.sdk.java.api.io.UploadedFileContent;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -151,4 +155,36 @@ public class FileUtils {
         return getBase64FileSize(base64Str)/1024;
     }
 
+    public static byte[] readFileToBytes(File file) {
+        byte[] content = null;
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+            content = new byte[(int) file.length()];
+            fis.read(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return content;
+    }
+
+    public static String getFileSuffix(String fileName) {
+        int lastIndexOf = fileName.lastIndexOf(".");
+        if(lastIndexOf!=-1) {
+            //说明有后缀
+            return fileName.substring(lastIndexOf+1);
+        }
+        return null;
+    }
+
+    public static UploadedFileContent createUploadFile(String filePath) {
+        File file = new File(filePath);
+        String originalName = file.getName();
+        byte[] data = readFileToBytes(file);
+        if (data==null) {
+            return null;
+        }
+
+        return new UploadedFileContent(data, originalName, originalName, getFileSuffix(originalName));
+    }
 }

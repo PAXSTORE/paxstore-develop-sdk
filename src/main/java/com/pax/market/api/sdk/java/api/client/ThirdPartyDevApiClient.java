@@ -147,7 +147,7 @@ public class ThirdPartyDevApiClient {
 		String requestUrl = ThirdPartyDevHttpUtils.buildRequestUrl(baseUrl + request.getRequestMappingUrl(), query);
 		logger.info(" --> {} {}", request.getRequestMethod().getValue(), requestUrl);
 
-		response = ThirdPartyDevHttpUtils.request(requestUrl, request.getRequestMethod().getValue(),connectTimeout, readTimeout, request.getRequestBody(), request.getHeaderMap(), request.getFilePathMap(), request.getFormValueMap(), retryTimes);
+		response = ThirdPartyDevHttpUtils.request(requestUrl, request.getRequestMethod().getValue(),connectTimeout, readTimeout, request.getRequestBody(), request.getHeaderMap(), request.getUploadFileMap(), request.getFormValueMap(), retryTimes);
 
 		return response;
 	}
