@@ -195,7 +195,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
             editApkRequest.setParamTemplateList(paramTemplateNameList);
         }
 
-        request.addFormValue("apkDetail", new Gson().toJson(editApkRequest, EditSingleApkRequest.class));
+        request.addFormValue("apkDetail", GsonUtils.getGsonBuilder().toJson(editApkRequest, EditSingleApkRequest.class));
     }
 
     private void handleFormData(CreateApkRequest createApkRequest, SdkRequest request) {
@@ -226,7 +226,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
             createApkRequest.setParamTemplateList(paramTemplateNameList);
         }
 
-        request.addFormValue("apkDetail", new Gson().toJson(createApkRequest, CreateApkRequest.class));
+        request.addFormValue("apkDetail", GsonUtils.getGsonBuilder().toJson(createApkRequest, CreateApkRequest.class));
     }
 
     private Result<String>  emptyResult(ThirdPartyDevApiClient client, SdkRequest request) {

@@ -168,10 +168,6 @@ public class FileUtils {
         return content;
     }
 
-    public static UploadedFileContent createUploadFile(String filePath) {
-        return createUploadFile(filePath, null);
-    }
-
     public static String getFileSuffix(String fileName) {
         int lastIndexOf = fileName.lastIndexOf(".");
         if(lastIndexOf!=-1) {
@@ -181,17 +177,14 @@ public class FileUtils {
         return null;
     }
 
-    public static UploadedFileContent createUploadFile(String filePath, String fileName) {
+    public static UploadedFileContent createUploadFile(String filePath) {
         File file = new File(filePath);
         String originalName = file.getName();
-        if(StringUtils.isEmpty(fileName)) {
-            fileName = originalName;
-        }
         byte[] data = readFileToBytes(file);
         if (data==null) {
             return null;
         }
 
-        return new UploadedFileContent(data, fileName, originalName, getFileSuffix(originalName));
+        return new UploadedFileContent(data, originalName, originalName, getFileSuffix(originalName));
     }
 }

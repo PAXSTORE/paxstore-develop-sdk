@@ -42,7 +42,7 @@ public class DeveloperApiTest {
     @Test
     public void testUploadApk() {
         CreateApkRequest createApkRequest = new CreateApkRequest();
-        createApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp.apk", "TestApp"));
+        createApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp.apk"));
         createApkRequest.setAppName("Test App Name");
         createApkRequest.setAppNameByVersion("App Name By Version");
         createApkRequest.setBaseType(APP_TYPE_NORMAL);
@@ -136,9 +136,9 @@ public class DeveloperApiTest {
     @Test
     public void testEditApk() {
         EditSingleApkRequest editApkRequest = new EditSingleApkRequest();
-        editApkRequest.setApkId(1642230508945446L);
-        editApkRequest.setApkName("TestAppV1.1");
-        editApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp_1.apk", "TestApp"));
+        editApkRequest.setApkId(1643163756265516L);
+        editApkRequest.setApkName("TestAppV1.2");
+//        editApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp_1.apk"));
         editApkRequest.setApkType(APP_TYPE_PARAMETER);
         editApkRequest.setShortDesc("test short descV3");
         editApkRequest.setDescription("test descriptionV3");
