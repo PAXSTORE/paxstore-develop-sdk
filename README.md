@@ -577,7 +577,7 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
   EditSingleApkRequest editApkRequest = new EditSingleApkRequest();
         editApkRequest.setApkId(1598744592121890L);
         editApkRequest.setApkName("Tiktok");
-        editApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp_1.apk", "TestApp"));
+        editApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp_1.apk"));
         editApkRequest.setApkType(APP_TYPE_PARAMETER);
         editApkRequest.setShortDesc("test short descV2");
         editApkRequest.setDescription("test descriptionV2");
