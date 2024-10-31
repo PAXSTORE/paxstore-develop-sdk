@@ -1,7 +1,6 @@
 package com.pax.market.api.sdk.java.api.test;
 
-import com.pax.market.api.sdk.java.api.base.dto.AppDetailDTO;
-import com.pax.market.api.sdk.java.api.base.dto.Result;
+import com.pax.market.api.sdk.java.api.base.dto.*;
 import com.pax.market.api.sdk.java.api.constant.Constants;
 import com.pax.market.api.sdk.java.api.developer.DeveloperApi;
 import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleAppRequest;
@@ -10,6 +9,7 @@ import com.pax.market.api.sdk.java.api.developer.dto.CreateApkRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.step.EditSingleApkRequest;
 import com.pax.market.api.sdk.java.api.io.UploadedFileContent;
 import com.pax.market.api.sdk.java.api.util.FileUtils;
+import com.pax.market.api.sdk.java.api.util.GsonUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -193,4 +193,21 @@ public class DeveloperApiTest {
         Assert.assertTrue(testApp.getBusinessCode() == 0);
         Assert.assertNotNull("get App failed", testApp.getData());
     }
+
+    @Test
+    public void testGetCodeByType() {
+        Result<CodeInfoDTO> result = developerApi.getCodeByType("app_category");
+        PageInfo<CodeInfoDTO> pageInfo = result.getPageInfo();
+        Assert.assertTrue(result.getBusinessCode() == 0);
+        Assert.assertNotNull("get codeList failed", pageInfo);
+    }
+
+    @Test
+    public void testGetApk() {
+        Result<ApkInfoDTO> apkInfo = developerApi.getApkById(1643270597771298L);
+        ApkInfoDTO data = apkInfo.getData();
+        Assert.assertTrue(apkInfo.getBusinessCode() == 0);
+        Assert.assertNotNull("get codeList failed", data);
+    }
+
 }

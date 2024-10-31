@@ -841,6 +841,235 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 | 1012          | Please sign your app with a self-signed certificate              |             |
 | 1013          | The App signature certificate  is invalid                        |             |
 
+### Get code by type
+App category list, it is dictionary
+
+**API**
+
+```
+Result<CodeInfoDTO> getCodeByType(String codeType)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name | Type   | Nullable | Description                                                        |
+|:---------------|:-------| :------- |:-------------------------------------------------------------------|
+| codeType          | String | false    | codeType of dictionary, Value can be 'app_category','product_type' |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  Result<CodeInfoDTO> result = developerApi.getCodeByType("app_category");
+  PageInfo<CodeInfoDTO> pageInfo = result.getPageInfo();
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 135,
+	"message": "Request parameter is missing or invalid"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0,
+	"pageInfo": {
+		"pageNo": 1,
+		"limit": 22,
+		"totalCount": 22,
+		"hasNext": false,
+		"dataSet": [{
+			"id": 1200,
+			"type": "app_category",
+			"value": "GYL_DK",
+			"label": "Loan",
+			"description": "Loan",
+			"lang": "en",
+			"sort": 0
+		}, {
+			"id": 2200,
+			"type": "app_category",
+			"value": "WL_PS",
+			"label": "Delivery",
+			"description": "Delivery",
+			"lang": "en",
+			"sort": 0
+		}, {
+			"id": 4100,
+			"type": "app_category",
+			"value": "SH_HY",
+			"label": "Membership",
+			"description": "Membership",
+			"lang": "en",
+			"sort": 0
+		}]
+	}
+}
+```
+Structure of class PageInfo
+
+|Property Name| Type              | Description              |
+|:---|:------------------|:-------------------------|
+|pageNo| Integer           | bytes of file content    |
+|limit| Integer           | name of file             |
+|totalCount| Integer           | originalFilename of file |
+|dataSet| List<CodeInfoDTO> | code list                |
+
+Structure of class CodeInfoDTO
+
+|Property Name| Type              | Description                       |
+|:---|:------------------|:----------------------------------|
+|type| String            | code type                         |
+|value| String           | code value, used by createApk API |
+|label| String | label of code                     |
+|description| String | description                       |
+
+
+**Possible business codes**
+
+| Business Code | Message                                                          | Description |
+|:--------------|:-----------------------------------------------------------------| :---------- |
+| 131           | Insufficient access right                           |             |
+| 135           | Invalid parameter or missing parameter                           |             | 
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate              |             |
+| 1013          | The App signature certificate  is invalid                        |             |
+
+### Get APK
+get apk by apkId
+
+**API**
+
+```
+Result<ApkInfoDTO> getApkById(Long apkId)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name | Type   | Nullable | Description |
+|:---------------|:-------| :------- |:------------|
+| apkId          | String | false    | apkId       |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  Result<ApkInfoDTO> apkInfo = developerApi.getApkById(1643270597771298L);
+  ApkInfoDTO data = apkInfo.getData();
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 135,
+	"message": "Request parameter is missing or invalid"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0,
+	"data": {
+		"id": 1643270597771298,
+		"appId": 1643270591479842,
+		"appName": "App Name By Version",
+		"packageName": "com.mizhongtech.bbwhy",
+		"appStatus": "A",
+		"status": "O",
+		"versionCode": 501,
+		"versionName": "5.01.48x",
+		"osType": "A",
+		"apkType": "P",
+		"apkFileType": "A",
+		"fileSize": 26803810,
+		"displayFileSize": "25.6 MB",
+		"apkIconFileId": "group1/M00/02/58/wKjIGWchoZSAYZIkAABezcNJq-g726.png",
+		"submitDate": "Oct 30, 2024, 11:01:43 AM",
+		"updatedDate": "Oct 30, 2024, 4:58:54 PM",
+		"approvedDate": "Oct 30, 2024, 4:58:54 PM",
+		"createdDate": "Oct 30, 2024, 11:01:23 AM",
+		"apkDetail": {
+			"apkId": 1643270597771298,
+			"appName": "App Name By Version",
+			"shortDesc": "test short desc",
+			"description": "test description",
+			"releaseNotes": "This is release note",
+			"screenshot0": "group1/M00/02/58/wKjIGWchoZOAC3URAAPHv517xvo207.png",
+			"screenshot1": "group1/M00/02/58/wKjIGWchoZOAFKFXAAdFKTEjRV4697.png",
+			"screenshot2": "group1/M00/02/58/wKjIGWchoZOAJOLuAABezcNJq-g904.png",
+			"screenShotType": "V",
+			"featuredImg": "group1/M00/02/58/wKjIGWchoZSATzkPAABezcNJq-g920.png"
+		},
+		"appChargeType": 0
+	}
+}
+```
+Structure of data field
+
+| Property Name | Type    | Description      |
+|:--------------|:--------|:-----------------|
+| businessCode          | Integer | business code    |
+| data         | ApkInfoDTO  | apk informations |
+
+Structure of class ApkInfoDTO
+
+| Property Name | Type | Description                             |
+|:--------------|:-----|:----------------------------------------|
+| id          | Long | apkId                                   |
+| appId         | Long | appId                                   |
+| appName         | String | app name                                |
+| packageName         | String | package name                            |
+| appStatus         | String | App status                              |
+| status         | String | APK status                              |
+| versionCode         | Long | version code of APK                     |
+| versionName         | String | version name of APK                     |
+| osType         | String | 'A' is ANDROID, 'T' is TRADITIONAL      |
+| apkType         | String | 'P' is PARAMETER_APP, 'N' is NORMAL_APP |
+| apkFileType         | String | apk file type                           |
+| fileSize         | Long | file size                               |
+| submitDate         | Date | apk submit date                         |
+| approvedDate         | Long | apk approved date                       |
+| apkSignatureStatus         | String | apk signature status                    |
+| apkDetail         | ApkDetailDTO | detail of APK                           |
+
+Structure of class ApkDetailDTO
+
+| Property Name | Type | Description                     |
+|:--------------|:-----|:--------------------------------|
+| apkId          | Long | apkId                           |
+| appName         | String | app name                        |
+| shortDesc         | String | shortDesc of apk                |
+| description         | String | APK status                      |
+| releaseNotes         | String | release Notes                   |
+| screenshot0         | String | picture url                     |
+| screenshot1         | String | picture url                     |
+| screenshot2         | String | picture url                     |
+| screenshot3         | String | picture url                     |
+| screenshot4         | String | picture url                     |
+| featuredImg         | String | featured image url              |
+| accessUrl         | String | apk signature status            |
+| attachment         | String | attachment url of release note  |
+| attachmentName         | String | attachment name of release note |
+
+**Possible business codes**
+
+| Business Code | Message                                                          | Description |
+|:--------------|:-----------------------------------------------------------------| :---------- |
+| 131           | Insufficient access right                           |             |
+| 135           | Invalid parameter or missing parameter                           |             | 
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate              |             |
+| 1013          | The App signature certificate  is invalid                        |             |
+
+
 ### Appendix
 
 **business category codes**

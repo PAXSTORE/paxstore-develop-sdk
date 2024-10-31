@@ -35,6 +35,8 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
     protected static final String DELETE_APP_URL = "/v1/3rd/developer/apps/{appId}";
     protected static final String DELETE_APK_URL = "/v1/3rd/developer/apks/{apkId}";
     protected static final String GET_APP_BY_PACKAGE_URL = "/v1/3rd/developer/apps";
+    protected static final String GET_CODE_BY_TYPE_URL = "/v1/3rd/developer/codes";
+    protected static final String GET_APK_BY_TYPE_URL = "/v1/3rd/developer/apks/{apkId}";
 
     public DeveloperApi(String baseUrl, String apiKey, String apiSecret) {
         super(baseUrl, apiKey, apiSecret);
@@ -134,6 +136,16 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         SdkRequest request = createSdkRequest(SUBMIT_APK_URL.replace("{apkId}", String.valueOf(apkId)));
         request.setRequestMethod(SdkRequest.RequestMethod.POST);
         return emptyResult(client,request);
+    }
+
+    public Result<ApkInfoDTO> getApkById(Long apkId) {
+        if(apkId==null || apkId<=0){
+            return new Result<ApkInfoDTO>(Collections.singletonList("parameter.apkId.null"));
+        }
+        ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
+        SdkRequest request = createSdkRequest(GET_APK_BY_TYPE_URL.replace("{apkId}", String.valueOf(apkId)));
+        request.setRequestMethod(SdkRequest.RequestMethod.GET);
+        return apkDataResult(client,request);
     }
 
     private void handleCreateApkFormData(CreateSingleApkRequest createApkRequest, SdkRequest request) {
@@ -239,9 +251,30 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         return  new Result<>(dataResponse);
     }
 
+    private Result<ApkInfoDTO>  apkDataResult(ThirdPartyDevApiClient client, SdkRequest request ) {
+        ApkResponse dataResponse =  EnhancedJsonUtils.fromJson(client.execute(request), ApkResponse.class);
+        return  new Result<>(dataResponse);
+    }
+
     private Result<Long>  idResult(ThirdPartyDevApiClient client, SdkRequest request ) {
         LongIdResponse idResponse =  EnhancedJsonUtils.fromJson(client.execute(request), LongIdResponse.class);
         return  new Result<>(idResponse);
+    }
+
+    public Result<CodeInfoDTO> getCodeByType(String codeType) {
+        ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
+        SdkRequest request = createSdkRequest(GET_CODE_BY_TYPE_URL);
+        request.setRequestMethod(SdkRequest.RequestMethod.GET);
+        if(StringUtils.isNotBlank(codeType)){
+            request.getRequestParams().put("codeType", codeType);
+            request.getRequestParams().put("lang", "en");
+        }
+        return codeListResult(client,request);
+    }
+
+    private static Result<CodeInfoDTO> codeListResult(ThirdPartyDevApiClient client, SdkRequest request ) {
+        PageResponse<CodeInfoDTO> pageResponse = EnhancedJsonUtils.fromJson(client.execute(request), CodeInfoPageResponse.class);
+        return new Result<>(pageResponse);
     }
 
 }
