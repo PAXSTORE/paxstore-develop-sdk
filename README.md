@@ -978,37 +978,43 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 {
 	"businessCode": 0,
 	"data": {
-		"id": 1643270597771298,
-		"appId": 1643270591479842,
-		"appName": "App Name By Version",
-		"packageName": "com.mizhongtech.bbwhy",
-		"appStatus": "A",
-		"status": "O",
-		"versionCode": 501,
-		"versionName": "5.01.48x",
+		"apkId": 1643502907686947,
+		"apkType": "N",
+		"apkIconFileId": "https://www.dev.paxsit.com/group1/M00/02/59/wKjIGWcjUjmADLs9AAAIOm3Mexw5393549",
+		"displayFileSize": "40.9 MB",
+		"versionName": "7.9",
+		"allowUpdateParamTemplate": true,
+		"paramTemplateNameList": [],
+		"apkCategoryList": ["GYL_DK", "GYL_JZ", "GYL_SK"],
+		"apkModelList": [1],
+		"signatureProvider": "NONE",
+		"minSdkVersion": "21",
+		"storeSdkVersion": null,
+		"apkFileFactoryList": [],
+		"appName": "七猫免费小说",
+		"shortDesc": "一句话简介",
+		"description": "描述",
+		"releaseNotes": null,
+		"screenshot0": "https://www.dev.paxsit.com/group1/M00/02/59/wKjIGWcjO5qAC6f2AAPHv517xvo197.png",
+		"screenshot1": "https://www.dev.paxsit.com/group1/M00/02/59/wKjIGWcjO5uAPYrUAAdFKTEjRV4261.png",
+		"screenshot2": "https://www.dev.paxsit.com/group1/M00/02/59/wKjIGWcjO5uAA8uOAASbj8LASiw607.png",
+		"screenshot3": null,
+		"screenshot4": null,
+		"featuredImg": null,
+		"accessUrl": null,
+		"attachment": null,
+		"attachmentName": null,
+		"appId": 1643490278637602,
+		"packageName": "com.kmxs.reader",
+		"price": null,
+		"currency": null,
+		"chargeType": 0,
+		"freeTrialDay": null,
 		"osType": "A",
-		"apkType": "P",
-		"apkFileType": "A",
-		"fileSize": 26803810,
-		"displayFileSize": "25.6 MB",
-		"apkIconFileId": "group1/M00/02/58/wKjIGWchoZSAYZIkAABezcNJq-g726.png",
-		"submitDate": "Oct 30, 2024, 11:01:43 AM",
-		"updatedDate": "Oct 30, 2024, 4:58:54 PM",
-		"approvedDate": "Oct 30, 2024, 4:58:54 PM",
-		"createdDate": "Oct 30, 2024, 11:01:23 AM",
-		"apkDetail": {
-			"apkId": 1643270597771298,
-			"appName": "App Name By Version",
-			"shortDesc": "test short desc",
-			"description": "test description",
-			"releaseNotes": "This is release note",
-			"screenshot0": "group1/M00/02/58/wKjIGWchoZOAC3URAAPHv517xvo207.png",
-			"screenshot1": "group1/M00/02/58/wKjIGWchoZOAFKFXAAdFKTEjRV4697.png",
-			"screenshot2": "group1/M00/02/58/wKjIGWchoZOAJOLuAABezcNJq-g904.png",
-			"screenShotType": "V",
-			"featuredImg": "group1/M00/02/58/wKjIGWchoZSATzkPAABezcNJq-g920.png"
-		},
-		"appChargeType": 0
+		"appType": "G",
+		"disableApkTypeChange": true,
+		"isFirstApkVersion": false,
+		"chargeMode": null
 	}
 }
 ```
@@ -1021,43 +1027,52 @@ Structure of data field
 
 Structure of class ApkInfoDTO
 
-| Property Name | Type | Description                             |
-|:--------------|:-----|:----------------------------------------|
-| id          | Long | apkId                                   |
-| appId         | Long | appId                                   |
-| appName         | String | app name                                |
-| packageName         | String | package name                            |
-| appStatus         | String | App status                              |
-| status         | String | APK status                              |
-| versionCode         | Long | version code of APK                     |
-| versionName         | String | version name of APK                     |
-| osType         | String | 'A' is ANDROID, 'T' is TRADITIONAL      |
-| apkType         | String | 'P' is PARAMETER_APP, 'N' is NORMAL_APP |
-| apkFileType         | String | apk file type                           |
-| fileSize         | Long | file size                               |
-| submitDate         | Date | apk submit date                         |
-| approvedDate         | Long | apk approved date                       |
-| apkSignatureStatus         | String | apk signature status                    |
-| apkDetail         | ApkDetailDTO | detail of APK                           |
+| Property Name | Type            | Description                                        |
+|:--------------|:----------------|:---------------------------------------------------|
+| apkId          | Long            | apkId                                              |
+| apkType         | String          | 'P' is PARAMETER_APP, 'N' is NORMAL_APP            |
+| apkIconFileId         | String          | icon file url                                      |
+| displayFileSize         | String          | APK file size, like '40.0MB'                       |
+| versionName         | String          | version name of APK                                |
+| allowUpdateParamTemplate         | Boolean         |                                                    |
+| paramTemplateNameList         | List<String>    | templateName list                                  |
+| apkCategoryList         | List<String>    | category list                                      |
+| apkModelList         | List<Long>      | model id list                                      |
+| signatureProvider         | String          | signature provider                                 |
+| minSdkVersion         | String          | minimum version of SDK                             |
+| apkFileFactoryList         | List<ApkFileVo> | apkFile for support multi vendor factory           |
+| appName         | String          | app name                                           |
+| shortDesc         | String          | shortDesc of apk                                   |
+| description         | String          | APK status                                         |
+| releaseNotes         | String          | release Notes                                      |
+| screenshot0         | String          | picture url                                        |
+| screenshot1         | String          | picture url                                        |
+| screenshot2         | String          | picture url                                        |
+| screenshot3         | String          | picture url                                        |
+| screenshot4         | String          | picture url                                        |
+| featuredImg         | String          | featured image url                                 |
+| accessUrl         | String          | apk signature status                               |
+| attachment         | String          | attachment url of release note                     |
+| attachmentName         | String          | attachment name of release note                    |
+| appId         | Long            | appId                                              |
+| packageName         | String          | package name of app                                |
+| price         | BigDecimal      | price of app                                       |
+| currency         | String          | currency of app, such as 'USD'                     |
+| chargeType         | Integer         | 0 is free , 1 is not free                          |
+| freeTrialDay         | Integer         | such as 100                                        |
+| osType         | String          | 'A' is Android ,'T' is tranditional, 'NIL' is None |
+| appType         | String          | 'G' is genernal app, 'S' is industry solution      |
+| disableApkTypeChange         | Boolean         |                                                    |
+| isFirstApkVersion         | Boolean         |                                                    |
+| chargeMode         | String          | 0 is TERMINAL_INSTALLED, 1 is QUANTITY             |
 
-Structure of class ApkDetailDTO
+Structure of class ApkFileVo
 
-| Property Name | Type | Description                     |
-|:--------------|:-----|:--------------------------------|
-| apkId          | Long | apkId                           |
-| appName         | String | app name                        |
-| shortDesc         | String | shortDesc of apk                |
-| description         | String | APK status                      |
-| releaseNotes         | String | release Notes                   |
-| screenshot0         | String | picture url                     |
-| screenshot1         | String | picture url                     |
-| screenshot2         | String | picture url                     |
-| screenshot3         | String | picture url                     |
-| screenshot4         | String | picture url                     |
-| featuredImg         | String | featured image url              |
-| accessUrl         | String | apk signature status            |
-| attachment         | String | attachment url of release note  |
-| attachmentName         | String | attachment name of release note |
+| Property Name | Type            | Description                             |
+|:--------------|:----------------|:----------------------------------------|
+| factoryId          | Long            | factory id                              |
+| factoryName         | String          | factoryName |
+| name         | String          | name                           |
 
 **Possible business codes**
 
