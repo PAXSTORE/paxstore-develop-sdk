@@ -986,7 +986,7 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 		"allowUpdateParamTemplate": true,
 		"paramTemplateNameList": [],
 		"apkCategoryList": ["GYL_DK", "GYL_JZ", "GYL_SK"],
-		"apkModelList": [1],
+		"apkModelList": ["A920","A930"],
 		"signatureProvider": "NONE",
 		"minSdkVersion": "21",
 		"storeSdkVersion": null,
@@ -1014,7 +1014,9 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 		"appType": "G",
 		"disableApkTypeChange": true,
 		"isFirstApkVersion": false,
-		"chargeMode": null
+		"chargeMode": null,
+		"versionCode":10020,
+		"status":"O"
 	}
 }
 ```
@@ -1027,44 +1029,46 @@ Structure of data field
 
 Structure of class ApkInfoDTO
 
-| Property Name | Type            | Description                                        |
-|:--------------|:----------------|:---------------------------------------------------|
-| apkId          | Long            | apkId                                              |
-| apkType         | String          | 'P' is PARAMETER_APP, 'N' is NORMAL_APP            |
-| apkIconFileId         | String          | icon file url                                      |
-| displayFileSize         | String          | APK file size, like '40.0MB'                       |
-| versionName         | String          | version name of APK                                |
-| allowUpdateParamTemplate         | Boolean         |                                                    |
-| paramTemplateNameList         | List<String>    | templateName list                                  |
-| apkCategoryList         | List<String>    | category list                                      |
-| apkModelList         | List<Long>      | model id list                                      |
-| signatureProvider         | String          | signature provider                                 |
-| minSdkVersion         | String          | minimum version of SDK                             |
-| apkFileFactoryList         | List<ApkFileVo> | apkFile for support multi vendor factory           |
-| appName         | String          | app name                                           |
-| shortDesc         | String          | shortDesc of apk                                   |
-| description         | String          | APK status                                         |
-| releaseNotes         | String          | release Notes                                      |
-| screenshot0         | String          | picture url                                        |
-| screenshot1         | String          | picture url                                        |
-| screenshot2         | String          | picture url                                        |
-| screenshot3         | String          | picture url                                        |
-| screenshot4         | String          | picture url                                        |
-| featuredImg         | String          | featured image url                                 |
-| accessUrl         | String          | apk signature status                               |
-| attachment         | String          | attachment url of release note                     |
-| attachmentName         | String          | attachment name of release note                    |
-| appId         | Long            | appId                                              |
-| packageName         | String          | package name of app                                |
-| price         | BigDecimal      | price of app                                       |
-| currency         | String          | currency of app, such as 'USD'                     |
-| chargeType         | Integer         | 0 is free , 1 is not free                          |
-| freeTrialDay         | Integer         | such as 100                                        |
-| osType         | String          | 'A' is Android ,'T' is tranditional, 'NIL' is None |
-| appType         | String          | 'G' is genernal app, 'S' is industry solution      |
-| disableApkTypeChange         | Boolean         |                                                    |
-| isFirstApkVersion         | Boolean         |                                                    |
-| chargeMode         | String          | 0 is TERMINAL_INSTALLED, 1 is QUANTITY             |
+| Property Name            | Type            | Description                                                                 |
+|:-------------------------|:----------------|:----------------------------------------------------------------------------|
+| apkId                    | Long            | apkId                                                                       |
+| apkType                  | String          | 'P' is PARAMETER_APP, 'N' is NORMAL_APP                                     |
+| apkIconFileId            | String          | icon file url                                                               |
+| displayFileSize          | String          | APK file size, like '40.0MB'                                                |
+| versionName              | String          | version name of APK                                                         |
+| allowUpdateParamTemplate | Boolean         |                                                                             |
+| paramTemplateNameList    | List<String>    | templateName list                                                           |
+| apkCategoryList          | List<String>    | category list                                                               |
+| apkModelList             | List<Long>      | model id list                                                               |
+| signatureProvider        | String          | signature provider                                                          |
+| minSdkVersion            | String          | minimum version of SDK                                                      |
+| apkFileFactoryList       | List<ApkFileVo> | apkFile for support multi vendor factory                                    |
+| appName                  | String          | app name                                                                    |
+| shortDesc                | String          | shortDesc of apk                                                            |
+| description              | String          | APK status                                                                  |
+| releaseNotes             | String          | release Notes                                                               |
+| screenshot0              | String          | picture url                                                                 |
+| screenshot1              | String          | picture url                                                                 |
+| screenshot2              | String          | picture url                                                                 |
+| screenshot3              | String          | picture url                                                                 |
+| screenshot4              | String          | picture url                                                                 |
+| featuredImg              | String          | featured image url                                                          |
+| accessUrl                | String          | apk signature status                                                        |
+| attachment               | String          | attachment url of release note                                              |
+| attachmentName           | String          | attachment name of release note                                             |
+| appId                    | Long            | appId                                                                       |
+| packageName              | String          | package name of app                                                         |
+| price                    | BigDecimal      | price of app                                                                |
+| currency                 | String          | currency of app, such as 'USD'                                              |
+| chargeType               | Integer         | 0 is free , 1 is not free                                                   |
+| freeTrialDay             | Integer         | such as 100                                                                 |
+| osType                   | String          | 'A' is Android ,'T' is tranditional, 'NIL' is None                          |
+| appType                  | String          | 'G' is genernal app, 'S' is industry solution                               |
+| disableApkTypeChange     | Boolean         |                                                                             |
+| isFirstApkVersion        | Boolean         |                                                                             |
+| chargeMode               | String          | 0 is TERMINAL_INSTALLED, 1 is QUANTITY                                      |
+| versionCode              | Long            |                                                                             |
+| status                   | String          | 'O' is ONLINE, 'U' is UNAVAILABLE, 'R' is REJECTED, 'P' is PENDING, 'D' is DRAFT |
 
 Structure of class ApkFileVo
 

@@ -18,7 +18,7 @@ public class ApkInfoDTO implements Serializable {
     /** 分类列表 -这里只返回value*/
     private List<String> apkCategoryList;
     /** 机型列表 -这里只返回modelId */
-    private List<Long> apkModelList;
+    private List<String> apkModelList;
 
     /** apk file info  */
     private String signatureProvider;
@@ -60,6 +60,8 @@ public class ApkInfoDTO implements Serializable {
 
     /** solution app charge mode**/
     private Integer chargeMode;
+    private String status;
+    private Long versionCode;
 
     private static class ApkFileVo implements Serializable{
         private static final long serialVersionUID = 1L;
@@ -156,11 +158,11 @@ public class ApkInfoDTO implements Serializable {
         this.apkCategoryList = apkCategoryList;
     }
 
-    public List<Long> getApkModelList() {
+    public List<String> getApkModelList() {
         return apkModelList;
     }
 
-    public void setApkModelList(List<Long> apkModelList) {
+    public void setApkModelList(List<String> apkModelList) {
         this.apkModelList = apkModelList;
     }
 
@@ -386,5 +388,21 @@ public class ApkInfoDTO implements Serializable {
 
     public void setChargeMode(Integer chargeMode) {
         this.chargeMode = chargeMode;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Long getVersionCode() {
+        return versionCode;
+    }
+
+    public void setVersionCode(Long versionCode) {
+        this.versionCode = versionCode;
     }
 }
