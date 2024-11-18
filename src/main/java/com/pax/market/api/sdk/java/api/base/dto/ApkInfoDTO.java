@@ -18,7 +18,9 @@ public class ApkInfoDTO implements Serializable {
     /** 分类列表 -这里只返回value*/
     private List<String> apkCategoryList;
     /** 机型列表 -这里只返回modelId */
-    private List<String> apkModelList;
+    private List<Long> apkModelList;
+    /** 机型列表 -这里只返回modelName */
+    private List<String> apkModelNameList;
 
     /** apk file info  */
     private String signatureProvider;
@@ -158,11 +160,11 @@ public class ApkInfoDTO implements Serializable {
         this.apkCategoryList = apkCategoryList;
     }
 
-    public List<String> getApkModelList() {
+    public List<Long> getApkModelList() {
         return apkModelList;
     }
 
-    public void setApkModelList(List<String> apkModelList) {
+    public void setApkModelList(List<Long> apkModelList) {
         this.apkModelList = apkModelList;
     }
 
@@ -404,5 +406,13 @@ public class ApkInfoDTO implements Serializable {
 
     public void setVersionCode(Long versionCode) {
         this.versionCode = versionCode;
+    }
+
+    public List<String> getApkModelNameList() {
+        return apkModelNameList;
+    }
+
+    public void setApkModelNameList(List<String> apkModelNameList) {
+        this.apkModelNameList = apkModelNameList;
     }
 }
