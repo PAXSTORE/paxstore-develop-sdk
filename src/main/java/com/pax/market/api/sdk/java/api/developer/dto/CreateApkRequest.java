@@ -18,6 +18,8 @@ public class CreateApkRequest implements Serializable {
     private UploadedFileContent appFile;
     private UploadedFileContent iconFile;
     private UploadedFileContent featuredImgFile;
+    //release note attachment
+    private UploadedFileContent attachment;
     private List<UploadedFileContent> screenshotFileList;
     private List<UploadedFileContent> paramTemplateFileList;
 
@@ -159,5 +161,13 @@ public class CreateApkRequest implements Serializable {
 
     public void setParamTemplateFileList(List<UploadedFileContent> paramTemplateFileList) {
         this.paramTemplateFileList = paramTemplateFileList;
+    }
+
+    public UploadedFileContent getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(UploadedFileContent attachment) {
+        this.attachment = attachment;
     }
 }

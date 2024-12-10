@@ -57,4 +57,10 @@ public class AppDetailDTO implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "AppDetailDTO [id=" + id + ", name=" + name + ", packageName=" + packageName + ", type="
+                + type + ", osType=" + osType + ", status=" + status+ "]";
+    }
 }

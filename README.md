@@ -89,6 +89,7 @@ Structure of class CreateApkRequest
 | appFile               | UploadedFileContent        | false    | the app file                                                                         |
 | iconFile              | UploadedFileContent        | true     | the icon file                                                                        |
 | featuredImgFile       | UploadedFileContent        | false    | the icon file                                                                        |
+| attachment            | UploadedFileContent        | true     | the release note file(text format)                                                   |
 | screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots file, at least three pictures                                        |
 | paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file path, mandatory when baseType is 'P'                    |
 
@@ -403,6 +404,7 @@ Structure of class CreateSingleApkRequest
 | appFile            | UploadedFileContent        | false    | the app file                                                                         |
 | iconFile           | UploadedFileContent        | true     | the icon file                                                                        |
 | featuredImgFile    | UploadedFileContent        | true     | the featured image file                                                              |
+| attachment            | UploadedFileContent        | true     | the release note file(text format)                                                   |
 | accessUrl          | String        | true     | url of access                                                                        |
 | screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots files, at least three pictures                                       |
 | paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file , template file is mandantory when ApkType is 'P'       |
@@ -565,6 +567,7 @@ Structure of class CreateSingleApkRequest
 | appFile            | UploadedFileContent        | true     | the appfile                                                                          |
 | iconFile           | UploadedFileContent        | false    | the icon file                                                                        |
 | featuredImg        | UploadedFileContent        | true     | the featured image file                                                              |
+| attachment            | UploadedFileContent        | true     | the release note file(text format)                                                   |
 | accessUrl          | String        | true     | url of access                                                                        |
 | screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots files                                                                |
 | paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file, mandantory when ApkType is 'P'                         |
@@ -1056,8 +1059,8 @@ Structure of class ApkInfoDTO
 | screenshot4              | String          | picture url                                                                      |
 | featuredImg              | String          | featured image url                                                               |
 | accessUrl                | String          | apk signature status                                                             |
-| attachment               | String          | attachment url of release note                                                   |
-| attachmentName           | String          | attachment name of release note                                                  |
+| attachment               | String          | attachment url of release note file(text file)                                   |
+| attachmentName           | String          | attachment name of release note(text file)                                       |
 | appId                    | Long            | appId                                                                            |
 | packageName              | String          | package name of app                                                              |
 | price                    | BigDecimal      | price of app                                                                     |

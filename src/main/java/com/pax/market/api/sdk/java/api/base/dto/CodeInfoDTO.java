@@ -66,4 +66,10 @@ public class CodeInfoDTO implements Serializable {
     public void setSort(Integer sort) {
         this.sort = sort;
     }
+
+    @Override
+    public String toString() {
+        return "CodeInfoDTO [id=" + id + ", type=" + type + ", value=" + value + ", label="
+                + label + ", description=" + description + ", lang=" + lang + ", sort=" + sort +  "]";
+    }
 }

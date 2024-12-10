@@ -223,6 +223,10 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
             request.addUploadFile("apkFile", createApkRequest.getAppFile());
         }
 
+        if (createApkRequest.getAttachment()!=null) {
+            request.addUploadFile("attachment", createApkRequest.getAttachment());
+        }
+
         if (createApkRequest.getScreenshotFileList() != null && !createApkRequest.getScreenshotFileList().isEmpty()) {
             for (int i = 0; i < createApkRequest.getScreenshotFileList().size(); i++) {
                 request.addUploadFile("screenshot#" + i, createApkRequest.getScreenshotFileList().get(i));
