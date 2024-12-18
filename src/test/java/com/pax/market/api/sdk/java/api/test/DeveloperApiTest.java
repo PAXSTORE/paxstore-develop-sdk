@@ -195,8 +195,8 @@ public class DeveloperApiTest {
     }
 
     @Test
-    public void testGetCodeByType() {
-        Result<CodeInfoDTO> result = developerApi.getCodeByType("app_category");
+    public void testGetAppCategory() {
+        Result<CodeInfoDTO> result = developerApi.getAppCategory();
         PageInfo<CodeInfoDTO> pageInfo = result.getPageInfo();
         Assert.assertTrue(result.getBusinessCode() == 0);
         Assert.assertNotNull("get codeList failed", pageInfo);

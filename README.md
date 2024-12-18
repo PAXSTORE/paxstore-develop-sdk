@@ -844,26 +844,20 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 | 1012          | Please sign your app with a self-signed certificate              |             |
 | 1013          | The App signature certificate  is invalid                        |             |
 
-### Get code by type
+### Get app category
 App category list, it is dictionary
 
 **API**
 
 ```
-Result<CodeInfoDTO> getCodeByType(String codeType)
+Result<CodeInfoDTO> getAppCategory()
 ```
-
-**Input parameter(s) description**
-
-| Parameter Name | Type   | Nullable | Description                                                        |
-|:---------------|:-------| :------- |:-------------------------------------------------------------------|
-| codeType          | String | false    | codeType of dictionary, Value can be 'app_category','product_type' |
 
 **Sample codes**
 
 ```
 DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
-  Result<CodeInfoDTO> result = developerApi.getCodeByType("app_category");
+  Result<CodeInfoDTO> result = developerApi.getAppCategory();
   PageInfo<CodeInfoDTO> pageInfo = result.getPageInfo();
 ```
 

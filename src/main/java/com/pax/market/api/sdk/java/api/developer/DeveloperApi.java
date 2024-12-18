@@ -265,14 +265,12 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         return  new Result<>(idResponse);
     }
 
-    public Result<CodeInfoDTO> getCodeByType(String codeType) {
+    public Result<CodeInfoDTO> getAppCategory() {
         ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
         SdkRequest request = createSdkRequest(GET_CODE_BY_TYPE_URL);
         request.setRequestMethod(SdkRequest.RequestMethod.GET);
-        if(StringUtils.isNotBlank(codeType)){
-            request.getRequestParams().put("codeType", codeType);
-            request.getRequestParams().put("lang", "en");
-        }
+        request.getRequestParams().put("codeType", "app_category");
+        request.getRequestParams().put("lang", "en");
         return codeListResult(client,request);
     }
 
