@@ -895,12 +895,12 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 ```
 Structure of class PageInfo
 
-|Property Name| Type              | Description              |
-|:---|:------------------|:-------------------------|
-|pageNo| Integer           | bytes of file content    |
-|limit| Integer           | name of file             |
-|totalCount| Integer           | originalFilename of file |
-|dataSet| List<CodeInfoDTO> | code list                |
+|Property Name| Type              | Description        |
+|:---|:------------------|:-------------------|
+|pageNo| Integer           | page no            |
+|limit| Integer           | limit size         |
+|totalCount| Integer           | total size of data |
+|dataSet| List<CodeInfoDTO> | code list          |
 
 Structure of class CodeInfoDTO
 
