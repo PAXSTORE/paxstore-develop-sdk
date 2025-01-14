@@ -391,6 +391,8 @@ public abstract class ThirdPartyDevHttpUtils {
 				contentType = "Content-Type: application/vnd.android.package-archive" + LINE_END + LINE_END;
 			} else if (paramName.contains("screenshot#") || paramName.contains("iconFile") || paramName.contains("featuredImg")) {
 				contentType = "Content-Type: image/jpeg" + LINE_END + LINE_END;
+			} else if (StringUtils.equals("attachment", paramName)) {
+				contentType = "Content-Type: text/plain" + LINE_END + LINE_END;
 			}
 			out.write(contentType.getBytes());
 

@@ -74,23 +74,24 @@ public Result<String> uploadApk(CreateApkRequest createApkRequest)
 
 Structure of class CreateApkRequest
 
-| Property Name         | Type          | Nullable | Description                                                                          |
-|:----------------------| :------------ |:---------|:-------------------------------------------------------------------------------------|
-| appName               | String        | false    | the name of app                                                                      |
-| baseType              | String        | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App) |
-| chargeType            | Integer       | false    | the charge type of app,  the values can be 0 and 1. (0 : Free, 1: Paid App)          |
-| price                 | BigDecimal    | true     | the price of app                                                                     |
-| modelNameList         | List\<String> | false    | model names, the apk supported models                                                |
-| categoryList          | List\<String> | false    | business category, please reference appendix part.                                   |
-| appNameByVersion      | String        | true     | the name of app version                                                              |
-| shortDesc             | String        | false    | short description                                                                    |
-| description           | String        | false    |                                                                                      |
-| releaseNotes          | String        | true     | release note                                                                         |
-| appFile               | UploadedFileContent        | false    | the app file                                                                         |
-| iconFile              | UploadedFileContent        | true     | the icon file                                                                        |
-| featuredImgFile       | UploadedFileContent        | false    | the icon file                                                                        |
-| screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots file, at least three pictures                                        |
-| paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file path, mandatory when baseType is 'P'                    |
+| Property Name         | Type          | Nullable | Description                                                                           |
+|:----------------------| :------------ |:---------|:--------------------------------------------------------------------------------------|
+| appName               | String        | false    | the name of app                                                                       |
+| baseType              | String        | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App)  |
+| chargeType            | Integer       | false    | the charge type of app,  the values can be 0 and 1. (0 : Free, 1: Paid App)           |
+| price                 | BigDecimal    | true     | the price of app                                                                      |
+| modelNameList         | List\<String> | false    | model names, the apk supported models                                                 |
+| categoryList          | List\<String> | false    | business category, please reference getAppCategory API (using value field).          |
+| appNameByVersion      | String        | true     | the name of app version                                                               |
+| shortDesc             | String        | false    | short description                                                                     |
+| description           | String        | false    |                                                                                       |
+| releaseNotes          | String        | true     | release note                                                                          |
+| appFile               | UploadedFileContent        | false    | the app file                                                                          |
+| iconFile              | UploadedFileContent        | true     | the icon file                                                                         |
+| featuredImgFile       | UploadedFileContent        | false    | the icon file                                                                         |
+| attachment            | UploadedFileContent        | true     | the release note file(text format)                                                    |
+| screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots file, at least three pictures                                         |
+| paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file path, mandatory when baseType is 'P'                     |
 
 
 Structure of class UploadedFileContent
@@ -390,22 +391,23 @@ public Result<String> createApk(CreateSingleApkRequest createApkRequest)
 
 Structure of class CreateSingleApkRequest
 
-| Property Name      | Type | Nullable | Description                                                                          |
-|:-------------------|:-----|:---------|:-------------------------------------------------------------------------------------|
-| appId              | Long | false    | the id of app                                                                        |
-| apkName            | String | false    | the name of apk                                                                      |
-| apkType            | String        | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App) |
-| modelNameList      | List\<String> | false    | model names, the apk supported models                                                |
-| categoryList       | List\<String> | false    | business category,please reference appendix part                                     |
-| shortDesc          | String        | false    | short description                                                                    |
-| description        | String        | false    |                                                                                      |
-| releaseNotes       | String        | true     | release note                                                                         |
-| appFile            | UploadedFileContent        | false    | the app file                                                                         |
-| iconFile           | UploadedFileContent        | true     | the icon file                                                                        |
-| featuredImgFile    | UploadedFileContent        | true     | the featured image file                                                              |
-| accessUrl          | String        | true     | url of access                                                                        |
-| screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots files, at least three pictures                                       |
-| paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file , template file is mandantory when ApkType is 'P'       |
+| Property Name      | Type | Nullable | Description                                                                                                    |
+|:-------------------|:-----|:---------|:---------------------------------------------------------------------------------------------------------------|
+| appId              | Long | false    | the id of app                                                                                                  |
+| apkName            | String | false    | the name of apk                                                                                                |
+| apkType            | String        | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App)                           |
+| modelNameList      | List\<String> | false    | model names, the apk supported models                                                                          |
+| categoryList       | List\<String> | false    | business category, please reference getAppCategory API (using value field).                                    |
+| shortDesc          | String        | false    | short description                                                                                              |
+| description        | String        | false    |                                                                                                                |
+| releaseNotes       | String        | true     | release note                                                                                                   |
+| appFile            | UploadedFileContent        | false    | the app file                                                                                                   |
+| iconFile           | UploadedFileContent        | true     | the icon file                                                                                                  |
+| featuredImgFile    | UploadedFileContent        | true     | the featured image file                                                                                        |
+| attachment            | UploadedFileContent        | true     | the release note file(text format)                                                                             |
+| accessUrl          | String        | true     | url of access                                                                                                  |
+| screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots files, at least three pictures                                                                 |
+| paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file , template file is mandantory when ApkType is 'P'                                 |
 
 **Sample codes**
 
@@ -550,24 +552,25 @@ public Result<String> editApk(EditSingleApkRequest editApkRequest)
 | :--------------- | :--------------- | :------- |:--------------------------------------------------|
 | editApkRequest | EditSingleApkRequest | false    | the edit request object, the structure like below |
 
-Structure of class CreateSingleApkRequest
+Structure of class EditSingleApkRequest
 
-| Property Name      | Type | Nullable | Description                                                                          |
-|:-------------------|:-----|:---------|:-------------------------------------------------------------------------------------|
-| apkId              | Long | false    | the id of app                                                                        |
-| apkName            | String | false    | the name of apk                                                                      |
-| apkType            | String        | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App) |
-| modelNameList      | List\<String> | false    | model names, the apk supported models                                                |
-| categoryList       | List\<String> | false    | business category                                                                    |
-| shortDesc          | String        | false    | short description                                                                    |
-| description        | String        | false    |                                                                                      |
-| releaseNotes       | String        | true     | release note                                                                         |
-| appFile            | UploadedFileContent        | true     | the appfile                                                                          |
-| iconFile           | UploadedFileContent        | false    | the icon file                                                                        |
-| featuredImg        | UploadedFileContent        | true     | the featured image file                                                              |
-| accessUrl          | String        | true     | url of access                                                                        |
-| screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots files                                                                |
-| paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file, mandantory when ApkType is 'P'                         |
+| Property Name      | Type | Nullable | Description                                                                                                                                   |
+|:-------------------|:-----|:---------|:----------------------------------------------------------------------------------------------------------------------------------------------|
+| apkId              | Long | false    | the id of app                                                                                                                                 |
+| apkName            | String | false    | the name of apk                                                                                                                               |
+| apkType            | String        | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App)                                                          |
+| modelNameList      | List\<String> | false    | model names, the apk supported models                                                                                                         |
+| categoryList       | List\<String> | false    | business category, please reference getAppCategory API (using value field).                                                                   |
+| shortDesc          | String        | false    | short description                                                                                                                             |
+| description        | String        | false    |                                                                                                                                               |
+| releaseNotes       | String        | true     | release note                                                                                                                                  |
+| appFile            | UploadedFileContent        | true     | the appfile                                                                                                                                   |
+| iconFile           | UploadedFileContent        | false    | the icon file                                                                                                                                 |
+| featuredImg        | UploadedFileContent        | true     | the featured image file                                                                                                                       |
+| attachment            | UploadedFileContent        | true     | the release note file(text format)                                                                                                            |
+| accessUrl          | String        | true     | url of access                                                                                                                                 |
+| screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots files                                                                                                                         |
+| paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file, mandantory when ApkType is 'P'                                                                                  |
 
 
 **Sample codes**
@@ -841,18 +844,245 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 | 1012          | Please sign your app with a self-signed certificate              |             |
 | 1013          | The App signature certificate  is invalid                        |             |
 
+### Get app category
+App category list, it is dictionary
+
+**API**
+
+```
+Result<CodeInfoDTO> getAppCategory()
+```
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  Result<CodeInfoDTO> result = developerApi.getAppCategory();
+  PageInfo<CodeInfoDTO> pageInfo = result.getPageInfo();
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 135,
+	"message": "Request parameter is missing or invalid"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0,
+	"pageInfo": {
+		"pageNo": 1,
+		"limit": 22,
+		"totalCount": 22,
+		"hasNext": false,
+		"dataSet": [{
+			"value": "GYL_DK",
+			"label": "Loan"
+		}, {
+			"value": "WL_PS",
+			"label": "Delivery"
+		}, {
+			"value": "SH_HY",
+			"label": "Membership"
+		}]
+	}
+}
+```
+Structure of class PageInfo
+
+|Property Name| Type              | Description        |
+|:---|:------------------|:-------------------|
+|pageNo| Integer           | page no            |
+|limit| Integer           | limit size         |
+|totalCount| Integer           | total size of data |
+|dataSet| List<CodeInfoDTO> | code list          |
+
+Structure of class CodeInfoDTO
+
+|Property Name| Type              | Description                       |
+|:---|:------------------|:----------------------------------|
+|value| String           | code value, used by createApk API |
+|label| String | label of code                     |
+
+
+**Possible business codes**
+
+| Business Code | Message                                                          | Description |
+|:--------------|:-----------------------------------------------------------------| :---------- |
+| 131           | Insufficient access right                           |             |
+| 135           | Invalid parameter or missing parameter                           |             | 
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate              |             |
+| 1013          | The App signature certificate  is invalid                        |             |
+
+### Get APK
+get apk by apkId
+
+**API**
+
+```
+Result<ApkInfoDTO> getApkById(Long apkId)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name | Type   | Nullable | Description |
+|:---------------|:-------| :------- |:------------|
+| apkId          | String | false    | apkId       |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  Result<ApkInfoDTO> apkInfo = developerApi.getApkById(1643270597771298L);
+  ApkInfoDTO data = apkInfo.getData();
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 135,
+	"message": "Request parameter is missing or invalid"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0,
+	"data": {
+		"apkId": 1643502907686947,
+		"apkType": "N",
+		"apkIconFileId": "https://www.dev.paxsit.com/group1/M00/02/59/wKjIGWcjUjmADLs9AAAIOm3Mexw5393549",
+		"displayFileSize": "40.9 MB",
+		"versionName": "7.9",
+		"allowUpdateParamTemplate": true,
+		"paramTemplateNameList": [],
+		"apkCategoryList": ["GYL_DK", "GYL_JZ", "GYL_SK"],
+		"apkModelList": [1],
+		"apkModelNameList": ["A920","A930"],
+		"signatureProvider": "NONE",
+		"minSdkVersion": "21",
+		"storeSdkVersion": null,
+		"apkFileFactoryList": [],
+		"appName": "七猫免费小说",
+		"shortDesc": "一句话简介",
+		"description": "描述",
+		"releaseNotes": null,
+		"screenshot0": "https://www.dev.paxsit.com/group1/M00/02/59/wKjIGWcjO5qAC6f2AAPHv517xvo197.png",
+		"screenshot1": "https://www.dev.paxsit.com/group1/M00/02/59/wKjIGWcjO5uAPYrUAAdFKTEjRV4261.png",
+		"screenshot2": "https://www.dev.paxsit.com/group1/M00/02/59/wKjIGWcjO5uAA8uOAASbj8LASiw607.png",
+		"screenshot3": null,
+		"screenshot4": null,
+		"featuredImg": null,
+		"accessUrl": null,
+		"attachment": null,
+		"attachmentName": null,
+		"appId": 1643490278637602,
+		"packageName": "com.kmxs.reader",
+		"price": null,
+		"currency": null,
+		"chargeType": 0,
+		"freeTrialDay": null,
+		"osType": "A",
+		"appType": "G",
+		"disableApkTypeChange": true,
+		"isFirstApkVersion": false,
+		"chargeMode": null,
+		"versionCode":10020,
+		"status":"O"
+	}
+}
+```
+Structure of data field
+
+| Property Name | Type    | Description      |
+|:--------------|:--------|:-----------------|
+| businessCode          | Integer | business code    |
+| data         | ApkInfoDTO  | apk informations |
+
+Structure of class ApkInfoDTO
+
+| Property Name            | Type            | Description                                                                      |
+|:-------------------------|:----------------|:---------------------------------------------------------------------------------|
+| apkId                    | Long            | apkId                                                                            |
+| apkType                  | String          | 'P' is PARAMETER_APP, 'N' is NORMAL_APP                                          |
+| apkIconFileId            | String          | icon file url                                                                    |
+| displayFileSize          | String          | APK file size, like '40.0MB'                                                     |
+| versionName              | String          | version name of APK                                                              |
+| allowUpdateParamTemplate | Boolean         |                                                                                  |
+| paramTemplateNameList    | List<String>    | templateName list                                                                |
+| apkCategoryList          | List<String>    | category list                                                                    |
+| apkModelList             | List<Long>      | model id list                                                                    |
+| apkModelNameList             | List<String>    | model name list                                                                  |
+| signatureProvider        | String          | signature provider                                                               |
+| minSdkVersion            | String          | minimum version of SDK                                                           |
+| apkFileFactoryList       | List<ApkFileVo> | apkFile for support multi vendor factory                                         |
+| appName                  | String          | app name                                                                         |
+| shortDesc                | String          | shortDesc of apk                                                                 |
+| description              | String          | APK status                                                                       |
+| releaseNotes             | String          | release Notes                                                                    |
+| screenshot0              | String          | picture url                                                                      |
+| screenshot1              | String          | picture url                                                                      |
+| screenshot2              | String          | picture url                                                                      |
+| screenshot3              | String          | picture url                                                                      |
+| screenshot4              | String          | picture url                                                                      |
+| featuredImg              | String          | featured image url                                                               |
+| accessUrl                | String          | apk signature status                                                             |
+| attachment               | String          | attachment url of release note file(text file)                                   |
+| attachmentName           | String          | attachment name of release note(text file)                                       |
+| appId                    | Long            | appId                                                                            |
+| packageName              | String          | package name of app                                                              |
+| price                    | BigDecimal      | price of app                                                                     |
+| currency                 | String          | currency of app, such as 'USD'                                                   |
+| chargeType               | Integer         | 0 is free , 1 is not free                                                        |
+| freeTrialDay             | Integer         | such as 100                                                                      |
+| osType                   | String          | 'A' is Android ,'T' is tranditional, 'NIL' is None                               |
+| appType                  | String          | 'G' is genernal app, 'S' is industry solution                                    |
+| disableApkTypeChange     | Boolean         |                                                                                  |
+| isFirstApkVersion        | Boolean         |                                                                                  |
+| chargeMode               | String          | 0 is TERMINAL_INSTALLED, 1 is QUANTITY                                           |
+| versionCode              | Long            |                                                                                  |
+| status                   | String          | 'O' is ONLINE, 'U' is UNAVAILABLE, 'R' is REJECTED, 'P' is PENDING, 'D' is DRAFT |
+
+Structure of class ApkFileVo
+
+| Property Name | Type            | Description                             |
+|:--------------|:----------------|:----------------------------------------|
+| factoryId          | Long            | factory id                              |
+| factoryName         | String          | factoryName |
+| name         | String          | name                           |
+
+**Possible business codes**
+
+| Business Code | Message                                                          | Description |
+|:--------------|:-----------------------------------------------------------------| :---------- |
+| 131           | Insufficient access right                           |             |
+| 135           | Invalid parameter or missing parameter                           |             | 
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate              |             |
+| 1013          | The App signature certificate  is invalid                        |             |
+
+
 ### Appendix
 
 **business category codes**
 
-| Value | Label         | Description                                                                                 |
-|:------|:--------------|:--------------------------------------------------------------------------------------------|
-| GYL   | SCM           | Supply Chain                                                                                |
-| WL    | Logistics     | Logistics                                                                                   |
-| CY    | Dining/Chains | Dining/Chains                                                                               |
-| SH    | Life Service  | Life Service                                                                                |
-| JG    | Agency        | Agency                                                                                      |
-| ...   | ...           | About other category, You can get it from app edit page in develop center or admin platform |
+| Value | Label         | Description                                                     |
+|:------|:--------------|:----------------------------------------------------------------|
+| GYL   | SCM           | Supply Chain                                                    |
+| WL    | Logistics     | Logistics                                                       |
+| CY    | Dining/Chains | Dining/Chains                                                   |
+| SH    | Life Service  | Life Service                                                    |
+| JG    | Agency        | Agency                                                          |
+| ...   | ...           | About other category, You can get from above getAppCategory API |
 
 **Model of device**
 
@@ -871,6 +1101,6 @@ To integrate with this SDK please add below dependency by updating the pom.xml f
 <dependency>
     <groupId>com.whatspos.sdk</groupId>
     <artifactId>3rdsys-developerapi</artifactId>
-    <version>1.2.1</version>
+    <version>1.3.0</version>
 </dependency>
 ```
