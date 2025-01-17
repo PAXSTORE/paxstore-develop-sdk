@@ -5,9 +5,11 @@ import com.pax.market.api.sdk.java.api.BaseThirdPartyDevApi;
 import com.pax.market.api.sdk.java.api.base.dto.*;
 import com.pax.market.api.sdk.java.api.base.request.SdkRequest;
 import com.pax.market.api.sdk.java.api.client.ThirdPartyDevApiClient;
+import com.pax.market.api.sdk.java.api.developer.dto.ApkOfflineRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleAppRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleApkRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.CreateApkRequest;
+import com.pax.market.api.sdk.java.api.developer.dto.step.EditAppKeySecretRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.step.EditSingleApkRequest;
 import com.pax.market.api.sdk.java.api.io.UploadedFileContent;
 import com.pax.market.api.sdk.java.api.util.EnhancedJsonUtils;
@@ -37,6 +39,9 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
     protected static final String GET_APP_BY_PACKAGE_URL = "/v1/3rd/developer/apps";
     protected static final String GET_CODE_BY_TYPE_URL = "/v1/3rd/developer/codes";
     protected static final String GET_APK_BY_TYPE_URL = "/v1/3rd/developer/apks/{apkId}";
+    protected static final String OFFLINE_APK_BY_ID = "/v1/3rd/developer/apks/{apkId}/offline";
+    protected static final String APK_VERSION_LIST_OF_APP = "/v1/3rd/developer/{appId}/apks/version-list";
+    protected static final String UPDATE_APP_KEY_SECRET = "/v1/3rd/developer/apps/{appId}/key-secret";
 
     public DeveloperApi(String baseUrl, String apiKey, String apiSecret) {
         super(baseUrl, apiKey, apiSecret);
@@ -274,9 +279,41 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         return codeListResult(client,request);
     }
 
+    public Result<String> updateAppKeySecret(Long appId, EditAppKeySecretRequest editAppKeySecretRequest) {
+        ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
+        SdkRequest request = createSdkRequest(UPDATE_APP_KEY_SECRET.replace("{appId}", String.valueOf(appId)));
+        request.setRequestMethod(SdkRequest.RequestMethod.PUT);
+        request.setRequestBody(new Gson().toJson(editAppKeySecretRequest, EditAppKeySecretRequest.class));
+        return emptyResult(client, request);
+    }
+
+
     private static Result<CodeInfoDTO> codeListResult(ThirdPartyDevApiClient client, SdkRequest request ) {
         PageResponse<CodeInfoDTO> pageResponse = EnhancedJsonUtils.fromJson(client.execute(request), CodeInfoPageResponse.class);
         return new Result<>(pageResponse);
     }
 
+    public Result<String> offlineApkById(Long apkId, ApkOfflineRequest offlineRequest) {
+        if(apkId==null || apkId<=0){
+            return new Result<>(Collections.singletonList("parameter.apkId.null"));
+        }
+        ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
+        SdkRequest request = createSdkRequest(OFFLINE_APK_BY_ID.replace("{apkId}", String.valueOf(apkId)));
+        request.setRequestMethod(SdkRequest.RequestMethod.POST);
+        request.setRequestBody(new Gson().toJson(offlineRequest, ApkOfflineRequest.class));
+
+        return emptyResult(client,request);
+    }
+
+    public Result<ApkVersionDTO> getApkVersionList(Long appId) {
+        ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
+        SdkRequest request = createSdkRequest(APK_VERSION_LIST_OF_APP.replace("{appId}", String.valueOf(appId)));
+        request.setRequestMethod(SdkRequest.RequestMethod.GET);
+        return apkVersionListResult(client,request);
+    }
+
+    private static Result<ApkVersionDTO> apkVersionListResult(ThirdPartyDevApiClient client, SdkRequest request ) {
+        PageResponse<ApkVersionDTO> pageResponse = EnhancedJsonUtils.fromJson(client.execute(request), ApkVersionPageResponse.class);
+        return new Result<>(pageResponse);
+    }
 }

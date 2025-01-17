@@ -238,9 +238,10 @@ public Result<String> createApp(CreateSingleAppRequest createAppRequest)
 
 Structure of class CreateSingleAppRequest
 
-| Property Name      | Type          | Nullable | Description                                                                         |
-| :----------------- |:--------------| :------- |:------------------------------------------------------------------------------------|
-| appName            | String        | false    | the name of app, max lenth is 64                                                    |
+| Property Name | Type          | Nullable | Description                                                                 |
+|:--------------|:--------------|:---------|:----------------------------------------------------------------------------|
+| appName       | String        | false    | the name of app, max lenth is 64                                            |
+| appKey        | String        | true     | The length of App key must 20, Must be a combination of numbers and letters |
 
 **Sample codes**
 
@@ -248,6 +249,8 @@ Structure of class CreateSingleAppRequest
 DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
     CreateSingleAppRequest createAppRequest = new CreateSingleAppRequest();
         createAppRequest.setAppName("APP20240223");
+        //not mandatory, it will generate random string with length 20 when not assigned
+        createAppRequest.setAppKey("97A9FE48F290A6C08F7B");
         developerApi.createApp(createAppRequest);
 ```
 
@@ -293,7 +296,7 @@ The Json structure shows like below.
 **Possible business codes**
 
 | Business Code | Message                                                      | Description |
-| :------------ | :----------------------------------------------------------- | :---------- |
+|:--------------| :----------------------------------------------------------- | :---------- |
 | 1011          | The app's developer signature is different from previous version |             |
 | 1012          | Please sign your app with a self-signed certificate          |             |
 | 1013          | The App signature certificate  is invalid                    |             |
@@ -301,7 +304,7 @@ The Json structure shows like below.
 | 1214          | App name is too long                                         |             |
 | 1217          | App with same package name already exists                    |             |
 | 1248          | App base type is invalid                                     |             |
-| 1248          | App base type is invalid                                     |             |
+
 
 ### getAppInfoByName
 Get App information by packageName or appName.
@@ -895,12 +898,12 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 ```
 Structure of class PageInfo
 
-|Property Name| Type              | Description        |
-|:---|:------------------|:-------------------|
-|pageNo| Integer           | page no            |
-|limit| Integer           | limit size         |
-|totalCount| Integer           | total size of data |
-|dataSet| List<CodeInfoDTO> | code list          |
+|Property Name| Type              | Description              |
+|:---|:------------------|:-------------------------|
+|pageNo| Integer           | current pageNo        |
+|limit| Integer           | fetch size            |
+|totalCount| Integer           | total count of record |
+|dataSet| List<CodeInfoDTO> | code list                |
 
 Structure of class CodeInfoDTO
 
@@ -1066,6 +1069,227 @@ Structure of class ApkFileVo
 |:--------------|:-----------------------------------------------------------------| :---------- |
 | 131           | Insufficient access right                           |             |
 | 135           | Invalid parameter or missing parameter                           |             | 
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate              |             |
+| 1013          | The App signature certificate  is invalid                        |             |
+
+
+### Update appKey and appSecret
+Update appKey and appSecret for special app
+
+**API**
+
+```
+public Result<String> updateAppKeySecret(Long appId, EditAppKeySecretRequest editAppKeySecretRequest) 
+```
+
+**Input parameter(s) description**
+
+| Parameter Name   | Type             | Nullable | Description                                         |
+| :--------------- | :--------------- | :------- |:----------------------------------------------------|
+| editAppKeySecretRequest | EditAppKeySecretRequest | false    | the update request object, the structure like below |
+
+Structure of class CreateSingleAppRequest
+
+| Property Name | Type          | Nullable | Description                                                                                |
+|:--------------|:--------------|:---------|:-------------------------------------------------------------------------------------------|
+| appKey       | String        | false    | the appKey of app, should encrypt with API_SECRET of developer. Use AESUtils.silentEncrypt |
+| appSecret       | String        | false    | the appSecret of app, should encrypt with API_SECRET of developer. AESUtils.silentEncrypt                        |
+
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+EditAppKeySecretRequest appKeySecretRequest = new EditAppKeySecretRequest();
+appKeySecretRequest.setAppKey(AESUtils.silentEncrypt("6XC042UCQG51T17F0D6X", TestConstants.API_SECRET));
+appKeySecretRequest.setAppSecret(AESUtils.silentEncrypt("P8J5JJ5801O65O3D32278999K6Y6NHZ6LU82318R",TestConstants.API_SECRET));
+
+Result<String> result = developerApi.updateAppKeySecret(1653632709689384L, appKeySecretRequest);
+Assert.assertTrue(result.getBusinessCode() == 0);
+```
+
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1330,
+	"message": "App key is mandatory"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0
+}
+```
+<br>
+
+The Json structure shows like below.
+
+| Property Name |Type| Description                             |
+|:--------------|:---|:----------------------------------------|
+| data          |Long| the id of app                           |
+| businessCode  |Long| 0 means success, otherwise means failed |
+
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+|:--------------| :----------------------------------------------------------- | :---------- |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+| 1213          | App name is mandatory                                        |             |
+| 1214          | App name is too long                                         |             |
+| 1217          | App with same package name already exists                    |             |
+| 1248          | App base type is invalid                                     |             |
+| 1332          | The length of App key must 20                                     |             |
+| 1334          | App key is invalid(Must be a combination of numbers and letters)                                     |             |
+| 1336          | App key already exists                                     |             |
+| 1330          | App key is mandatory                                     |             |
+| 1331          | App secret is mandatory                                     |             |
+
+
+### Get apk version list of APP
+get all apk version list for App
+
+**API**
+
+```
+Result<ApkVersionDTO> getApkVersionList(Long appId)
+```
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+Result<ApkVersionDTO> result = developerApi.getApkVersionList(1000L);
+PageInfo<ApkVersionDTO> pageInfo = result.getPageInfo();
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 135,
+	"message": "Request parameter is missing or invalid"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0,
+	"pageInfo": {
+		"pageNo": 1,
+		"limit": 2,
+		"totalCount": 2,
+		"hasNext": false,
+		"dataset": [{
+            "apkId": 1643490633056290,
+            "status": "O",
+            "versionCode": 70820,
+            "versionName": "7.8.20"
+        }, {
+            "apkId": 1643502907686947,
+            "status": "D",
+            "versionCode": 70900,
+            "versionName": "7.9"
+        }]
+	}
+}
+```
+Structure of class PageInfo
+
+|Property Name| Type              | Description           |
+|:---|:------------------|:----------------------|
+|pageNo| Integer           | current pageNo        |
+|limit| Integer           | fetch size            |
+|totalCount| Integer           | total count of record |
+|dataSet| List<ApkVersionDTO> | data list             |
+
+Structure of class ApkVersionDTO
+
+|Property Name| Type   | Description                                                                      |
+|:---|:-------|:---------------------------------------------------------------------------------|
+|apkId| Long   | apk id                                                                           |
+|status| String | apk status, D is Draft, P is pending, O is online, R is reject, U is unavailable |
+|versionCode| Long   | version code                                                                     |
+|versionName| String | version name                                                                     |
+
+
+**Possible business codes**
+
+| Business Code | Message                                                          | Description |
+|:--------------|:-----------------------------------------------------------------| :---------- |
+| 131           | Insufficient access right                           |             |
+| 135           | Invalid parameter or missing parameter                           |             | 
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate              |             |
+| 1013          | The App signature certificate  is invalid                        |             |
+
+### Offline APK
+Offline Apk by apkId
+
+**API**
+
+```
+public Result<String> offlineApkById(Long apkId, ApkOfflineRequest request)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name | Type   | Nullable | Description       |
+|:---------------|:-------| :------- |:------------------|
+| apkId          | Long | false    | id of apk         |
+| offlineRequest | ApkOfflineRequest | false    | reason of offline |
+
+Structure of class ApkOfflineRequest
+
+| Property Name |Type|Nullable| Description                   |
+|:--------------|:---|:---|:------------------------------|
+| comment       |String|false| The reason about offling APK. |
+
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+ApkOfflineRequest offlineRequest = new ApkOfflineRequest();
+offlineRequest.setComment("too old version");
+developerApi.offlineApkById(1643270597771298L, offlineRequest);
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1002,
+	"message": "APK not found"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0
+}
+```
+
+**Possible business codes**
+
+| Business Code | Message                                                          | Description |
+|:--------------|:-----------------------------------------------------------------| :---------- |
+| 131           | Insufficient access right                           |             |
+| 135           | Invalid parameter or missing parameter                           |             |
+| 1002          | APK not found                                                    |             |
+| 1205          | App is not editable                                                    |             |
 | 1011          | The app's developer signature is different from previous version |             |
 | 1012          | Please sign your app with a self-signed certificate              |             |
 | 1013          | The App signature certificate  is invalid                        |             |
