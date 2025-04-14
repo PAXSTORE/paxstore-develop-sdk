@@ -175,51 +175,52 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 
 **Possible business codes**
 
-| Business Code | Message                                                      | Description |
-| :------------ | :----------------------------------------------------------- | :---------- |
-| 1011          | The app's developer signature is different from previous version |             |
-| 1012          | Please sign your app with a self-signed certificate          |             |
-| 1013          | The App signature certificate  is invalid                    |             |
-| 1117          | App OS type must be same with previous version               |             |
-| 1202          | App package name should be same with previous version        |             |
-| 1205          | App is not editable                                          |             |
-| 1209          | App detail is mandatory                                      |             |
-| 1213          | App name is mandatory                                        |             |
-| 1214          | App name is too long                                         |             |
-| 1217          | App with same package name already exists                    |             |
-| 1244          | App model is mandatory                                       |             |
-| 1245          | App base type is mandatory                                   |             |
-| 1247          | App icon is mandatory                                        |             |
-| 1248          | App base type is invalid                                     |             |
-| 1253          | Parameter template is mandatory                              |             |
-| 1256          | Unsupported file type                                        |             |
-| 1258          | App name is mandatory                                        |             |
-| 1259          | App name is too long                                         |             |
-| 1260          | Short description is mandatory                               |             |
-| 1261          | Short description is too long                                |             |
-| 1262          | Description is mandatory                                     |             |
-| 1263          | Description is too long                                      |             |
-| 1264          | Release notes is too long                                    |             |
-| 1265          | At least 3 screenshots required                              |             |
-| 1267          | Package name [com.pax.market.*] is not allowed               |             |
-| 1273          | Only one pending app could exist at the same time            |             |
-| 1274          | Package name [{0}] is not allowed                            |             |
-| 1278          | App version already exists                                   |             |
-| 1283          | Draft app version exists, unable to upload the new version   |             |
-| 1297          | The app does not support to selected model                   |             |
-| 1304          | Category is mandatory                                        |             |
-| 1326          | App package name is too long                                 |             |
-| 1625          | Version Name already exists                                  |             |
-| 1700          | Model doesn't exist                                          |             |
-| 1714          | Existed model status is not active                           |             |
-| 2514          | Model is mandatory                                           |             |
-| 6010          | The name in appinfo file should be same with previous version |             |
-| 6100          | The APP_NAME in config file should be same with previous version |             |
+| Business Code | Message                                                                 | Description |
+|:--------------|:------------------------------------------------------------------------| :---------- |
+| 1011          | The app's developer signature is different from previous version        |             |
+| 1012          | Please sign your app with a self-signed certificate                     |             |
+| 1013          | The App signature certificate  is invalid                               |             |
+| 1117          | App OS type must be same with previous version                          |             |
+| 1202          | App package name should be same with previous version                   |             |
+| 1205          | App is not editable                                                     |             |
+| 1209          | App detail is mandatory                                                 |             |
+| 1213          | App name is mandatory                                                   |             |
+| 1214          | App name is too long                                                    |             |
+| 1217          | App with same package name already exists                               |             |
+| 1244          | App model is mandatory                                                  |             |
+| 1245          | App base type is mandatory                                              |             |
+| 1247          | App icon is mandatory                                                   |             |
+| 1248          | App base type is invalid                                                |             |
+| 1253          | Parameter template is mandatory                                         |             |
+| 1256          | Unsupported file type                                                   |             |
+| 1258          | App name is mandatory                                                   |             |
+| 1259          | App name is too long                                                    |             |
+| 1260          | Short description is mandatory                                          |             |
+| 1261          | Short description is too long                                           |             |
+| 1262          | Description is mandatory                                                |             |
+| 1263          | Description is too long                                                 |             |
+| 1264          | Release notes is too long                                               |             |
+| 1265          | At least 3 screenshots required                                         |             |
+| 1267          | Package name [com.pax.market.*] is not allowed                          |             |
+| 1273          | Only one pending app could exist at the same time                       |             |
+| 1274          | Package name [{0}] is not allowed                                       |             |
+| 1278          | App version already exists                                              |             |
+| 1283          | Draft app version exists, unable to upload the new version              |             |
+| 1297          | The app does not support to selected model                              |             |
+| 1304          | Category is mandatory                                                   |             |
+| 1326          | App package name is too long                                            |             |
+| 1625          | Version Name already exists                                             |             |
+| 1700          | Model doesn't exist                                                     |             |
+| 1714          | Existed model status is not active                                      |             |
+| 2514          | Model is mandatory                                                      |             |
+| 6010          | The name in appinfo file should be same with previous version           |             |
+| 6100          | The APP_NAME in config file should be same with previous version        |             |
 | 6200          | The [info]-name in system.ini file should be same with previous version |             |
-| 9203          | Chargeable app is not allowed                                |             |
-| 9205          | Developer is not allowed in this market                      |             |
-| 10102         | Do not upload signed file                                    |             |
-| 29102         | Set up your Stripe account first                             |             |
+| 9203          | Chargeable app is not allowed                                           |             |
+| 9205          | Developer is not allowed in this market                                 |             |
+| 10102         | Do not upload signed file                                               |             |
+| 13041         | Category is invalid                                                     |             |
+| 29102         | Set up your Stripe account first                                        |             |
 
 ### Create App 
 Create App project with specific name simply, will get appId when success.
@@ -538,6 +539,7 @@ The JSON structure shows like below.
 | 9203          | Chargeable app is not allowed                                           |             |
 | 9205          | Developer is not allowed in this market                                 |             |
 | 10102         | Do not upload signed file                                               |             |
+| 13041         | Category is invalid                                                     |             |
 | 29102         | Set up your Stripe account first                                        |             |
 
 ### Edit an Apk
@@ -692,6 +694,7 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 | 9203          | Chargeable app is not allowed                                           |             |
 | 9205          | Developer is not allowed in this market                                 |             |
 | 10102         | Do not upload signed file                                               |             |
+| 13041         | Category is invalid                                                     |             |
 | 29102         | Set up your Stripe account first                                        |             |
 
 ### Submit Apk
