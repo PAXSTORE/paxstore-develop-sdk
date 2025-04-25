@@ -1328,6 +1328,6 @@ To integrate with this SDK please add below dependency by updating the pom.xml f
 <dependency>
     <groupId>com.whatspos.sdk</groupId>
     <artifactId>3rdsys-developerapi</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
 </dependency>
 ```
