@@ -12,24 +12,26 @@
 
 package com.pax.market.api.sdk.java.api.developer.dto.step;
 
-
 import java.io.Serializable;
 
-/**
- * 第三方开发者创建应用Request
- * @author maozhengwen
- * @date 2024/02/05
- */
-public class CreateSingleAppRequest implements Serializable {
-
+public class EditAppKeySecretRequest implements Serializable {
     private static final long serialVersionUID = 3038268183852188565L;
-    private String appName;
+    private String appKey;
+    private String appSecret;
 
-    public String getAppName() {
-        return appName;
+    public String getAppKey() {
+        return appKey;
     }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
+    public void setAppKey(String appKey) {
+        this.appKey = appKey;
+    }
+
+    public String getAppSecret() {
+        return appSecret;
+    }
+
+    public void setAppSecret(String appSecret) {
+        this.appSecret = appSecret;
     }
 }

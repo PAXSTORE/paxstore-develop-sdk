@@ -1,15 +1,16 @@
 package com.pax.market.api.sdk.java.api.test;
 
 import com.pax.market.api.sdk.java.api.base.dto.*;
-import com.pax.market.api.sdk.java.api.constant.Constants;
 import com.pax.market.api.sdk.java.api.developer.DeveloperApi;
+import com.pax.market.api.sdk.java.api.developer.dto.ApkOfflineRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleAppRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleApkRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.CreateApkRequest;
+import com.pax.market.api.sdk.java.api.developer.dto.step.EditAppKeySecretRequest;
 import com.pax.market.api.sdk.java.api.developer.dto.step.EditSingleApkRequest;
 import com.pax.market.api.sdk.java.api.io.UploadedFileContent;
+import com.pax.market.api.sdk.java.api.util.AESUtils;
 import com.pax.market.api.sdk.java.api.util.FileUtils;
-import com.pax.market.api.sdk.java.api.util.GsonUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -209,5 +210,32 @@ public class DeveloperApiTest {
         Assert.assertTrue(apkInfo.getBusinessCode() == 0);
         Assert.assertNotNull("get codeList failed", data);
     }
+
+    @Test
+    public void testUpdateAppKeySecret() {
+        EditAppKeySecretRequest appKeySecretRequest = new EditAppKeySecretRequest();
+        appKeySecretRequest.setAppKey(AESUtils.silentEncrypt("6XC042UCQG51T17F0D6X", TestConstants.API_SECRET));
+        appKeySecretRequest.setAppSecret(AESUtils.silentEncrypt("P8J5JJ5801O65O3D32278999K6Y6NHZ6LU82318R",TestConstants.API_SECRET));
+
+        Result<String> result = developerApi.updateAppKeySecret(1653632709689384L, appKeySecretRequest);
+        Assert.assertTrue(result.getBusinessCode() == 0);
+        Assert.assertNotNull("update AppKey Secret failed", result.getData());
+    }
+
+    @Test
+    public void testOfflineApk() {
+        ApkOfflineRequest offlineRequest = new ApkOfflineRequest();
+        offlineRequest.setComment("too old version");
+        Result<String> apkInfo = developerApi.offlineApkById(1643270597771298L, offlineRequest);
+        Assert.assertTrue(apkInfo.getBusinessCode() == 0);
+    }
+
+    @Test
+    public void testGetApkVersionList() {
+        Result<ApkVersionDTO> result = developerApi.getApkVersionList(1643490278637602L);
+        Assert.assertTrue(result.getBusinessCode() == 0);
+        PageInfo<ApkVersionDTO> pageInfo = result.getPageInfo();
+    }
+
 
 }
