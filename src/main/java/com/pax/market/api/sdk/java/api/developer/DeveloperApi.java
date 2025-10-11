@@ -6,11 +6,8 @@ import com.pax.market.api.sdk.java.api.base.dto.*;
 import com.pax.market.api.sdk.java.api.base.request.SdkRequest;
 import com.pax.market.api.sdk.java.api.client.ThirdPartyDevApiClient;
 import com.pax.market.api.sdk.java.api.developer.dto.ApkOfflineRequest;
-import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleAppRequest;
-import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleApkRequest;
+import com.pax.market.api.sdk.java.api.developer.dto.step.*;
 import com.pax.market.api.sdk.java.api.developer.dto.CreateApkRequest;
-import com.pax.market.api.sdk.java.api.developer.dto.step.EditAppKeySecretRequest;
-import com.pax.market.api.sdk.java.api.developer.dto.step.EditSingleApkRequest;
 import com.pax.market.api.sdk.java.api.io.UploadedFileContent;
 import com.pax.market.api.sdk.java.api.util.EnhancedJsonUtils;
 import com.pax.market.api.sdk.java.api.util.GsonUtils;
@@ -32,6 +29,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
     protected static final String UPLOAD_APK_URL = "/v1/3rd/developer/apk/upload";
     protected static final String CREATE_APP_URL = "/v1/3rd/developer/apps";
     protected static final String CREATE_APK_URL = "/v1/3rd/developer/apps/{appId}/apks";
+    protected static final String CREATE_MULTIPLE_APK_URL = "/v1/3rd/developer/apps/{appId}/multiple/apks";
     protected static final String EDIT_APK_URL = "/v1/3rd/developer/apks/{apkId}";
     protected static final String SUBMIT_APK_URL = "/v1/3rd/developer/apks/{apkId}/submit";
     protected static final String DELETE_APP_URL = "/v1/3rd/developer/apps/{appId}";
@@ -83,7 +81,26 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         SdkRequest request = createSdkRequest(CREATE_APK_URL.replace("{appId}", String.valueOf(createApkRequest.getAppId())));
         request.setRequestMethod(SdkRequest.RequestMethod.POST);
         handleCreateApkFormData(createApkRequest, request);
+        if (createApkRequest.getAppFile()!=null) {
+            request.addUploadFile("apkFile", createApkRequest.getAppFile());
+        }
+        return idResult(client,request);
+    }
 
+    public Result<Long> createMultipleApk(CreateMultipleApkRequest createApkRequest) {
+        List<String> validationErrs = Validators.validateCreate(createApkRequest, "parameter.apkCreateRequest.null");
+        if (validationErrs.size() > 0) {
+            return new Result<Long>(validationErrs);
+        }
+        ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
+        SdkRequest request = createSdkRequest(CREATE_MULTIPLE_APK_URL.replace("{appId}", String.valueOf(createApkRequest.getAppId())));
+        request.setRequestMethod(SdkRequest.RequestMethod.POST);
+        handleCreateApkFormData(createApkRequest, request);
+        if (createApkRequest.getMultipleAppFile() != null && !createApkRequest.getMultipleAppFile().isEmpty()){
+            for (Map.Entry<String, UploadedFileContent> entry : createApkRequest.getMultipleAppFile().entrySet()) {
+                request.addUploadFile("factory#" + entry.getKey(), entry.getValue());
+            }
+        }
         return idResult(client,request);
     }
 
@@ -153,17 +170,13 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         return apkDataResult(client,request);
     }
 
-    private void handleCreateApkFormData(CreateSingleApkRequest createApkRequest, SdkRequest request) {
+    private void handleCreateApkFormData(CreateBaseApkRequest createApkRequest, SdkRequest request) {
         if (createApkRequest.getIconFile()!=null) {
             request.addUploadFile("iconFile", createApkRequest.getIconFile());
         }
 
         if (createApkRequest.getFeaturedImgFile()!=null) {
             request.addUploadFile("featuredImg", createApkRequest.getFeaturedImgFile());
-        }
-
-        if (createApkRequest.getAppFile()!=null) {
-            request.addUploadFile("apkFile", createApkRequest.getAppFile());
         }
 
         if (createApkRequest.getScreenshotFileList() != null && !createApkRequest.getScreenshotFileList().isEmpty()) {
@@ -181,7 +194,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
             createApkRequest.setParamTemplateList(paramTemplateNameList);
         }
         Gson gson = GsonUtils.getGsonBuilder();
-        request.addFormValue("apkDetail", gson.toJson(createApkRequest, CreateSingleApkRequest.class));
+        request.addFormValue("apkDetail", gson.toJson(createApkRequest, CreateBaseApkRequest.class));
     }
 
     private void handleEditApkFormData(EditSingleApkRequest editApkRequest, SdkRequest request) {
