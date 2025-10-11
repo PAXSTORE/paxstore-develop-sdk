@@ -1233,6 +1233,76 @@ Structure of class ApkFileVo
 | 1013          | The App signature certificate  is invalid                    |             |
 
 
+
+### Get appKey and appSecret
+
+Get appKey and appSecret by appId
+
+**API**
+
+```
+public Result<AppKeySecretDTO> getAppKeySecret(Long appId)
+```
+
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+Result<AppKeySecretDTO> result = developerApi.getAppKeySecret(1705773446987822L);
+```
+
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1000,
+	"message": "App not found"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+    "businessCode": 0,
+    "data": {
+        "appKey": "DGGG0IZ72VL09S4C24J4",
+        "appSecret": "18DEHR0W40473U27MI11G344O0980SFK873B8WB7"
+    },
+    "rateLimit": "5",
+    "rateLimitRemain": "4",
+    "rateLimitReset": "1760167121665"
+}
+```
+
+<br>
+
+The Json structure shows like below.
+
+| Property Name | Type            | Description                             |
+| :------------ | :-------------- | :-------------------------------------- |
+| data          | AppKeySecretDTO | the info of AppKeySecret                |
+| businessCode  | Long            | 0 means success, otherwise means failed |
+
+The AppKeySecretDTO structure shows like below.
+
+| Property Name | Type   | Description |
+| :------------ | :----- | :---------- |
+| appKey        | String |             |
+| appSecret     | String |             |
+
+**Possible business codes**
+
+| Business Code | Message                                 | Description |
+| :------------ | :-------------------------------------- | :---------- |
+| 131           | Insufficient access right               |             |
+| 1000          | App not found                           |             |
+| 9205          | Developer is not allowed in this market |             |
+
+
+
 ### Update appKey and appSecret
 
 Update appKey and appSecret for special app

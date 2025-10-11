@@ -255,6 +255,13 @@ public class DeveloperApiTest {
     }
 
     @Test
+    public void testGetAppKeySecret() {
+        Result<AppKeySecretDTO> result = developerApi.getAppKeySecret(1705773446987822L);
+        logger.debug("result is {}", result);
+        Assert.assertEquals(0, result.getBusinessCode());
+    }
+
+    @Test
     public void testUpdateAppKeySecret() {
         EditAppKeySecretRequest appKeySecretRequest = new EditAppKeySecretRequest();
         appKeySecretRequest.setAppKey(AESUtils.silentEncrypt("6XC042UCQG51T17F0D6X", TestConstants.API_SECRET));

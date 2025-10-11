@@ -40,6 +40,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
     protected static final String OFFLINE_APK_BY_ID = "/v1/3rd/developer/apks/{apkId}/offline";
     protected static final String APK_VERSION_LIST_OF_APP = "/v1/3rd/developer/{appId}/apks/version-list";
     protected static final String UPDATE_APP_KEY_SECRET = "/v1/3rd/developer/apps/{appId}/key-secret";
+    protected static final String GET_APP_KEY_SECRET = "/v1/3rd/developer/apps/{appId}/key-secret";
 
     public DeveloperApi(String baseUrl, String apiKey, String apiSecret) {
         super(baseUrl, apiKey, apiSecret);
@@ -298,6 +299,17 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         request.setRequestMethod(SdkRequest.RequestMethod.PUT);
         request.setRequestBody(new Gson().toJson(editAppKeySecretRequest, EditAppKeySecretRequest.class));
         return emptyResult(client, request);
+    }
+
+    public Result<AppKeySecretDTO> getAppKeySecret(Long appId) {
+        if(appId==null || appId<=0){
+            return new Result<AppKeySecretDTO>(Collections.singletonList("parameter.appId.null"));
+        }
+        ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
+        SdkRequest request = createSdkRequest(GET_APP_KEY_SECRET.replace("{appId}", String.valueOf(appId)));
+        request.setRequestMethod(SdkRequest.RequestMethod.GET);
+        AppKeySecretResponse appKeySecretResponse =  EnhancedJsonUtils.fromJson(client.execute(request), AppKeySecretResponse.class);
+        return new Result<>(appKeySecretResponse);
     }
 
 
