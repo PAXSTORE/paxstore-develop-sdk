@@ -79,7 +79,7 @@ public class DeveloperApiTest {
 
         createApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("D:\\image\\3.jpg"));
         createApkRequest.setIconFile(FileUtils.createUploadFile("D:\\image.jpg"));
-        Result<String>  result = developerApi.uploadApk(createApkRequest);
+        Result<Long>  result = developerApi.uploadApk(createApkRequest);
         Assert.assertTrue(result.getBusinessCode() == 0);
     }
 
@@ -248,7 +248,7 @@ public class DeveloperApiTest {
 
     @Test
     public void testGetApk() {
-        Result<ApkInfoDTO> apkInfo = developerApi.getApkById(1643270597771298L);
+        Result<ApkInfoDTO> apkInfo = developerApi.getApkById(1000000022L);
         ApkInfoDTO data = apkInfo.getData();
         Assert.assertTrue(apkInfo.getBusinessCode() == 0);
         Assert.assertNotNull("get codeList failed", data);

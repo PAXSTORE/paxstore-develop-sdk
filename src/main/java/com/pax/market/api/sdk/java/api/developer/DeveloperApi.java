@@ -50,15 +50,15 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         super(baseUrl, apiKey, apiSecret, timeZone);
     }
 
-    public Result<String> uploadApk(CreateApkRequest createApkRequest) {
+    public Result<Long> uploadApk(CreateApkRequest createApkRequest) {
         List<String> validationErrs = Validators.validateCreate(createApkRequest, "parameter.terminalCreateRequest.null");
         if (validationErrs.size() > 0) {
-            return new Result<String>(validationErrs);
+            return new Result<>(validationErrs);
         }
         ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
         SdkRequest request = createSdkRequest(UPLOAD_APK_URL);
         handleFormData(createApkRequest,request);
-        return emptyResult(client,request);
+        return idResult(client,request);
     }
 
     public Result<Long> createApp(CreateSingleAppRequest createAppRequest) {
