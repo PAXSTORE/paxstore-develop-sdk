@@ -25,7 +25,7 @@ Create Apk by one step, it needs fully information of App and Apk.
 **API**
 
 ```
-public Result<String> uploadApk(CreateApkRequest createApkRequest)
+public Result<Long> uploadApk(CreateApkRequest createApkRequest)
 ```
 
 **Input parameter(s) description**
@@ -126,10 +126,18 @@ DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-
 
 ```
 {
-	"businessCode": 0
+	"businessCode": 0,
+	"data": 1634922089414693
 }
 ```
+<br>
 
+The Json structure shows like below.
+
+| Property Name | Type | Description                             |
+| :------------ | :--- |:----------------------------------------|
+| data          | Long | the id of apk                           |
+| businessCode  | Long | 0 means success, otherwise means failed |
 
 **Possible client validation errors**
 
