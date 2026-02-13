@@ -1,0 +1,1537 @@
+## Developer API
+
+All APIs related to developer app operations are encapsulated in this class *com.pax.market.api.sdk.java.api.developer.DeveloperApi*.
+
+**Constructors of DeveloperApi**
+
+```
+public DeveloperApi(String baseUrl, String apiKey, String apiSecret);
+```
+
+**Constructor parameters description**
+
+| Name      | Type   | Description                                                  |
+| :-------- | :----- | :----------------------------------------------------------- |
+| baseUrl   | String | the base url of REST API                                     |
+| apiKey    | String | the apiKey of developer, get this key from PAXSTORE admin console, refer to chapter Apply access rights |
+| apiSecret | String | apiSecret, get api secret from PAXSTORE admin console, refer to chapter Apply access rights |
+
+
+
+### Upload an Apk
+
+Create Apk by one step, it needs fully information of App and Apk.
+
+**API**
+
+```
+public Result<Long> uploadApk(CreateApkRequest createApkRequest)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name   | Type             | Nullable | Description                                         |
+| :--------------- | :--------------- | :------- | :-------------------------------------------------- |
+| createApkRequest | CreateApkRequest | false    | the create request object, the structure like below |
+
+Structure of class CreateApkRequest
+
+| Property Name         | Type                       | Nullable | Description                                                  |
+| :-------------------- | :------------------------- | :------- | :----------------------------------------------------------- |
+| appName               | String                     | false    | the name of app                                              |
+| baseType              | String                     | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App) |
+| chargeType            | Integer                    | false    | the charge type of app,  the values can be 0 and 1. (0 : Free, 1: Paid App) |
+| price                 | BigDecimal                 | true     | the price of app                                             |
+| modelNameList         | List\<String>              | false    | model names, the apk supported models                        |
+| categoryList          | List\<String>              | false    | business category, please reference getAppCategory API (using value field). |
+| appNameByVersion      | String                     | true     | the name of app version                                      |
+| shortDesc             | String                     | false    | short description                                            |
+| description           | String                     | false    |                                                              |
+| releaseNotes          | String                     | true     | release note                                                 |
+| appFile               | UploadedFileContent        | false    | the app file                                                 |
+| iconFile              | UploadedFileContent        | true     | the icon file                                                |
+| featuredImgFile       | UploadedFileContent        | false    | the icon file                                                |
+| attachment            | UploadedFileContent        | true     | the release note file(text format)                           |
+| screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots file, at least three pictures                |
+| paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file path, mandatory when baseType is 'P' |
+
+
+Structure of class UploadedFileContent
+
+| Property Name    | Type   | Description              |
+| :--------------- | :----- | :----------------------- |
+| bytesContent     | byte[] | bytes of file content    |
+| name             | String | name of file             |
+| originalFilename | String | originalFilename of file |
+| contentType      | String | conent of file           |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  CreateApkRequest createApkRequest = new CreateApkRequest();
+        createApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp.apk"));
+        createApkRequest.setAppName("test");
+        createApkRequest.setBaseType(APP_TYPE_NORMAL);
+        //parameter should use APP_TYPE_PARAMETER
+        //createApkRequest.setBaseType(APP_TYPE_PARAMETER);
+        createApkRequest.setShortDesc("test short desc");
+        createApkRequest.setDescription("test description");
+        createApkRequest.setReleaseNotes("This is release note");
+        createApkRequest.setChargeType(0);
+
+        List<String> categoryList = new ArrayList<>();
+        categoryList.add("WL_PS");
+        categoryList.add("WL_SK");
+        createApkRequest.setCategoryList(categoryList);
+        List<String> modelNameList = new ArrayList<>();
+        modelNameList.add("A920");
+        createApkRequest.setModelNameList(modelNameList);
+
+        List<UploadedFileContent> screenshotList = new ArrayList<>();
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp1.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp2.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp3.png"));
+        createApkRequest.setScreenshotFileList(screenshotList);
+        
+        /**List<UploadedFileContent> paramList = new ArrayList<>();
+        paramList.add(FileUtils.createUploadFile("C:\\TestApp_paramTemplate.xml"));
+        createApkRequest.setParamTemplateFileList(paramList);**/
+        
+        createApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("C:\\TestApp3.png"));
+        createApkRequest.setIconFile(FileUtils.createUploadFile("C:\\TestApp3.png"));
+
+        developerApi.uploadApk(createApkRequest);
+```
+
+**Client side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": -1,
+	"validationErrors": ["Parameter createApkRequest cannot be null!"]
+}
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1213,
+	"message": "App name is mandatory"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0,
+	"data": 1634922089414693
+}
+```
+<br>
+
+The Json structure shows like below.
+
+| Property Name | Type | Description                             |
+| :------------ | :--- |:----------------------------------------|
+| data          | Long | the id of apk                           |
+| businessCode  | Long | 0 means success, otherwise means failed |
+
+**Possible client validation errors**
+
+> <font color="red">Parameter CreateApkRequest can not be empty!</font>
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+| 1117          | App OS type must be same with previous version               |             |
+| 1202          | App package name should be same with previous version        |             |
+| 1205          | App is not editable                                          |             |
+| 1209          | App detail is mandatory                                      |             |
+| 1213          | App name is mandatory                                        |             |
+| 1214          | App name is too long                                         |             |
+| 1217          | App with same package name already exists                    |             |
+| 1244          | App model is mandatory                                       |             |
+| 1245          | App base type is mandatory                                   |             |
+| 1247          | App icon is mandatory                                        |             |
+| 1248          | App base type is invalid                                     |             |
+| 1253          | Parameter template is mandatory                              |             |
+| 1256          | Unsupported file type                                        |             |
+| 1258          | App name is mandatory                                        |             |
+| 1259          | App name is too long                                         |             |
+| 1260          | Short description is mandatory                               |             |
+| 1261          | Short description is too long                                |             |
+| 1262          | Description is mandatory                                     |             |
+| 1263          | Description is too long                                      |             |
+| 1264          | Release notes is too long                                    |             |
+| 1265          | At least 3 screenshots required                              |             |
+| 1267          | Package name [com.pax.market.*] is not allowed               |             |
+| 1273          | Only one pending app could exist at the same time            |             |
+| 1274          | Package name [{0}] is not allowed                            |             |
+| 1278          | App version already exists                                   |             |
+| 1283          | Draft app version exists, unable to upload the new version   |             |
+| 1297          | The app does not support to selected model                   |             |
+| 1304          | Category is mandatory                                        |             |
+| 1326          | App package name is too long                                 |             |
+| 1625          | Version Name already exists                                  |             |
+| 1700          | Model doesn't exist                                          |             |
+| 1714          | Existed model status is not active                           |             |
+| 2514          | Model is mandatory                                           |             |
+| 6010          | The name in appinfo file should be same with previous version |             |
+| 6100          | The APP_NAME in config file should be same with previous version |             |
+| 6200          | The [info]-name in system.ini file should be same with previous version |             |
+| 9203          | Chargeable app is not allowed                                |             |
+| 9205          | Developer is not allowed in this market                      |             |
+| 10102         | Do not upload signed file                                    |             |
+| 13041         | Category is invalid                                          |             |
+| 29102         | Set up your Stripe account first                             |             |
+
+### Create App 
+
+Create App project with specific name simply, will get appId when success.
+
+**API**
+
+```
+public Result<String> createApp(CreateSingleAppRequest createAppRequest)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name   | Type                   | Nullable | Description                                         |
+| :--------------- | :--------------------- | :------- | :-------------------------------------------------- |
+| createAppRequest | CreateSingleAppRequest | false    | the create request object, the structure like below |
+
+Structure of class CreateSingleAppRequest
+
+| Property Name | Type   | Nullable | Description                                                  |
+| :------------ | :----- | :------- | :----------------------------------------------------------- |
+| appName       | String | false    | the name of app, max lenth is 64                             |
+| appKey        | String | true     | The length of App key must 20, Must be a combination of numbers and letters |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+    CreateSingleAppRequest createAppRequest = new CreateSingleAppRequest();
+        createAppRequest.setAppName("APP20240223");
+        //not mandatory, it will generate random string with length 20 when not assigned
+        createAppRequest.setAppKey("97A9FE48F290A6C08F7B");
+        developerApi.createApp(createAppRequest);
+```
+
+**Client side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": -1,
+	"validationErrors": ["Parameter appCreateRequest cannot be null!"]
+}
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1213,
+	"message": "App name is mandatory"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0,
+	"data": 1634922089414693
+}
+```
+
+<br>
+
+The Json structure shows like below.
+
+| Property Name | Type | Description                             |
+| :------------ | :--- | :-------------------------------------- |
+| data          | Long | the id of app                           |
+| businessCode  | Long | 0 means success, otherwise means failed |
+
+**Possible client validation errors**
+
+> <font color="red">Parameter appCreateRequest cannot be null!</font>
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+| 1213          | App name is mandatory                                        |             |
+| 1214          | App name is too long                                         |             |
+| 1217          | App with same package name already exists                    |             |
+| 1248          | App base type is invalid                                     |             |
+
+
+### getAppInfoByName
+
+Get App information by packageName or appName.
+
+Note: packageName and appName should not be null at same time
+
+**API**
+
+```
+public Result<AppDetailDTO> getAppInfoByName(String packageName, String appName)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name | Type   | Nullable | Description         |
+| :------------- | :----- | :------- | :------------------ |
+| packageName    | String | false    | package name of app |
+| appName        | String | false    | name of app         |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  developerApi.getAppInfoByName("com.kibo.xunlian", "TestApp1");
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 135,
+	"message": "Invalid parameter or missing parameter"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0,
+	"data": {
+		"id": 1634804562919462,
+		"name": "TestApp0920",
+		"type": "G",
+		"status": "A"
+	}
+}
+```
+
+<br>
+
+The type in dataSet of is AppDetailDTO. And the structure shows like below.
+
+| Property Name | Type   | Description                                                  |
+| :------------ | :----- | :----------------------------------------------------------- |
+| id            | Long   | the id of app                                                |
+| name          | String | the name of app                                              |
+| type          | String | the type of app , value can be G(General App),S(Solution App) |
+| status        | String | the status of App, value can be one of A(Active), I(INACTIVE) and S(Suspend) |
+
+<br>
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 135           | Invalid parameter or missing parameter                       |             |
+| 1325          | App package name is mandatory                                |             |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+
+### Create an Apk
+
+Create an Apk with related information
+
+**API**
+
+```
+public Result<String> createApk(CreateSingleApkRequest createApkRequest)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name   | Type                   | Nullable | Description                                         |
+| :--------------- | :--------------------- | :------- | :-------------------------------------------------- |
+| createApkRequest | CreateSingleApkRequest | false    | the create request object, the structure like below |
+
+Structure of class CreateSingleApkRequest
+
+| Property Name         | Type                       | Nullable | Description                                                  |
+| :-------------------- | :------------------------- | :------- | :----------------------------------------------------------- |
+| appId                 | Long                       | false    | the id of app                                                |
+| apkName               | String                     | false    | the name of apk                                              |
+| apkType               | String                     | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App) |
+| modelNameList         | List\<String>              | false    | model names, the apk supported models                        |
+| categoryList          | List\<String>              | false    | business category, please reference getAppCategory API (using value field). |
+| shortDesc             | String                     | false    | short description                                            |
+| description           | String                     | false    |                                                              |
+| releaseNotes          | String                     | true     | release note                                                 |
+| appFile               | UploadedFileContent        | false    | the app file                                                 |
+| iconFile              | UploadedFileContent        | true     | the icon file                                                |
+| featuredImgFile       | UploadedFileContent        | true     | the featured image file                                      |
+| attachment            | UploadedFileContent        | true     | the release note file(text format)                           |
+| accessUrl             | String                     | true     | url of access                                                |
+| screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots files, at least three pictures               |
+| paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file , template file is mandantory when ApkType is 'P' |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  CreateSingleApkRequest createApkRequest = new CreateSingleApkRequest();
+        createApkRequest.setAppId(1598740513161250L);
+        createApkRequest.setApkName("Tiktok-V1.0");
+        createApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp.apk"));
+        //createApkRequest.setApkType(APP_TYPE_NORMAL);
+        createApkRequest.setApkType(APP_TYPE_PARAMETER);
+        createApkRequest.setShortDesc("test short desc");
+        createApkRequest.setDescription("test description");
+        createApkRequest.setReleaseNotes("This is release note");
+        createApkRequest.setAccessUrl("www.baidu.com");
+        // business category dictionary
+        // You can get it from app edit page in develop center or admin platform
+        List<String> categoryList = new ArrayList<>();
+        categoryList.add("WL_PS");
+        categoryList.add("WL_SK");
+        createApkRequest.setCategoryList(categoryList);
+        List<String> modelNameList = new ArrayList<>();
+        //model of device
+        //About others models, You can get it from app edit page in develop center or admin platform
+        modelNameList.add("A920");
+        //modelNameList.add("Prolin");
+        createApkRequest.setModelNameList(modelNameList);
+
+        List<UploadedFileContent> screenshotList = new ArrayList<>();
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp1.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp2.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp3.png"));
+        createApkRequest.setScreenshotFileList(screenshotList);
+
+        List<UploadedFileContent> paramList = new ArrayList<>();
+        paramList.add(FileUtils.createUploadFile("C:\\TestApp_paramTemplate.xml"));
+        createApkRequest.setParamTemplateFileList(paramList);
+
+        createApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("C:\\TestApp3.png"));
+        createApkRequest.setIconFile(FileUtils.createUploadFile("C:\\TestApp3.png"));
+
+        developerApi.createApk(createApkRequest);
+```
+
+**Client side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": -1,
+	"validationErrors": ["Parameter createApkRequest cannot be null!"]
+}
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1213,
+	"message": "App name is mandatory"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0,
+	"data": 1634925723779110
+}
+```
+
+The JSON structure shows like below.
+<br>
+
+| Parameter Name | Type | Nullable | Description |
+| :------------- | :--- | :------- | :---------- |
+| data           | Long | false    | id of APK   |
+
+
+**Possible client validation errors**
+
+> <font color="red">Parameter CreateApkRequest can not be empty!</font>
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 135           | Invalid parameter or missing parameter                       |             |
+| 1000          | The app not found                                            |             |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+| 1103          | APK icon is too large                                        |             |
+| 1104          | APK release note is too large                                |             |
+| 1117          | App OS type must be same with previous version               |             |
+| 1202          | App package name should be same with previous version        |             |
+| 1205          | App is not editable                                          |             |
+| 1209          | App detail is mandatory                                      |             |
+| 1213          | Apk name is mandatory                                        |             |
+| 1214          | Apk name is too long                                         |             |
+| 1217          | App with same package name already exists                    |             |
+| 1244          | App model is mandatory                                       |             |
+| 1247          | App icon is mandatory                                        |             |
+| 1253          | Parameter template is mandatory                              |             |
+| 1256          | Unsupported file type                                        |             |
+| 1258          | App name is mandatory                                        |             |
+| 1259          | App name is too long                                         |             |
+| 1260          | Short description is mandatory                               |             |
+| 1261          | Short description is too long                                |             |
+| 1262          | Description is mandatory                                     |             |
+| 1263          | Description is too long                                      |             |
+| 1264          | Release notes is too long                                    |             |
+| 1265          | At least 3 screenshots required                              |             |
+| 1267          | Package name [com.pax.market.*] is not allowed               |             |
+| 1273          | Only one pending app could exist at the same time            |             |
+| 1274          | Package name [{0}] is not allowed                            |             |
+| 1278          | App version already exists                                   |             |
+| 1283          | Draft app version exists, unable to upload the new version   |             |
+| 1297          | The app does not support to selected model                   |             |
+| 1304          | Category is mandatory                                        |             |
+| 1326          | App package name is too long                                 |             |
+| 1625          | Version Name already exists                                  |             |
+| 1700          | Model doesn't exist                                          |             |
+| 1714          | Existed model status is not active                           |             |
+| 2514          | Model is mandatory                                           |             |
+| 6010          | The name in appinfo file should be same with previous version |             |
+| 6100          | The APP_NAME in config file should be same with previous version |             |
+| 6200          | The [info]-name in system.ini file should be same with previous version |             |
+| 9203          | Chargeable app is not allowed                                |             |
+| 9205          | Developer is not allowed in this market                      |             |
+| 10102         | Do not upload signed file                                    |             |
+| 13041         | Category is invalid                                          |             |
+| 29102         | Set up your Stripe account first                             |             |
+
+### Create multiple apk
+
+Create multiple apk 
+
+**API**
+
+```
+public Result<Long> createMultipleApk(CreateMultipleApkRequest createApkRequest)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name           | Type             | Nullable | Description                                         |
+| :----------------------- | :--------------- | :------- | :-------------------------------------------------- |
+| CreateMultipleApkRequest | createApkRequest | false    | the create request object, the structure like below |
+
+Structure of class CreateMultipleApkRequest
+
+| Property Name         | Type                             | Nullable | Description                                                  |
+| :-------------------- | :------------------------------- | :------- | :----------------------------------------------------------- |
+| appId                 | Long                             | false    | the id of app                                                |
+| apkName               | String                           | false    | the name of apk                                              |
+| apkType               | String                           | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App) |
+| modelNameList         | List\<String>                    | false    | model names, the apk supported models                        |
+| categoryList          | List\<String>                    | false    | business category, please reference getAppCategory API (using value field). |
+| shortDesc             | String                           | false    | short description                                            |
+| description           | String                           | false    |                                                              |
+| releaseNotes          | String                           | true     | release note                                                 |
+| iconFile              | UploadedFileContent              | true     | the icon file                                                |
+| featuredImgFile       | UploadedFileContent              | true     | the featured image file                                      |
+| attachment            | UploadedFileContent              | true     | the release note file(text format)                           |
+| accessUrl             | String                           | true     | url of access                                                |
+| screenshotFileList    | List\<UploadedFileContent>       | false    | the screenshots files, at least three pictures               |
+| paramTemplateFileList | List\<UploadedFileContent>       | true     | the parameter templates file , template file is mandantory when ApkType is 'P' |
+| multipleAppFile       | Map<String, UploadedFileContent> | false    | multipleAppFile                                              |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+        CreateMultipleApkRequest createApkRequest = new CreateMultipleApkRequest();
+        createApkRequest.setAppId(1705773446987822L);
+        Map<String, UploadedFileContent> multipleApk = new HashMap<>();
+        multipleApk.put("PAX", FileUtils.createUploadFile("C:\101.0.apk"));
+        multipleApk.put("A_Multivendor", FileUtils.createUploadFile("C:\101.0.apk"));
+        createApkRequest.setMultipleAppFile(multipleApk);
+        createApkRequest.setApkName("TestApp");
+        createApkRequest.setApkType(APP_TYPE_PARAMETER);
+        createApkRequest.setShortDesc("test short desc");
+        createApkRequest.setDescription("test description");
+        createApkRequest.setReleaseNotes("This is release note");
+        createApkRequest.setAccessUrl("www.baidu.com");
+        createApkRequest.setChargeType(0);
+        createApkRequest.setPrice(BigDecimal.ONE);
+
+        List<String> categoryList = new ArrayList<>();
+        categoryList.add("CY_WM");
+        categoryList.add("CY_JXC");
+        createApkRequest.setCategoryList(categoryList);
+        List<String> modelNameList = new ArrayList<>();
+        modelNameList.add("A920");
+        modelNameList.add("Multivendor1");
+        createApkRequest.setModelNameList(modelNameList);
+
+        List<UploadedFileContent> screenshotList = new ArrayList<>();
+        screenshotList.add(FileUtils.createUploadFile("C:\1.jpeg"));
+        screenshotList.add(FileUtils.createUploadFile("C:\2.jpeg"));
+        screenshotList.add(FileUtils.createUploadFile("C:\3.jpeg"));
+        createApkRequest.setScreenshotFileList(screenshotList);
+
+        List<UploadedFileContent> paramList = new ArrayList<>();
+        paramList.add(FileUtils.createUploadFile("C:\\TestApp_paramTemplate.xml"));
+        createApkRequest.setParamTemplateFileList(paramList);
+
+        createApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("C:\3.jpeg"));
+        createApkRequest.setIconFile(FileUtils.createUploadFile("C:\1.jpeg"));
+
+        Result<Long>  result = developerApi.createMultipleApk(createApkRequest);
+     
+```
+
+**Client side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": -1,
+	"validationErrors": ["Parameter createApkRequest cannot be null!"]
+}
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1213,
+	"message": "App name is mandatory"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+    "businessCode": 0,
+    "data": 1705962278748210,
+    "rateLimit": "5",
+    "rateLimitRemain": "4",
+    "rateLimitReset": "1760151004409"
+}
+```
+
+The JSON structure shows like below.
+<br>
+
+| Parameter Name | Type | Nullable | Description |
+| :------------- | :--- | :------- | :---------- |
+| data           | Long | false    | id of APK   |
+
+
+**Possible client validation errors**
+
+> <font color="red">Parameter CreateApkRequest can not be empty!</font>
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 135           | Invalid parameter or missing parameter                       |             |
+| 1000          | The app not found                                            |             |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+| 1103          | APK icon is too large                                        |             |
+| 1104          | APK release note is too large                                |             |
+| 1117          | App OS type must be same with previous version               |             |
+| 1202          | App package name should be same with previous version        |             |
+| 1205          | App is not editable                                          |             |
+| 1209          | App detail is mandatory                                      |             |
+| 1213          | Apk name is mandatory                                        |             |
+| 1214          | Apk name is too long                                         |             |
+| 1217          | App with same package name already exists                    |             |
+| 1244          | App model is mandatory                                       |             |
+| 1247          | App icon is mandatory                                        |             |
+| 1253          | Parameter template is mandatory                              |             |
+| 1256          | Unsupported file type                                        |             |
+| 1258          | App name is mandatory                                        |             |
+| 1259          | App name is too long                                         |             |
+| 1260          | Short description is mandatory                               |             |
+| 1261          | Short description is too long                                |             |
+| 1262          | Description is mandatory                                     |             |
+| 1263          | Description is too long                                      |             |
+| 1264          | Release notes is too long                                    |             |
+| 1265          | At least 3 screenshots required                              |             |
+| 1267          | Package name [com.pax.market.*] is not allowed               |             |
+| 1273          | Only one pending app could exist at the same time            |             |
+| 1274          | Package name [{0}] is not allowed                            |             |
+| 1278          | App version already exists                                   |             |
+| 1283          | Draft app version exists, unable to upload the new version   |             |
+| 1297          | The app does not support to selected model                   |             |
+| 1304          | Category is mandatory                                        |             |
+| 1326          | App package name is too long                                 |             |
+| 1625          | Version Name already exists                                  |             |
+| 1700          | Model doesn't exist                                          |             |
+| 1714          | Existed model status is not active                           |             |
+| 2514          | Model is mandatory                                           |             |
+| 6010          | The name in appinfo file should be same with previous version |             |
+| 6100          | The APP_NAME in config file should be same with previous version |             |
+| 6200          | The [info]-name in system.ini file should be same with previous version |             |
+| 9203          | Chargeable app is not allowed                                |             |
+| 9205          | Developer is not allowed in this market                      |             |
+| 10102         | Do not upload signed file                                    |             |
+| 13041         | Category is invalid                                          |             |
+| 29102         | Set up your Stripe account first                             |             |
+
+
+
+### Edit an Apk
+
+Edit the information of an Apk
+
+**API**
+
+```
+public Result<String> editApk(EditSingleApkRequest editApkRequest)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name | Type                 | Nullable | Description                                       |
+| :------------- | :------------------- | :------- | :------------------------------------------------ |
+| editApkRequest | EditSingleApkRequest | false    | the edit request object, the structure like below |
+
+Structure of class EditSingleApkRequest
+
+| Property Name         | Type                       | Nullable | Description                                                  |
+| :-------------------- | :------------------------- | :------- | :----------------------------------------------------------- |
+| apkId                 | Long                       | false    | the id of app                                                |
+| apkName               | String                     | false    | the name of apk                                              |
+| apkType               | String                     | false    | the type of app, the values can be 'P' and 'N'. (P : Parameter App, N: Standard App) |
+| modelNameList         | List\<String>              | false    | model names, the apk supported models                        |
+| categoryList          | List\<String>              | false    | business category, please reference getAppCategory API (using value field). |
+| shortDesc             | String                     | false    | short description                                            |
+| description           | String                     | false    |                                                              |
+| releaseNotes          | String                     | true     | release note                                                 |
+| appFile               | UploadedFileContent        | true     | the appfile                                                  |
+| iconFile              | UploadedFileContent        | false    | the icon file                                                |
+| featuredImg           | UploadedFileContent        | true     | the featured image file                                      |
+| attachment            | UploadedFileContent        | true     | the release note file(text format)                           |
+| accessUrl             | String                     | true     | url of access                                                |
+| screenshotFileList    | List\<UploadedFileContent> | false    | the screenshots files                                        |
+| paramTemplateFileList | List\<UploadedFileContent> | true     | the parameter templates file, mandantory when ApkType is 'P' |
+
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  EditSingleApkRequest editApkRequest = new EditSingleApkRequest();
+        editApkRequest.setApkId(1598744592121890L);
+        editApkRequest.setApkName("Tiktok");
+        editApkRequest.setAppFile(FileUtils.createUploadFile("C:\\TestApp_1.apk"));
+        editApkRequest.setApkType(APP_TYPE_PARAMETER);
+        editApkRequest.setShortDesc("test short descV2");
+        editApkRequest.setDescription("test descriptionV2");
+        editApkRequest.setReleaseNotes("This is release noteV2");
+        editApkRequest.setAccessUrl("www.baidu-v2.com");
+
+        List<String> categoryList = new ArrayList<>();
+        categoryList.add("WL_PS");
+        categoryList.add("WL_SK");
+        editApkRequest.setCategoryList(categoryList);
+        List<String> modelNameList = new ArrayList<>();
+        modelNameList.add("A920");
+        modelNameList.add("A920Pro");
+        editApkRequest.setModelNameList(modelNameList);
+
+        List<UploadedFileContent> screenshotList = new ArrayList<>();
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp111.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp222.png"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\TestApp333.png"));
+        editApkRequest.setScreenshotFileList(screenshotList);
+
+        List<UploadedFileContent> paramList = new ArrayList<>();
+        paramList.add(FileUtils.createUploadFile("C:\\TestApp_paramTemplate2.xml"));
+        editApkRequest.setParamTemplateFileList(paramList);
+
+        editApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("C:\\TestApp333.png"));
+        editApkRequest.setIconFile(FileUtils.createUploadFile("C:\\TestApp333.png"));
+
+        developerApi.editApk(editApkRequest);
+```
+
+**Client side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": -1,
+	"validationErrors": ["Parameter editApkRequest cannot be null!"]
+}
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1002,
+	"message": "APK not found"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0
+}
+```
+
+
+**Possible client validation errors**
+
+> <font color="red">Parameter editApkRequest can not be empty!</font>
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 135           | Invalid parameter or missing parameter                       |             |
+| 1002          | APK not found                                                |             |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+| 1117          | App OS type must be same with previous version               |             |
+| 1202          | App package name should be same with previous version        |             |
+| 1205          | App is not editable                                          |             |
+| 1209          | App detail is mandatory                                      |             |
+| 1213          | App name is mandatory                                        |             |
+| 1214          | App name is too long                                         |             |
+| 1217          | App with same package name already exists                    |             |
+| 1244          | App model is mandatory                                       |             |
+| 1247          | App icon is mandatory                                        |             |
+| 1253          | Parameter template is mandatory                              |             |
+| 1256          | Unsupported file type                                        |             |
+| 1258          | App name is mandatory                                        |             |
+| 1259          | App name is too long                                         |             |
+| 1260          | Short description is mandatory                               |             |
+| 1261          | Short description is too long                                |             |
+| 1262          | Description is mandatory                                     |             |
+| 1263          | Description is too long                                      |             |
+| 1264          | Release notes is too long                                    |             |
+| 1265          | At least 3 screenshots required                              |             |
+| 1267          | Package name [com.pax.market.*] is not allowed               |             |
+| 1273          | Only one pending app could exist at the same time            |             |
+| 1274          | Package name [{0}] is not allowed                            |             |
+| 1278          | App version already exists                                   |             |
+| 1283          | Draft app version exists, unable to upload the new version   |             |
+| 1288          | Multiple APK manufacturer information does not match         |             |
+| 1289          | Multiple APK manufacturer upload limit exceeded              |             |
+| 1297          | The app does not support to selected model                   |             |
+| 1304          | Category is mandatory                                        |             |
+| 1326          | App package name is too long                                 |             |
+| 1625          | Version Name already exists                                  |             |
+| 1700          | Model doesn't exist                                          |             |
+| 1714          | Existed model status is not active                           |             |
+| 2514          | Model is mandatory                                           |             |
+| 6010          | The name in appinfo file should be same with previous version |             |
+| 6100          | The APP_NAME in config file should be same with previous version |             |
+| 6200          | The [info]-name in system.ini file should be same with previous version |             |
+| 9203          | Chargeable app is not allowed                                |             |
+| 9205          | Developer is not allowed in this market                      |             |
+| 10102         | Do not upload signed file                                    |             |
+| 13041         | Category is invalid                                          |             |
+| 29102         | Set up your Stripe account first                             |             |
+
+### Submit Apk
+
+Submit Apk for administrator approval
+
+**API**
+
+```
+public Result<String> submitApk(Long apkId)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name | Type | Nullable | Description |
+| :------------- | :--- | :------- | :---------- |
+| apkId          | Long | false    | id of apk   |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  developerApi.submitApk(1598744592121890L);
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1002,
+	"message": "APK not found"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0
+}
+```
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 135           | Invalid parameter or missing parameter                       |             |
+| 1000          | APP not found                                                |             |
+| 1002          | APK not found                                                |             |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+
+
+### Delete Apk
+
+Delete Apk by apkId
+
+**API**
+
+```
+public Result<String> deleteApk(Long apkId)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name | Type | Nullable | Description |
+| :------------- | :--- | :------- | :---------- |
+| apkId          | Long | false    | id of apk   |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  developerApi.deleteApk(1598563819716651L);
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1002,
+	"message": "APK not found"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0
+}
+```
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 131           | Insufficient access right                                    |             |
+| 135           | Invalid parameter or missing parameter                       |             |
+| 1002          | APK not found                                                |             |
+| 1205          | App is not editable                                          |             |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+
+### Delete App
+
+Delete App project by appId
+
+**API**
+
+```
+public Result<String> deleteApp(Long appId)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name | Type | Nullable | Description |
+| :------------- | :--- | :------- | :---------- |
+| appId          | Long | false    | id of app   |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  developerApi.deleteApp(2598004800782372L);
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1000,
+	"message": "APP not found"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0
+}
+```
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 131           | Insufficient access right                                    |             |
+| 135           | Invalid parameter or missing parameter                       |             |
+| 1000          | APP not found                                                |             |
+| 1205          | App is not editable                                          |             |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+
+### Get app category
+
+App category list, it is dictionary
+
+**API**
+
+```
+Result<CodeInfoDTO> getAppCategory()
+```
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  Result<CodeInfoDTO> result = developerApi.getAppCategory();
+  PageInfo<CodeInfoDTO> pageInfo = result.getPageInfo();
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 135,
+	"message": "Request parameter is missing or invalid"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0,
+	"pageInfo": {
+		"pageNo": 1,
+		"limit": 22,
+		"totalCount": 22,
+		"hasNext": false,
+		"dataSet": [{
+			"value": "GYL_DK",
+			"label": "Loan"
+		}, {
+			"value": "WL_PS",
+			"label": "Delivery"
+		}, {
+			"value": "SH_HY",
+			"label": "Membership"
+		}]
+	}
+}
+```
+
+Structure of class PageInfo
+
+| Property Name | Type              | Description           |
+| :------------ | :---------------- | :-------------------- |
+| pageNo        | Integer           | current pageNo        |
+| limit         | Integer           | fetch size            |
+| totalCount    | Integer           | total count of record |
+| dataSet       | List<CodeInfoDTO> | code list             |
+
+Structure of class CodeInfoDTO
+
+| Property Name | Type   | Description                       |
+| :------------ | :----- | :-------------------------------- |
+| value         | String | code value, used by createApk API |
+| label         | String | label of code                     |
+
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 131           | Insufficient access right                                    |             |
+| 135           | Invalid parameter or missing parameter                       |             |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+
+### Get APK
+
+get apk by apkId
+
+**API**
+
+```
+Result<ApkInfoDTO> getApkById(Long apkId)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name | Type   | Nullable | Description |
+| :------------- | :----- | :------- | :---------- |
+| apkId          | String | false    | apkId       |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+  Result<ApkInfoDTO> apkInfo = developerApi.getApkById(1643270597771298L);
+  ApkInfoDTO data = apkInfo.getData();
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 135,
+	"message": "Request parameter is missing or invalid"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0,
+	"data": {
+		"apkId": 1643502907686947,
+		"apkType": "N",
+		"apkIconFileId": "https://www.dev.paxsit.com/group1/M00/02/59/wKjIGWcjUjmADLs9AAAIOm3Mexw5393549",
+		"displayFileSize": "40.9 MB",
+		"versionName": "7.9",
+		"allowUpdateParamTemplate": true,
+		"paramTemplateNameList": [],
+		"apkCategoryList": ["GYL_DK", "GYL_JZ", "GYL_SK"],
+		"apkModelList": [1],
+		"apkModelNameList": ["A920","A930"],
+		"signatureProvider": "NONE",
+		"minSdkVersion": "21",
+		"storeSdkVersion": null,
+		"apkFileFactoryList": [],
+		"appName": "QIMAO",
+		"shortDesc": "SHORTDESC",
+		"description": "DESC",
+		"releaseNotes": null,
+		"screenshot0": "https://www.dev.paxsit.com/group1/M00/02/59/wKjIGWcjO5qAC6f2AAPHv517xvo197.png",
+		"screenshot1": "https://www.dev.paxsit.com/group1/M00/02/59/wKjIGWcjO5uAPYrUAAdFKTEjRV4261.png",
+		"screenshot2": "https://www.dev.paxsit.com/group1/M00/02/59/wKjIGWcjO5uAA8uOAASbj8LASiw607.png",
+		"screenshot3": null,
+		"screenshot4": null,
+		"featuredImg": null,
+		"accessUrl": null,
+		"attachment": null,
+		"attachmentName": null,
+		"appId": 1643490278637602,
+		"packageName": "com.kmxs.reader",
+		"price": null,
+		"currency": null,
+		"chargeType": 0,
+		"freeTrialDay": null,
+		"osType": "A",
+		"appType": "G",
+		"disableApkTypeChange": true,
+		"isFirstApkVersion": false,
+		"chargeMode": null,
+		"versionCode":10020,
+		"status":"O"
+	}
+}
+```
+
+Structure of data field
+
+| Property Name | Type       | Description      |
+| :------------ | :--------- | :--------------- |
+| businessCode  | Integer    | business code    |
+| data          | ApkInfoDTO | apk informations |
+
+Structure of class ApkInfoDTO
+
+| Property Name            | Type            | Description                                                  |
+| :----------------------- | :-------------- | :----------------------------------------------------------- |
+| apkId                    | Long            | apkId                                                        |
+| apkType                  | String          | 'P' is PARAMETER_APP, 'N' is NORMAL_APP                      |
+| apkIconFileId            | String          | icon file url                                                |
+| displayFileSize          | String          | APK file size, like '40.0MB'                                 |
+| versionName              | String          | version name of APK                                          |
+| allowUpdateParamTemplate | Boolean         |                                                              |
+| paramTemplateNameList    | List<String>    | templateName list                                            |
+| apkCategoryList          | List<String>    | category list                                                |
+| apkModelList             | List<Long>      | model id list                                                |
+| apkModelNameList         | List<String>    | model name list                                              |
+| signatureProvider        | String          | signature provider                                           |
+| minSdkVersion            | String          | minimum version of SDK                                       |
+| apkFileFactoryList       | List<ApkFileVo> | apkFile for support multi vendor factory                     |
+| appName                  | String          | app name                                                     |
+| shortDesc                | String          | shortDesc of apk                                             |
+| description              | String          | APK status                                                   |
+| releaseNotes             | String          | release Notes                                                |
+| screenshot0              | String          | picture url                                                  |
+| screenshot1              | String          | picture url                                                  |
+| screenshot2              | String          | picture url                                                  |
+| screenshot3              | String          | picture url                                                  |
+| screenshot4              | String          | picture url                                                  |
+| featuredImg              | String          | featured image url                                           |
+| accessUrl                | String          | apk signature status                                         |
+| attachment               | String          | attachment url of release note file(text file)               |
+| attachmentName           | String          | attachment name of release note(text file)                   |
+| appId                    | Long            | appId                                                        |
+| packageName              | String          | package name of app                                          |
+| price                    | BigDecimal      | price of app                                                 |
+| currency                 | String          | currency of app, such as 'USD'                               |
+| chargeType               | Integer         | 0 is free , 1 is not free                                    |
+| freeTrialDay             | Integer         | such as 100                                                  |
+| osType                   | String          | 'A' is Android ,'T' is tranditional, 'NIL' is None           |
+| appType                  | String          | 'G' is genernal app, 'S' is industry solution                |
+| disableApkTypeChange     | Boolean         |                                                              |
+| isFirstApkVersion        | Boolean         |                                                              |
+| chargeMode               | String          | 0 is TERMINAL_INSTALLED, 1 is QUANTITY                       |
+| versionCode              | Long            |                                                              |
+| status                   | String          | 'O' is ONLINE, 'U' is UNAVAILABLE, 'R' is REJECTED, 'P' is PENDING, 'D' is DRAFT |
+
+Structure of class ApkFileVo
+
+| Property Name | Type   | Description |
+| :------------ | :----- | :---------- |
+| factoryId     | Long   | factory id  |
+| factoryName   | String | factoryName |
+| name          | String | name        |
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 131           | Insufficient access right                                    |             |
+| 135           | Invalid parameter or missing parameter                       |             |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+
+
+
+### Get appKey and appSecret
+
+Get appKey and appSecret by appId
+
+**API**
+
+```
+public Result<AppKeySecretDTO> getAppKeySecret(Long appId)
+```
+
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+Result<AppKeySecretDTO> result = developerApi.getAppKeySecret(1705773446987822L);
+```
+
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1000,
+	"message": "App not found"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+    "businessCode": 0,
+    "data": {
+        "appKey": "DGGG0IZ72VL09S4C24J4",
+        "appSecret": "18DEHR0W40473U27MI11G344O0980SFK873B8WB7"
+    },
+    "rateLimit": "5",
+    "rateLimitRemain": "4",
+    "rateLimitReset": "1760167121665"
+}
+```
+
+<br>
+
+The Json structure shows like below.
+
+| Property Name | Type            | Description                             |
+| :------------ | :-------------- | :-------------------------------------- |
+| data          | AppKeySecretDTO | the info of AppKeySecret                |
+| businessCode  | Long            | 0 means success, otherwise means failed |
+
+The AppKeySecretDTO structure shows like below.
+
+| Property Name | Type   | Description |
+| :------------ | :----- | :---------- |
+| appKey        | String |             |
+| appSecret     | String |             |
+
+**Possible business codes**
+
+| Business Code | Message                                 | Description |
+| :------------ | :-------------------------------------- | :---------- |
+| 131           | Insufficient access right               |             |
+| 1000          | App not found                           |             |
+| 9205          | Developer is not allowed in this market |             |
+
+
+
+### Update appKey and appSecret
+
+Update appKey and appSecret for special app
+
+**API**
+
+```
+public Result<String> updateAppKeySecret(Long appId, EditAppKeySecretRequest editAppKeySecretRequest) 
+```
+
+**Input parameter(s) description**
+
+| Parameter Name          | Type                    | Nullable | Description                                         |
+| :---------------------- | :---------------------- | :------- | :-------------------------------------------------- |
+| editAppKeySecretRequest | EditAppKeySecretRequest | false    | the update request object, the structure like below |
+
+Structure of class CreateSingleAppRequest
+
+| Property Name | Type   | Nullable | Description                                                  |
+| :------------ | :----- | :------- | :----------------------------------------------------------- |
+| appKey        | String | false    | the appKey of app, should encrypt with API_SECRET of developer. Use AESUtils.silentEncrypt |
+| appSecret     | String | false    | the appSecret of app, should encrypt with API_SECRET of developer. AESUtils.silentEncrypt |
+
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+EditAppKeySecretRequest appKeySecretRequest = new EditAppKeySecretRequest();
+appKeySecretRequest.setAppKey(AESUtils.silentEncrypt("6XC042UCQG51T17F0D6X", TestConstants.API_SECRET));
+appKeySecretRequest.setAppSecret(AESUtils.silentEncrypt("P8J5JJ5801O65O3D32278999K6Y6NHZ6LU82318R",TestConstants.API_SECRET));
+
+Result<String> result = developerApi.updateAppKeySecret(1653632709689384L, appKeySecretRequest);
+Assert.assertTrue(result.getBusinessCode() == 0);
+```
+
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1330,
+	"message": "App key is mandatory"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0
+}
+```
+
+<br>
+
+The Json structure shows like below.
+
+| Property Name | Type | Description                             |
+| :------------ | :--- | :-------------------------------------- |
+| data          | Long | the id of app                           |
+| businessCode  | Long | 0 means success, otherwise means failed |
+
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+| 1213          | App name is mandatory                                        |             |
+| 1214          | App name is too long                                         |             |
+| 1217          | App with same package name already exists                    |             |
+| 1248          | App base type is invalid                                     |             |
+| 1332          | The length of App key must 20                                |             |
+| 1334          | App key is invalid(Must be a combination of numbers and letters) |             |
+| 1336          | App key already exists                                       |             |
+| 1330          | App key is mandatory                                         |             |
+| 1331          | App secret is mandatory                                      |             |
+
+
+### Get apk version list of APP
+
+get all apk version list for App
+
+**API**
+
+```
+Result<ApkVersionDTO> getApkVersionList(Long appId)
+```
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+Result<ApkVersionDTO> result = developerApi.getApkVersionList(1000L);
+PageInfo<ApkVersionDTO> pageInfo = result.getPageInfo();
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 135,
+	"message": "Request parameter is missing or invalid"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0,
+	"pageInfo": {
+		"pageNo": 1,
+		"limit": 2,
+		"totalCount": 2,
+		"hasNext": false,
+		"dataset": [{
+            "apkId": 1643490633056290,
+            "status": "O",
+            "versionCode": 70820,
+            "versionName": "7.8.20"
+        }, {
+            "apkId": 1643502907686947,
+            "status": "D",
+            "versionCode": 70900,
+            "versionName": "7.9"
+        }]
+	}
+}
+```
+
+Structure of class PageInfo
+
+| Property Name | Type                | Description           |
+| :------------ | :------------------ | :-------------------- |
+| pageNo        | Integer             | current pageNo        |
+| limit         | Integer             | fetch size            |
+| totalCount    | Integer             | total count of record |
+| dataSet       | List<ApkVersionDTO> | data list             |
+
+Structure of class ApkVersionDTO
+
+| Property Name | Type   | Description                                                  |
+| :------------ | :----- | :----------------------------------------------------------- |
+| apkId         | Long   | apk id                                                       |
+| status        | String | apk status, D is Draft, P is pending, O is online, R is reject, U is unavailable |
+| versionCode   | Long   | version code                                                 |
+| versionName   | String | version name                                                 |
+
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 131           | Insufficient access right                                    |             |
+| 135           | Invalid parameter or missing parameter                       |             |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |
+
+### Offline APK
+
+Offline Apk by apkId
+
+**API**
+
+```
+public Result<String> offlineApkById(Long apkId, ApkOfflineRequest request)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name | Type              | Nullable | Description       |
+| :------------- | :---------------- | :------- | :---------------- |
+| apkId          | Long              | false    | id of apk         |
+| offlineRequest | ApkOfflineRequest | false    | reason of offline |
+
+Structure of class ApkOfflineRequest
+
+| Property Name | Type   | Nullable | Description                   |
+| :------------ | :----- | :------- | :---------------------------- |
+| comment       | String | false    | The reason about offling APK. |
+
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+ApkOfflineRequest offlineRequest = new ApkOfflineRequest();
+offlineRequest.setComment("too old version");
+developerApi.offlineApkById(1643270597771298L, offlineRequest);
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1002,
+	"message": "APK not found"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 0
+}
+```
+
+**Possible business codes**
+
+| Business Code | Message                                                      | Description |
+| :------------ | :----------------------------------------------------------- | :---------- |
+| 131           | Insufficient access right                                    |             |
+| 135           | Invalid parameter or missing parameter                       |             |
+| 1002          | APK not found                                                |             |
+| 1205          | App is not editable                                          |             |
+| 1011          | The app's developer signature is different from previous version |             |
+| 1012          | Please sign your app with a self-signed certificate          |             |
+| 1013          | The App signature certificate  is invalid                    |             |

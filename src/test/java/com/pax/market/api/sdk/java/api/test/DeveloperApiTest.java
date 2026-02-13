@@ -3,11 +3,8 @@ package com.pax.market.api.sdk.java.api.test;
 import com.pax.market.api.sdk.java.api.base.dto.*;
 import com.pax.market.api.sdk.java.api.developer.DeveloperApi;
 import com.pax.market.api.sdk.java.api.developer.dto.ApkOfflineRequest;
-import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleAppRequest;
-import com.pax.market.api.sdk.java.api.developer.dto.step.CreateSingleApkRequest;
+import com.pax.market.api.sdk.java.api.developer.dto.step.*;
 import com.pax.market.api.sdk.java.api.developer.dto.CreateApkRequest;
-import com.pax.market.api.sdk.java.api.developer.dto.step.EditAppKeySecretRequest;
-import com.pax.market.api.sdk.java.api.developer.dto.step.EditSingleApkRequest;
 import com.pax.market.api.sdk.java.api.io.UploadedFileContent;
 import com.pax.market.api.sdk.java.api.util.AESUtils;
 import com.pax.market.api.sdk.java.api.util.FileUtils;
@@ -19,7 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.pax.market.api.sdk.java.api.constant.Constants.APP_TYPE_NORMAL;
 import static com.pax.market.api.sdk.java.api.constant.Constants.APP_TYPE_PARAMETER;
@@ -80,7 +79,7 @@ public class DeveloperApiTest {
 
         createApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("D:\\image\\3.jpg"));
         createApkRequest.setIconFile(FileUtils.createUploadFile("D:\\image.jpg"));
-        Result<String>  result = developerApi.uploadApk(createApkRequest);
+        Result<Long>  result = developerApi.uploadApk(createApkRequest);
         Assert.assertTrue(result.getBusinessCode() == 0);
     }
 
@@ -135,6 +134,50 @@ public class DeveloperApiTest {
     }
 
     @Test
+    public void testCreateMultipleApk() {
+        CreateMultipleApkRequest createApkRequest = new CreateMultipleApkRequest();
+        createApkRequest.setAppId(1705773446987822L);
+        Map<String, UploadedFileContent> multipleApk = new HashMap<>();
+        multipleApk.put("PAX", FileUtils.createUploadFile("C:\\101.0.apk"));
+        multipleApk.put("A_Multivendor", FileUtils.createUploadFile("C:\\101.0.apk"));
+        createApkRequest.setMultipleAppFile(multipleApk);
+        createApkRequest.setApkName("TestApp");
+        createApkRequest.setApkType(APP_TYPE_PARAMETER);
+        createApkRequest.setShortDesc("test short desc");
+        createApkRequest.setDescription("test description");
+        createApkRequest.setReleaseNotes("This is release note");
+        createApkRequest.setAccessUrl("www.baidu.com");
+        createApkRequest.setChargeType(0);
+        createApkRequest.setPrice(BigDecimal.ONE);
+
+        List<String> categoryList = new ArrayList<>();
+        categoryList.add("CY_WM");
+        categoryList.add("CY_JXC");
+        createApkRequest.setCategoryList(categoryList);
+        List<String> modelNameList = new ArrayList<>();
+        modelNameList.add("A920");
+        modelNameList.add("Multivendor1");
+        createApkRequest.setModelNameList(modelNameList);
+
+        List<UploadedFileContent> screenshotList = new ArrayList<>();
+        screenshotList.add(FileUtils.createUploadFile("C:\\1.jpeg"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\2.jpeg"));
+        screenshotList.add(FileUtils.createUploadFile("C:\\3.jpeg"));
+        createApkRequest.setScreenshotFileList(screenshotList);
+
+        List<UploadedFileContent> paramList = new ArrayList<>();
+        paramList.add(FileUtils.createUploadFile("C:\\TestApp_paramTemplate.xml"));
+        createApkRequest.setParamTemplateFileList(paramList);
+
+        createApkRequest.setFeaturedImgFile(FileUtils.createUploadFile("/Users/shawnshi/公司文件/app/免费看漫画大全/3.jpeg"));
+        createApkRequest.setIconFile(FileUtils.createUploadFile("/Users/shawnshi/公司文件/app/免费看漫画大全/1.jpeg"));
+
+        Result<Long>  result = developerApi.createMultipleApk(createApkRequest);
+        Assert.assertEquals(0, result.getBusinessCode());
+        Assert.assertNotNull("create Apk failed", result.getData());
+    }
+
+    @Test
     public void testEditApk() {
         EditSingleApkRequest editApkRequest = new EditSingleApkRequest();
         editApkRequest.setApkId(1643163756265516L);
@@ -185,7 +228,7 @@ public class DeveloperApiTest {
 
     @Test
     public void testSubmitApk() {
-        developerApi.submitApk(1593832021950503L);
+        developerApi.submitApk(1705958438862898L);
     }
 
     @Test
@@ -205,10 +248,17 @@ public class DeveloperApiTest {
 
     @Test
     public void testGetApk() {
-        Result<ApkInfoDTO> apkInfo = developerApi.getApkById(1643270597771298L);
+        Result<ApkInfoDTO> apkInfo = developerApi.getApkById(1000000022L);
         ApkInfoDTO data = apkInfo.getData();
         Assert.assertTrue(apkInfo.getBusinessCode() == 0);
         Assert.assertNotNull("get codeList failed", data);
+    }
+
+    @Test
+    public void testGetAppKeySecret() {
+        Result<AppKeySecretDTO> result = developerApi.getAppKeySecret(1705773446987822L);
+        logger.debug("result is {}", result);
+        Assert.assertEquals(0, result.getBusinessCode());
     }
 
     @Test
