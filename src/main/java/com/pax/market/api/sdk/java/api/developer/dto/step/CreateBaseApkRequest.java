@@ -31,6 +31,8 @@ public class CreateBaseApkRequest implements Serializable {
 
     private Integer chargeType;
     private BigDecimal price;
+    private Boolean allowUploadLocalParameter;
+    private Boolean allowParamPartialPush;
 
     public List<String> getModelNameList() {
         return modelNameList;
@@ -160,4 +162,19 @@ public class CreateBaseApkRequest implements Serializable {
         this.paramTemplateFileList = paramTemplateFileList;
     }
 
+    public Boolean getAllowUploadLocalParameter() {
+        return allowUploadLocalParameter;
+    }
+
+    public void setAllowUploadLocalParameter(Boolean allowUploadLocalParameter) {
+        this.allowUploadLocalParameter = allowUploadLocalParameter;
+    }
+
+    public Boolean getAllowParamPartialPush() {
+        return allowParamPartialPush;
+    }
+
+    public void setAllowParamPartialPush(Boolean allowParamPartialPush) {
+        this.allowParamPartialPush = allowParamPartialPush;
+    }
 }
