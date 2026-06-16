@@ -45,12 +45,17 @@
     <developers>
         <developer>
             <name>Jay</name>
-            <email>tanjie@szzolon.com</email>
+            <email>tanjie@paxsz.com</email>
             <organization>pax</organization>
         </developer>
         <developer>
             <name>Allen</name>
-            <email>zhoudong@szzolon.com</email>
+            <email>zhoudong@paxsz.com</email>
+            <organization>pax</organization>
+        </developer>
+        <developer>
+            <name>ShiFan</name>
+            <email>shifan@paxsz.com</email>
             <organization>pax</organization>
         </developer>
     </developers>
