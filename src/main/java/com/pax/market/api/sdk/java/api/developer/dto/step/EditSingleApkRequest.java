@@ -32,6 +32,8 @@ public class EditSingleApkRequest implements Serializable {
     private UploadedFileContent featuredImgFile;
     private List<UploadedFileContent> screenshotFileList;
     private List<UploadedFileContent> paramTemplateFileList;
+    private Boolean allowUploadLocalParameter;
+    private Boolean allowParamPartialPush;
 
 
     public List<String> getModelNameList() {
@@ -152,5 +154,21 @@ public class EditSingleApkRequest implements Serializable {
 
     public void setParamTemplateFileList(List<UploadedFileContent> paramTemplateFileList) {
         this.paramTemplateFileList = paramTemplateFileList;
+    }
+
+    public Boolean getAllowUploadLocalParameter() {
+        return allowUploadLocalParameter;
+    }
+
+    public void setAllowUploadLocalParameter(Boolean allowUploadLocalParameter) {
+        this.allowUploadLocalParameter = allowUploadLocalParameter;
+    }
+
+    public Boolean getAllowParamPartialPush() {
+        return allowParamPartialPush;
+    }
+
+    public void setAllowParamPartialPush(Boolean allowParamPartialPush) {
+        this.allowParamPartialPush = allowParamPartialPush;
     }
 }

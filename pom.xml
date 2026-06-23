@@ -16,7 +16,7 @@
     <modelVersion>4.0.0</modelVersion>
 	<groupId>com.whatspos.sdk</groupId>
     <artifactId>3rdsys-developerapi</artifactId>
-	<version>1.4.1</version>
+	<version>1.4.2</version>
 
     <name>DeveloperAPI Java SDK</name>
     <description>DeveloperAPI Java SDK</description>
@@ -45,13 +45,18 @@
     <developers>
         <developer>
             <name>Jay</name>
-            <email>tanjie@szzolon.com</email>
-            <organization>ZOLON</organization>
+            <email>tanjie@paxsz.com</email>
+            <organization>pax</organization>
         </developer>
         <developer>
             <name>Allen</name>
-            <email>zhoudong@szzolon.com</email>
-            <organization>ZOLON</organization>
+            <email>zhoudong@paxsz.com</email>
+            <organization>pax</organization>
+        </developer>
+        <developer>
+            <name>ShiFan</name>
+            <email>shifan@paxsz.com</email>
+            <organization>pax</organization>
         </developer>
     </developers>
 

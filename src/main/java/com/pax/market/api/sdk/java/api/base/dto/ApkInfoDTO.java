@@ -13,6 +13,8 @@ public class ApkInfoDTO implements Serializable {
     private String displayFileSize;
     private String versionName;
     private Boolean allowUpdateParamTemplate;
+    private Boolean allowUploadLocalParameter;
+    private Boolean allowParamPartialPush;
 
     private List<String> paramTemplateNameList;
     /** 分类列表 -这里只返回value*/
@@ -414,5 +416,21 @@ public class ApkInfoDTO implements Serializable {
 
     public void setApkModelNameList(List<String> apkModelNameList) {
         this.apkModelNameList = apkModelNameList;
+    }
+
+    public Boolean getAllowUploadLocalParameter() {
+        return allowUploadLocalParameter;
+    }
+
+    public void setAllowUploadLocalParameter(Boolean allowUploadLocalParameter) {
+        this.allowUploadLocalParameter = allowUploadLocalParameter;
+    }
+
+    public Boolean getAllowParamPartialPush() {
+        return allowParamPartialPush;
+    }
+
+    public void setAllowParamPartialPush(Boolean allowParamPartialPush) {
+        this.allowParamPartialPush = allowParamPartialPush;
     }
 }
