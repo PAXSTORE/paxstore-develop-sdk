@@ -1544,3 +1544,72 @@ developerApi.offlineApkById(1643270597771298L, offlineRequest);
 | 1011          | The app's developer signature is different from previous version |             |
 | 1012          | Please sign your app with a self-signed certificate          |             |
 | 1013          | The App signature certificate  is invalid                    |             |
+
+### Upload Apk Attachment
+
+Upload or delete an attachment file for a specific APK. Only allowed when the APK is in **Draft** status.
+
+**API**
+
+```
+public Result<String> uploadApkAttachment(Long apkId, UploadedFileContent attachment)
+```
+
+**Input parameter(s) description**
+
+| Parameter Name | Type                | Nullable | Description                                                  |
+| :------------- | :------------------ | :------- | :----------------------------------------------------------- |
+| apkId          | Long                | false    | the id of apk                                                |
+| attachment     | UploadedFileContent | true     | the attachment file content (.txt format). Pass null to delete existing attachment |
+
+**Sample codes**
+
+```
+DeveloperApi developerApi = new DeveloperApi("https://api.whatspos.com/p-market-api", "7AN2R0ROMLCOZI39H0MV", "I43OHYX91TL96IB7324E0FP2IG5YSWZGFJOUZIKY");
+// Upload attachment
+UploadedFileContent attachment = FileUtils.createUploadFile("C:\\release_notes.txt");
+Result<String> result = developerApi.uploadApkAttachment(1643270597771298L, attachment);
+
+// Delete attachment
+Result<String> result = developerApi.uploadApkAttachment(1643270597771298L, null);
+```
+
+**Server side validation failed sample result(JSON formatted)**
+
+```
+{
+	"businessCode": 1205,
+	"message": "App is not editable"
+}
+```
+
+**Successful sample result(JSON formatted)**
+
+```
+{
+    "businessCode": 0,
+    "rateLimit": "51",
+    "rateLimitRemain": "50",
+    "rateLimitReset": "1783478155882"
+}
+```
+
+<br>
+
+The Json structure shows like below.
+
+| Property Name | Type   | Description                             |
+| :------------ | :----- | :-------------------------------------- |
+| businessCode  | Long   | 0 means success, otherwise means failed |
+| message       | String | response message                        |
+
+**Possible business codes**
+
+| Business Code | Message                                 | Description |
+| :------------ | :-------------------------------------- | :---------- |
+| 131           | Insufficient access right               |             |
+| 135           | Invalid parameter or missing parameter  |             |
+| 1000          | App not found                           |             |
+| 1001          | App not found                           |             |
+| 1002          | APK not found                           |             |
+| 1205          | App is not editable                     |             |

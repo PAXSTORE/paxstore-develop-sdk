@@ -287,5 +287,19 @@ public class DeveloperApiTest {
         PageInfo<ApkVersionDTO> pageInfo = result.getPageInfo();
     }
 
+    @Test
+    public void testUploadApkAttachment() {
+        // Upload attachment
+        UploadedFileContent attachment = FileUtils.createUploadFile("C:\\release_notes.txt");
+        Result<String> result = developerApi.uploadApkAttachment(1754018802040864L, attachment);
+        Assert.assertEquals(0, result.getBusinessCode());
+    }
+
+    @Test
+    public void testDeleteApkAttachment() {
+        // Delete attachment by passing null
+        Result<String> result = developerApi.uploadApkAttachment(1754018802040864L, null);
+        Assert.assertEquals(0, result.getBusinessCode());
+    }
 
 }

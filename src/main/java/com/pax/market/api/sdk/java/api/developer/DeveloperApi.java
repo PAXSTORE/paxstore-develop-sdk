@@ -41,6 +41,7 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
     protected static final String APK_VERSION_LIST_OF_APP = "/v1/3rd/developer/{appId}/apks/version-list";
     protected static final String UPDATE_APP_KEY_SECRET = "/v1/3rd/developer/apps/{appId}/key-secret";
     protected static final String GET_APP_KEY_SECRET = "/v1/3rd/developer/apps/{appId}/key-secret";
+    protected static final String UPLOAD_APK_ATTACHMENT_URL = "/v1/3rd/developer/apks/{apkId}/attachment";
 
     public DeveloperApi(String baseUrl, String apiKey, String apiSecret) {
         super(baseUrl, apiKey, apiSecret);
@@ -328,6 +329,27 @@ public class DeveloperApi extends BaseThirdPartyDevApi {
         request.setRequestBody(new Gson().toJson(offlineRequest, ApkOfflineRequest.class));
 
         return emptyResult(client,request);
+    }
+
+    /**
+     * Upload or delete an attachment for a given APK.
+     * Only allowed when the APK is in Draft status.
+     *
+     * @param apkId      the ID of the APK
+     * @param attachment the attachment file content; pass null to delete existing attachment
+     * @return Result with success/error message
+     */
+    public Result<String> uploadApkAttachment(Long apkId, UploadedFileContent attachment) {
+        if (apkId == null || apkId <= 0) {
+            return new Result<>(Collections.singletonList("parameter.apkId.null"));
+        }
+        ThirdPartyDevApiClient client = new ThirdPartyDevApiClient(getBaseUrl(), getApiKey(), getApiSecret());
+        SdkRequest request = createSdkRequest(UPLOAD_APK_ATTACHMENT_URL.replace("{apkId}", String.valueOf(apkId)));
+        request.setRequestMethod(SdkRequest.RequestMethod.POST);
+        if (attachment != null) {
+            request.addUploadFile("attachment", attachment);
+        }
+        return emptyResult(client, request);
     }
 
     public Result<ApkVersionDTO> getApkVersionList(Long appId) {
